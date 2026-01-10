@@ -1,0 +1,81 @@
+jwt:
+  secretKey: sdfksdhfoiashdlknaknsvkasuifasdnckjasbgdpwrfnacsldkjvbuiapsdbffyfjvjh
+
+spring:
+  application:
+    name: api-gateway
+
+
+
+  cloud:
+    config:
+      enabled: false #to disable the spring.could.config
+
+    gateway:
+      server:
+        webflux:
+          routes:
+            - id: user-service
+              uri: lb://UserService
+              predicates:
+                - Path=/api/v1/**
+              filters:
+                - StripPrefix=2
+#                - name: LoggingOrder
+                - name: Authentication
+                  args:
+                    isAuthenticationEnabled : true #passing the arguement to the config
+                    isAuthorizationEnabled : true #passing the arguement to the config
+#                - name: Authorization
+#                  args:
+#                    allowedRoles: ADMIN , SUPER_ADMIN
+
+            - id: post-service
+              uri: lb://PostService
+              predicates:
+                - Path=/api/v1/**
+              filters:
+                - StripPrefix=2
+                - AddRequestHeader=x-custom-header,Nishant
+                - name: Authentication
+                  args:
+                    isAuthenticationEnabled: true #passing the argument to the config
+                    isAuthorizationEnabled: true #passing the argument to the config
+#                - name: Authorization
+#                  args:
+#                    allowedRoles: ADMIN , SUPER_ADMIN
+            - id: connection-service
+              uri: lb://ConnectionService
+              predicates:
+                - Path=/api/v1/**
+              filters:
+                - StripPrefix=2
+                - AddRequestHeader=x-custom-header,Nishant
+                - name: Authentication
+                  args:
+                    isAuthenticationEnabled: true #passing the argument to the config
+                    isAuthorizationEnabled: true #passing the argument to the config
+
+
+
+
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+
+
+
+server:
+  port: 8085
+
+
+
+
+
+# Remmeber this :  not - name: AuthenticationGatewayFilterFactory -> - name: Authentication
+#      Spring Cloud Gateway does NOT use full class names.
+#      It automatically strips:
+#      GatewayFilterFactory
+#      Filter
