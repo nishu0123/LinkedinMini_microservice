@@ -1,10 +1,12 @@
 package com.Nishant.LinkedIn_Mini.PostService.Controller;
 
 import com.Nishant.LinkedIn_Mini.PostService.Auth.AuthContextHolder;
+import com.Nishant.LinkedIn_Mini.PostService.Dto.EventDto.PostCreatedEventDto;
 import com.Nishant.LinkedIn_Mini.PostService.Dto.PostCreateRequestDto;
 import com.Nishant.LinkedIn_Mini.PostService.Dto.PostDto;
 import com.Nishant.LinkedIn_Mini.PostService.Entity.PostEntity;
 import com.Nishant.LinkedIn_Mini.PostService.Service.PostCreateService;
+import com.Nishant.LinkedIn_Mini.PostService.Service.PostCreatedEventProducer;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,6 +30,9 @@ public class PostController {
     private final ModelMapper modelMapper;
     @Autowired
     private final PostCreateService postCreateService;
+
+    @Autowired
+    private final PostCreatedEventProducer postCreatedEventProducer;
 
 
     @GetMapping("/greet")
@@ -57,23 +62,26 @@ public class PostController {
         Long tempUserId = AuthContextHolder.getCurrentUserId(); //get the id using interceptor
 
         log.info("received user id in PostService from the Interceptor  = " + tempUserId);
-        PostEntity postEntity = postCreateService.savePostIntoDb(postRequestDto , tempUserId);
-        PostDto postDto = modelMapper.map(postEntity , PostDto.class); //mapping the postEntity data with PostDto
         /*
-        now return the response to the user
-        update post created
-        when post is created in future we will use Kafka to publish this message to the broker
-        and then other service like notification can consume it to notify user about the
-        postCreation
-        */
-//         space for further implementation
-
-        /*
-
-        implement the logic here
+        TO do : using feignCLient get the image or video url and save it to the db
          */
 
-        //return the response
+
+        PostEntity postEntity = postCreateService.savePostIntoDb(postRequestDto , tempUserId);
+        PostDto postDto = modelMapper.map(postEntity , PostDto.class); //mapping the postEntity data with PostDto
+
+
+        //now imageUrl have been saved into the database
+        //produce the event -> post-created
+
+        String imageUrl = postDto.getContent();//we will pass this imageUrl into the event
+
+        //producing event when post is created
+        PostCreatedEventDto postCreatedEventDto = new PostCreatedEventDto();
+        postCreatedEventDto.setImageUrl(imageUrl);
+        postCreatedEventDto.setUserId(tempUserId);
+        postCreatedEventProducer.sendPostEvent(postCreatedEventDto);
+
         return new ResponseEntity<>(postDto , HttpStatus.CREATED);
     }
 
