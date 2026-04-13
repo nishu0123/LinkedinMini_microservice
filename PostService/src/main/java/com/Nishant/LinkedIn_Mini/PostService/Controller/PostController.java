@@ -48,6 +48,7 @@ public class PostController {
     this part will be handled later at this time i will hardcore the user id
     */
 
+
     //this is working
     @PostMapping("/createPost")
     public ResponseEntity<PostDto> CreatePost(@RequestBody PostCreateRequestDto postRequestDto  , @RequestHeader ("X-User-Id")Long userId)
@@ -109,6 +110,23 @@ public class PostController {
         List<PostDto> allPost= postCreateService.getAllPost(userId);
         return ResponseEntity.ok(allPost);
     }
+
+    //now implement the delete post logic
+
+    @PostMapping("/deletePost")
+    public ResponseEntity<PostDto> deletePost(@RequestBody PostDto postDto){
+        //write logic to delete the post
+        //we have post_id against this post ,
+        Long postId = postDto.getId();
+        //now we have to delete post by id , and its our choice that we want to delete
+        //post from the cloudinary service or not
+        //we have to also delete post from cloudinary or google cloud service
+        return new ResponseEntity<>(postDto , HttpStatus.ACCEPTED);
+
+    }
+
+
+
 
 
 }
