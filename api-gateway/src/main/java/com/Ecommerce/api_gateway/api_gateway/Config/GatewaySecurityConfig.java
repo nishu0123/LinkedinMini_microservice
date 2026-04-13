@@ -6,6 +6,7 @@ import org.springframework.security.config.annotation.web.reactive.EnableWebFlux
 import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.web.server.SecurityWebFilterChain;
 
+
 @Configuration
 @EnableWebFluxSecurity
 public class GatewaySecurityConfig {
@@ -14,19 +15,37 @@ public class GatewaySecurityConfig {
     public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http) {
 
         return http
-                .csrf(ServerHttpSecurity.CsrfSpec::disable)  // disable CSRF for APIs
+                .csrf(ServerHttpSecurity.CsrfSpec::disable)
                 .authorizeExchange(exchange -> exchange
-                        // Permit login & signup endpoints
-                        .pathMatchers("/api/v1/user/auth/login", "/api/v1/user/auth/signup").permitAll()
-
-                        // Allow actuator if needed
-                        .pathMatchers("/actuator/**").permitAll()
-
-                        // Everything else requires authentication
-                        .anyExchange().authenticated()
+                        .anyExchange().permitAll()   // 🔥 IMPORTANT
                 )
-                .httpBasic(ServerHttpSecurity.HttpBasicSpec::disable)  // disable default basic auth popup
-                .formLogin(ServerHttpSecurity.FormLoginSpec::disable)  // disable default login page
+                .httpBasic(ServerHttpSecurity.HttpBasicSpec::disable)
+                .formLogin(ServerHttpSecurity.FormLoginSpec::disable)
                 .build();
     }
 }
+
+//@Configuration
+//@EnableWebFluxSecurity
+//public class GatewaySecurityConfig {
+//
+//    @Bean
+//    public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http) {
+//
+//        return http
+//                .csrf(ServerHttpSecurity.CsrfSpec::disable)  // disable CSRF for APIs
+//                .authorizeExchange(exchange -> exchange
+//                        // Permit login & signup endpoints
+//                        .pathMatchers("/api/v1/user/auth/login", "/api/v1/user/auth/signup").permitAll()
+//
+//                        // Allow actuator if needed
+//                        .pathMatchers("/actuator/**").permitAll()
+//
+//                        // Everything else requires authentication
+//                        .anyExchange().authenticated()
+//                )
+//                .httpBasic(ServerHttpSecurity.HttpBasicSpec::disable)  // disable default basic auth popup
+//                .formLogin(ServerHttpSecurity.FormLoginSpec::disable)  // disable default login page
+//                .build();
+//    }
+//}
