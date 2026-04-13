@@ -8,16 +8,17 @@ import org.springframework.stereotype.Service;
 @Service
 @Slf4j
 public class NotificationConsumer {
+//currently this function is not used
 
     // 1. Accepts a full DTO (JSON will be automatically converted)
-    @KafkaListener(topics = "post.created")
-    public void handlePostCreated(PostCreatedEventDto event) {
-        log.info("Processing rich object: {}", event.getImageUrl());
-    }
+//    @KafkaListener(topics = "post.created")
+//    public void handlePostCreated(PostCreatedEventDto event) {
+//        log.info("Processing rich object: {}", event.getImageUrl());
+//    }
 
     // 2. Accepts a simple Long/String (No complex JSON needed)
-    @KafkaListener(topics = "post.liked")
-    public void handlePostLiked(Long postId) {
-        log.info("Processing simple ID: {}", postId);
-    }
+//    @KafkaListener(topics = "post.liked")
+//    public void handlePostLiked(Long postId) {
+//        log.info("Processing simple ID: {}", postId);
+//    }
 }
