@@ -1,6 +1,6 @@
 package com.Nishant.LinkedIn_Mini.ConnectionService.Auth;
 
-import com.Nishant.LinkedIn_Mini.PostService.Auth.RequestInterceptor;
+import com.Nishant.LinkedIn_Mini.ConnectionService.Auth.RequestInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
