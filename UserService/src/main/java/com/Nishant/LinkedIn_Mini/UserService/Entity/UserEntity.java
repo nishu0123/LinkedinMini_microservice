@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Getter
 @Setter
+@Table(name = "user")
 public class UserEntity {
     @Id
      @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,9 +25,11 @@ public class UserEntity {
             nullable = false
     )
     String email;
+
     @Column(
-            name = "password",
+            name = "encoded_password",
             nullable = false
     )
     String password;
+
 }
