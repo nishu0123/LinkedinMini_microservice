@@ -15,6 +15,13 @@ public class RequestInterceptor implements HandlerInterceptor {
                              HttpServletResponse response,
                              Object handler) throws Exception {
 
+        String path = request.getRequestURI();
+        //skip the header interceptor for swagger
+        if (path.contains("/swagger-ui")
+                || path.contains("/v3/api-docs")) {
+            return true;
+        }
+
         String userIdHeader = request.getHeader("X-USER-ID");
 
         if (userIdHeader == null || userIdHeader.isBlank()) {
@@ -34,8 +41,6 @@ public class RequestInterceptor implements HandlerInterceptor {
 
         return true;
     }
-
-
     //it is called after we got the response , of exception occurs , this function is mainly used to
     //remove the user id
     @Override
