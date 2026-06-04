@@ -24,5 +24,7 @@ public class EmailService {
 
         mailSender.send(message);
         log.info("Email sent successfully to {}", recipientEmail);
+
+        //adding comment for test 
     }
 }
