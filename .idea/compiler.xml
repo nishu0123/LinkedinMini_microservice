@@ -11,6 +11,16 @@
         <module name="UploaderService" />
         <module name="discovery-service" />
       </profile>
+      <profile name="Annotation profile for LinkedIn_Mini" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="false">
+          <entry name="/home/nishu_nishant/.m2/repository/org/projectlombok/lombok/1.18.32/lombok-1.18.32.jar" />
+        </processorPath>
+        <module name="ConnectionService" />
+        <module name="UserService" />
+      </profile>
       <profile name="Annotation profile for NotificationService" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
@@ -28,16 +38,6 @@
           <entry name="/home/nishu_nishant/.m2/repository/org/projectlombok/lombok/1.18.42/lombok-1.18.42.jar" />
         </processorPath>
         <module name="PostService" />
-      </profile>
-      <profile name="Annotation profile for LinkedIn_Mini" enabled="true">
-        <sourceOutputDir name="target/generated-sources/annotations" />
-        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
-        <outputRelativeToContentRoot value="true" />
-        <processorPath useClasspath="false">
-          <entry name="/home/nishu_nishant/.m2/repository/org/projectlombok/lombok/1.18.32/lombok-1.18.32.jar" />
-        </processorPath>
-        <module name="ConnectionService" />
-        <module name="UserService" />
       </profile>
     </annotationProcessing>
   </component>

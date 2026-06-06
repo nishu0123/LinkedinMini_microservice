@@ -5,7 +5,7 @@
 
     <modelVersion>4.0.0</modelVersion>
 
-    <!-- 🔴 Spring Boot MUST be the parent -->
+    <!-- Spring Boot MUST be the parent -->
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
@@ -18,12 +18,12 @@
     <version>0.0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
 
-    <!-- 🔹 Java version -->
+    <!--Java version -->
     <properties>
         <java.version>17</java.version>
     </properties>
 
-    <!-- 🔹 Spring Cloud BOM (for Eureka, Gateway, etc.) -->
+    <!-- Spring Cloud BOM (for Eureka, Gateway, etc.) -->
     <dependencyManagement>
         <dependencies>
             <dependency>
@@ -36,7 +36,7 @@
         </dependencies>
     </dependencyManagement>
 
-    <!-- 🔹 Modules -->
+    <!-- Modules -->
     <modules>
         <module>UserService</module>
         <module>PostService</module>
