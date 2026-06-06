@@ -69,6 +69,7 @@ public class PostController {
 
 
         PostEntity postEntity = postCreateService.savePostIntoDb(postRequestDto , tempUserId);
+        log.info("Post saved into the database successfully!");
         PostDto postDto = modelMapper.map(postEntity , PostDto.class); //mapping the postEntity data with PostDto
 
 
