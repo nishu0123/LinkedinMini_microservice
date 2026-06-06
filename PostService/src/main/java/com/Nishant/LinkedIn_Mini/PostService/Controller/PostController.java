@@ -76,7 +76,7 @@ public class PostController {
         //now imageUrl have been saved into the database
         //produce the event -> post-created
 
-        String imageUrl = postDto.getContent();//we will pass this imageUrl into the event
+        String imageUrl = postDto.getImgUrl();//we will pass this imageUrl into the event
 
         //producing event when post is created
         PostCreatedEventDto postCreatedEventDto = new PostCreatedEventDto();
@@ -96,7 +96,7 @@ public class PostController {
         //and the we will return the post having that id
         PostEntity postEntity = postCreateService.getPost(postId);
         PostDto postDto = modelMapper.map(postEntity , PostDto.class);
-        if(postDto.getContent() == null)
+        if(postDto.getImgUrl() == null)
         {
             return new ResponseEntity<>(postDto , HttpStatus.NO_CONTENT);
         }

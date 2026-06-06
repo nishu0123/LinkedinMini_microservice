@@ -11,19 +11,33 @@ import lombok.extern.slf4j.Slf4j;
 @Setter
 @Table(name = "post_like")
 public class PostLikeEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
+    private Long id;
 
-    @Column(
-            name = "post_id",
-            nullable = false
-    )
-    Long postId;
+
 
     @Column(
             name = "user_id",
             nullable = false
     )
-    Long userId;
+    private Long userId;
+
+
+
+    @JoinColumn(
+            name = "post_id",
+            nullable = false
+    )
+    private Long postId;
+
+
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @org.hibernate.annotations.OnDelete(
+            action = org.hibernate.annotations.OnDeleteAction.CASCADE
+    )
+    private PostEntity post;
+
 }

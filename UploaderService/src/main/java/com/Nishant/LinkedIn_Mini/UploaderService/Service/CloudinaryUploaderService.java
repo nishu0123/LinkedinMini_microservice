@@ -1,5 +1,6 @@
 package com.Nishant.LinkedIn_Mini.UploaderService.Service;
 
+import com.Nishant.LinkedIn_Mini.UploaderService.Dto.CreatePostResponseDto;
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import lombok.RequiredArgsConstructor;
@@ -19,14 +20,16 @@ public class CloudinaryUploaderService implements UploaderService {
 //      ("request has been passed to the service layer ");
     private final Cloudinary cloudinary;
     @Override
-    public String upload(MultipartFile file) {
+    public CreatePostResponseDto upload(MultipartFile file) {
+
+        CreatePostResponseDto createPostResponseDto = new CreatePostResponseDto();
         log.info("request passed to the service layer");
         // Upload the image
         try {
             Map<String, Object> params = Map.of(
                     "use_filename", true,
-                    "unique_filename", false,
-                    "overwrite", true
+                    "unique_filename", true,
+                    "overwrite", false
             );
 
             Map uploadResult = cloudinary.uploader().upload(
@@ -35,9 +38,13 @@ public class CloudinaryUploaderService implements UploaderService {
             );
 
             String imageUrl = (String) uploadResult.get("secure_url");
+            String publicId = (String) uploadResult.get("public_id");
             log.info("Image uploaded successfully: {}", imageUrl);
 
-            return imageUrl;
+            createPostResponseDto.setImgUrl(imageUrl);
+            createPostResponseDto.setPublicId(publicId);
+
+            return createPostResponseDto;
 
         } catch (IOException e) {
             log.error("Error uploading image to Cloudinary", e);

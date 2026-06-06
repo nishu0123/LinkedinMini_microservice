@@ -13,7 +13,8 @@ import java.util.Date;
 @Data
 public class PostDto {
     private Long id;
-    private String content;
+    private String imgUrl;//content has been changed to imgUrl
     private Long userId;
+    private String publicId;
     private Date createdAt;
 }

@@ -2,6 +2,7 @@ package com.Nishant.LinkedIn_Mini.PostService.Service;
 import java.util.Base64;
 
 import com.Nishant.LinkedIn_Mini.PostService.Custom.Base64ToMultipartFile;
+import com.Nishant.LinkedIn_Mini.PostService.Dto.CreatePostUploaderResponseDto;
 import com.Nishant.LinkedIn_Mini.PostService.Dto.PostCreateRequestDto;
 import com.Nishant.LinkedIn_Mini.PostService.Dto.PostDto;
 import com.Nishant.LinkedIn_Mini.PostService.Entity.PostEntity;
@@ -76,12 +77,15 @@ public class PostCreateService {
         MultipartFile customMultipartFile = new Base64ToMultipartFile(decodedBytes, "upload.png");
 
         // 4. Call Feign Client
-        ResponseEntity<String> response =
+        ResponseEntity<CreatePostUploaderResponseDto> response =
                 imageUploaderFeign.upload(customMultipartFile);
 
 //        uploaderClient.uploadFile(customMultipartFile);
 
-        String imageUrl = response.getBody();
+        String imageUrl = response.getBody().getImgUrl();
+
+        String publicId = response.getBody().getPublicId();//we will get the public_id from the uploader service and save it into the post table
+
 
         /*
         String base64Image = postRequestDto.getContent();//image
@@ -98,8 +102,8 @@ public class PostCreateService {
 
 
 //        String response = imageUploaderFeign.upload(postRequestDto);
-        postEntity.setContent(imageUrl); //store the string of the response that contains the url of the image
-
+        postEntity.setImgUrl(imageUrl); //store the string of the response that contains the url of the image
+        postEntity.setPublicId(publicId);
 //        PostEntity savedPost = postCreateRepository.save(postEntity);
 //        return savedPost;
         //upper two commented line can be written as

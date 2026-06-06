@@ -1,5 +1,6 @@
 package com.Nishant.LinkedIn_Mini.UploaderService.Controller;
 
+import com.Nishant.LinkedIn_Mini.UploaderService.Dto.CreatePostResponseDto;
 import com.Nishant.LinkedIn_Mini.UploaderService.Service.UploaderService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.hc.client5.http.entity.mime.MultipartPart;
@@ -29,10 +30,12 @@ public class UploadController {
     }
 
     @PostMapping(value = "/uploadImage" , consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<String> upload(@RequestPart("file") MultipartFile file) {
+    public ResponseEntity<CreatePostResponseDto> upload(@RequestPart("file") MultipartFile file) {
         log.info("Upload API hit, file name: {}", file.getOriginalFilename());
-        String url = uploaderService.upload(file);
-        return ResponseEntity.ok(url);
+//        String url = uploaderService.upload(file);
+        CreatePostResponseDto createPostResponseDto = uploaderService.upload(file);
+
+        return ResponseEntity.ok(createPostResponseDto);
     }
 
 

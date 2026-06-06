@@ -1,6 +1,7 @@
 package com.Nishant.LinkedIn_Mini.PostService.FeignClient;
 
 import com.Nishant.LinkedIn_Mini.PostService.Config.FeignMultipartConfig;
+import com.Nishant.LinkedIn_Mini.PostService.Dto.CreatePostUploaderResponseDto;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,5 +20,5 @@ public interface imageUploaderFeign {
 //    @PostMapping("/file")
 // ADD THIS: consumes = MediaType.MULTIPART_FORM_DATA_VALUE
     @PostMapping(value = "/upload/file/uploadImage", consumes = org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE)
-    ResponseEntity<String> upload(@RequestPart("file") MultipartFile file);
+    ResponseEntity<CreatePostUploaderResponseDto> upload(@RequestPart("file") MultipartFile file);
 }
