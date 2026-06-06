@@ -1,0 +1,14 @@
+# Secrets & Environment Variables
+.env
+
+# Build and Target Directories
+**/target/
+build/
+
+# IDE and System Files
+.idea/
+*.iml
+
+# Compiled Java Files
+*.class
+*.jar

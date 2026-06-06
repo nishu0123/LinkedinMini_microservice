@@ -1,81 +1,266 @@
 jwt:
-  secretKey: sdfksdhfoiashdlknaknsvkasuifasdnckjasbgdpwrfnacsldkjvbuiapsdbffyfjvjh
+  secretKey: ${JWT_SECRET_KEY}
 
 spring:
   application:
     name: api-gateway
-
-
-
   cloud:
     config:
-      enabled: false #to disable the spring.could.config
-
+      enabled: false
     gateway:
       server:
         webflux:
           routes:
-            - id: user-service
+            # 1. PUBLIC AUTH ROUTE (Must be first)
+            - id: user-auth-public
               uri: lb://UserService
+              order: -1 # lesser the number higher the priority
               predicates:
-                - Path=/api/v1/**
+                # This catches login and signup specifically
+                - Path=/api/v1/user/auth/signup,/api/v1/user/auth/login
+
               filters:
                 - StripPrefix=2
-#                - name: LoggingOrder
+                # NO Authentication filter here
+
+            # 2. PROTECTED USER ROUTE
+            - id: user-service
+              uri: lb://UserService
+              order: 0
+              predicates:
+                - Path=/api/v1/user/**
+              filters:
+                - StripPrefix=2
                 - name: Authentication
                   args:
-                    isAuthenticationEnabled : true #passing the arguement to the config
-                    isAuthorizationEnabled : true #passing the arguement to the config
-#                - name: Authorization
-#                  args:
-#                    allowedRoles: ADMIN , SUPER_ADMIN
+                    AuthenticationEnabled: true
+                    AuthorizationEnabled: true
 
+            # 3. POST SERVICE
             - id: post-service
               uri: lb://PostService
               predicates:
-                - Path=/api/v1/**
+                - Path=/api/v1/post/**
               filters:
                 - StripPrefix=2
                 - AddRequestHeader=x-custom-header,Nishant
                 - name: Authentication
                   args:
-                    isAuthenticationEnabled: true #passing the argument to the config
-                    isAuthorizationEnabled: true #passing the argument to the config
-#                - name: Authorization
-#                  args:
-#                    allowedRoles: ADMIN , SUPER_ADMIN
+                    AuthenticationEnabled: true
+                    AuthorizationEnabled: true
+
+            # 4. CONNECTION SERVICE
             - id: connection-service
               uri: lb://ConnectionService
               predicates:
-                - Path=/api/v1/**
+                - Path=/api/v1/connection/**
               filters:
                 - StripPrefix=2
                 - AddRequestHeader=x-custom-header,Nishant
                 - name: Authentication
                   args:
-                    isAuthenticationEnabled: true #passing the argument to the config
-                    isAuthorizationEnabled: true #passing the argument to the config
+                    AuthenticationEnabled: true
+                    AuthorizationEnabled: true
 
+            # 5. NOTIFICATION SERVICE
+            - id: NotificationService
+              uri: lb://NotificationService
+              predicates:
+                - Path=/api/v1/Notification/**
+              filters:
+                - StripPrefix=2
+                - AddRequestHeader=x-custom-header,Nishant
+                - name: Authentication
+                  args:
+                    AuthenticationEnabled: true
+                    AuthorizationEnabled: true
 
-
-
+            # 6. UPLOADER SERVICE
+            - id: UploaderService
+              uri: lb://UploaderService
+              predicates:
+                - Path=/api/v1/upload/**
+              filters:
+                - StripPrefix=2
+                - AddRequestHeader=x-custom-header,Nishant
+                - name: Authentication
+                  args:
+                    AuthenticationEnabled: true
+                    AuthorizationEnabled: true
 
 eureka:
   client:
     service-url:
       defaultZone: http://localhost:8761/eureka
 
-
-
 server:
-  port: 8085
-
-
-
-
-
+  port: 6085
 # Remmeber this :  not - name: AuthenticationGatewayFilterFactory -> - name: Authentication
 #      Spring Cloud Gateway does NOT use full class names.
 #      It automatically strips:
 #      GatewayFilterFactory
 #      Filter
+
+
+#jwt:
+#  secretKey: sdfksdhfoiashdlknaknsvkasuifasdnckjasbgdpwrfnacsldkjvbuiapsdbffyfjvjh
+#
+#spring:
+#  application:
+#    name: api-gateway
+#
+#  cloud:
+#    config:
+#      enabled: false #to disable the spring.cloud.config
+#
+#    gateway:
+#      server:
+#        webflux:
+#          routes:
+#            - id: user-service
+#              uri: lb://UserService
+#              predicates:
+#                - Path=/api/v1/user-service/**
+#              filters:
+#                - StripPrefix=3
+#                - name: Authentication
+#                  args:
+#                    isAuthenticationEnabled: true
+#                    isAuthorizationEnabled: true
+#
+#            - id: post-service
+#              uri: lb://PostService
+#              predicates:
+#                - Path=/api/v1/post-service/**
+#              filters:
+#                - StripPrefix=3
+#                - AddRequestHeader=x-custom-header,Nishant
+#                - name: Authentication
+#                  args:
+#                    isAuthenticationEnabled: true
+#                    isAuthorizationEnabled: true
+#
+#            - id: connection-service
+#              uri: lb://ConnectionService
+#              predicates:
+#                - Path=/api/v1/connection-service/**
+#              filters:
+#                - StripPrefix=3
+#                - AddRequestHeader=x-custom-header,Nishant
+#                - name: Authentication
+#                  args:
+#                    isAuthenticationEnabled: true
+#                    isAuthorizationEnabled: true
+#
+#            - id: notification-service
+#              uri: lb://NotificationService
+#              predicates:
+#                - Path=/api/v1/notification-service/**
+#              filters:
+#                - StripPrefix=3
+#                - name: Authentication
+#                  args:
+#                    isAuthenticationEnabled: true
+#                    isAuthorizationEnabled: true
+#
+#            - id: uploader-service
+#              uri: lb://UploaderService
+#              predicates:
+#                - Path=/api/v1/uploader-service/**
+#              filters:
+#                - StripPrefix=3
+#                - name: Authentication
+#                  args:
+#                    isAuthenticationEnabled: true
+#                    isAuthorizationEnabled: true
+#
+#eureka:
+#  client:
+#    service-url:
+#      defaultZone: http://localhost:8761/eureka
+#
+#server:
+#  port: 8065
+
+
+#jwt:
+#  secretKey: sdfksdhfoiashdlknaknsvkasuifasdnckjasbgdpwrfnacsldkjvbuiapsdbffyfjvjh
+#
+#spring:
+#  application:
+#    name: api-gateway
+#
+#
+#
+#  cloud:
+#    config:
+#      enabled: false #to disable the spring.could.config
+#
+#    gateway:
+#      server:
+#        webflux:
+#          routes:
+#            - id: user-service
+#              uri: lb://UserService
+#              predicates:
+#                - Path=/api/v1/**
+#              filters:
+#                - StripPrefix=2
+##                - name: LoggingOrder
+#                - name: Authentication
+#                  args:
+#                    isAuthenticationEnabled : true #passing the arguement to the config
+#                    isAuthorizationEnabled : true #passing the arguement to the config
+##                - name: Authorization
+##                  args:
+##                    allowedRoles: ADMIN , SUPER_ADMIN
+#
+#            - id: post-service
+#              uri: lb://PostService
+#              predicates:
+#                - Path=/api/v1/**
+#              filters:
+#                - StripPrefix=2
+#                - AddRequestHeader=x-custom-header,Nishant
+#                - name: Authentication
+#                  args:
+#                    isAuthenticationEnabled: true #passing the argument to the config
+#                    isAuthorizationEnabled: true #passing the argument to the config
+##                - name: Authorization
+##                  args:
+##                    allowedRoles: ADMIN , SUPER_ADMIN
+#            - id: connection-service
+#              uri: lb://ConnectionService
+#              predicates:
+#                - Path=/api/v1/**
+#              filters:
+#                - StripPrefix=2
+#                - AddRequestHeader=x-custom-header,Nishant
+#                - name: Authentication
+#                  args:
+#                    isAuthenticationEnabled: true #passing the argument to the config
+#                    isAuthorizationEnabled: true #passing the argument to the config
+#
+#
+#
+#
+#
+#eureka:
+#  client:
+#    service-url:
+#      defaultZone: http://localhost:8761/eureka
+#
+#
+#
+#server:
+#  port: 8065
+#
+#
+#
+#
+#
+## Remmeber this :  not - name: AuthenticationGatewayFilterFactory -> - name: Authentication
+##      Spring Cloud Gateway does NOT use full class names.
+##      It automatically strips:
+##      GatewayFilterFactory
+##      Filter

@@ -46,12 +46,28 @@ public class PostCreateService {
         postEntity.setCreatedAt(now);
         postEntity.setUserId(tempUserId);
         log.info("postEntity data = {} " , postEntity);//print the post entity value
+//handling the content if it does not contains the comma
+//        //Before setting the content get the content url , after uploading the content
+//        String base64Image = postRequestDto.getContent();//image
+//
+//        // 1. Remove the header (e.g., "data:image/png;base64,")
+//        String base64Data = base64Image.split(",")[1];
 
-        //Before setting the content get the content url , after uploading the content
-        String base64Image = postRequestDto.getContent();//image
+        // Before setting the content get the content url, after uploading the content
+        String base64Image = postRequestDto.getContent(); // image
 
-        // 1. Remove the header (e.g., "data:image/png;base64,")
-        String base64Data = base64Image.split(",")[1];
+// Create a variable to hold the clean data, defaulting to the raw string
+        String base64Data = base64Image;
+
+// 1. SAFELY Remove the header ONLY if a comma prefix exists
+        if (base64Image != null && base64Image.contains(",")) {
+            String[] parts = base64Image.split(",");
+            if (parts.length > 1) {
+                base64Data = parts[1];
+            }
+        } else {
+            log.info("Processing direct raw Base64 string (no metadata prefix detected).");
+        }
 
         // 2. Decode to byte array
         byte[] decodedBytes = Base64.getDecoder().decode(base64Data);

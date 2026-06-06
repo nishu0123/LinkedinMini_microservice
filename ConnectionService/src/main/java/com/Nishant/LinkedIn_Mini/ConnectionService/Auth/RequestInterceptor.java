@@ -15,6 +15,14 @@ public class RequestInterceptor implements HandlerInterceptor {
                              HttpServletResponse response,
                              Object handler) throws Exception {
 
+//         Allow Swagger/OpenAPI endpoints
+        String path = request.getRequestURI();
+        if (path.contains("/swagger-ui")
+                || path.contains("/v3/api-docs")
+                || path.contains("/swagger-resources")) {
+            return true;
+        }
+
         String userIdHeader = request.getHeader("X-USER-ID");
 
         if (userIdHeader == null || userIdHeader.isBlank()) {

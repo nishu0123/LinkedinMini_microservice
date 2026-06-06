@@ -1,19 +1,94 @@
-spring:
-  kafka:
-    bootstrap-servers: localhost:9092
+#spring:
+#  kafka:
+#    bootstrap-servers: localhost:9092
+#
+#    consumer:
+#      group-id: notification-service-group
+#      auto-offset-reset: earliest
+#      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+#      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+#      enable-auto-commit: true
+#
+#    producer:
+#      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+#      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+#      acks: all
+#      retries: 3
+#
+#    listener:
+#      missing-topics-fatal: false
 
-    consumer:
-      group-id: notification-service-group
-      auto-offset-reset: earliest
-      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-      enable-auto-commit: true
 
-    producer:
-      key-serializer: org.apache.kafka.common.serialization.StringSerializer
-      value-serializer: org.apache.kafka.common.serialization.StringSerializer
-      acks: all
-      retries: 3
+#
+#spring:
+#  kafka:
+#    bootstrap-servers: localhost:9092
+#
+#    consumer:
+#      group-id: notification-service-group
+#      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+#      value-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
+#      properties:
+#        spring.deserializer.value.delegate.class: org.springframework.kafka.support.serializer.JsonDeserializer
+#        spring.json.trusted.packages: "com.Nishant.*"
+#
+#    producer:
+#      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+#      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+#      properties:
+#        spring.json.add.type.headers: false
+#
+#    listener:
+#      missing-topics-fatal: false
+#  # Mail Configuration (Moved inside the same 'spring' block)
+#  mail:
+#    host: sandbox.smtp.mailtrap.io
+#    port: 2525
+#    username: user
+#    password: password
+#    properties:
+#      mail:
+#        smtp:
+#          auth: true
+#          starttls:
+#            enable: true
+#
+#
+#
+#
 
-    listener:
-      missing-topics-fatal: false
+#spring:
+#  # Kafka Configuration
+#  kafka:
+#    bootstrap-servers: localhost:9092
+#
+#    consumer:
+#      group-id: notification-service-group
+#      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+#      # Using ErrorHandlingDeserializer to wrap JsonDeserializer
+#      value-deserializer: org.springframework.kafka.support.serialization.ErrorHandlingDeserializer
+#      properties:
+#        spring.deserializer.value.delegate.class: org.springframework.kafka.support.serialization.JsonDeserializer
+#        spring.json.trusted.packages: "com.Nishant.*"
+#
+#    producer:
+#      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+#      value-serializer: org.springframework.kafka.support.serialization.JsonSerializer
+#      properties:
+#        spring.json.add.type.headers: false
+#
+#    listener:
+#      missing-topics-fatal: false
+#
+#  # Mail Configuration (Moved inside the same 'spring' block)
+#  mail:
+#    host: sandbox.smtp.mailtrap.io
+#    port: 2525
+#    username: user
+#    password: password
+#    properties:
+#      mail:
+#        smtp:
+#          auth: true
+#          starttls:
+#            enable: true
