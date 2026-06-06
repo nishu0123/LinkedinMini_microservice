@@ -5,32 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="95c9979f-48c5-4464-b41f-d32d437848b1" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/NotificationService/src/main/resources/application.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ConnectionService/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/ConnectionService/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ConnectionService/src/main/java/com/Nishant/LinkedIn_Mini/ConnectionService/Auth/RequestInterceptor.java" beforeDir="false" afterPath="$PROJECT_DIR$/ConnectionService/src/main/java/com/Nishant/LinkedIn_Mini/ConnectionService/Auth/RequestInterceptor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ConnectionService/src/main/java/com/Nishant/LinkedIn_Mini/ConnectionService/ConnectionServiceApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/ConnectionService/src/main/java/com/Nishant/LinkedIn_Mini/ConnectionService/ConnectionServiceApplication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ConnectionService/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/ConnectionService/src/main/resources/application.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/NotificationService/src/main/java/com/Nishant/LinkedIn_Mini/NotificationService/NotificationServiceApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/NotificationService/src/main/java/com/Nishant/LinkedIn_Mini/NotificationService/NotificationServiceApplication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/NotificationService/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/NotificationService/src/main/resources/application.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PostService/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/PostService/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PostService/src/main/java/com/Nishant/LinkedIn_Mini/PostService/Controller/PostController.java" beforeDir="false" afterPath="$PROJECT_DIR$/PostService/src/main/java/com/Nishant/LinkedIn_Mini/PostService/Controller/PostController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PostService/src/main/java/com/Nishant/LinkedIn_Mini/PostService/PostServiceApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/PostService/src/main/java/com/Nishant/LinkedIn_Mini/PostService/PostServiceApplication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PostService/src/main/java/com/Nishant/LinkedIn_Mini/PostService/Service/PostCreateService.java" beforeDir="false" afterPath="$PROJECT_DIR$/PostService/src/main/java/com/Nishant/LinkedIn_Mini/PostService/Service/PostCreateService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PostService/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/PostService/src/main/resources/application.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UploaderService/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/UploaderService/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UploaderService/src/main/java/com/Nishant/LinkedIn_Mini/UploaderService/UploaderServiceApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/UploaderService/src/main/java/com/Nishant/LinkedIn_Mini/UploaderService/UploaderServiceApplication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UploaderService/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/UploaderService/src/main/resources/application.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UserService/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/UserService/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UserService/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/UserService/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UserService/src/main/java/com/Nishant/LinkedIn_Mini/UserService/UserServiceApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/UserService/src/main/java/com/Nishant/LinkedIn_Mini/UserService/UserServiceApplication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UserService/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/UserService/src/main/resources/application.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api-gateway/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/api-gateway/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api-gateway/src/main/java/com/Ecommerce/api_gateway/api_gateway/ApiGatewayApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/api-gateway/src/main/java/com/Ecommerce/api_gateway/api_gateway/ApiGatewayApplication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api-gateway/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/api-gateway/src/main/resources/application.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
