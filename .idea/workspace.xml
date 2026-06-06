@@ -5,17 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="95c9979f-48c5-4464-b41f-d32d437848b1" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/jarRepositories.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/jarRepositories.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/NotificationService/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/NotificationService/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PostService/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/PostService/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PostService/src/main/java/com/Nishant/LinkedIn_Mini/PostService/Config/FeignMultipartConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/PostService/src/main/java/com/Nishant/LinkedIn_Mini/PostService/Config/FeignMultipartConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UploaderService/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/UploaderService/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PostService/src/main/java/com/Nishant/LinkedIn_Mini/PostService/Auth/RequestInterceptor.java" beforeDir="false" afterPath="$PROJECT_DIR$/PostService/src/main/java/com/Nishant/LinkedIn_Mini/PostService/Auth/RequestInterceptor.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UserService/src/main/java/com/Nishant/LinkedIn_Mini/UserService/Auth/RequestInterceptor.java" beforeDir="false" afterPath="$PROJECT_DIR$/UserService/src/main/java/com/Nishant/LinkedIn_Mini/UserService/Auth/RequestInterceptor.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -85,21 +77,6 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="ConnectionServiceApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" temporary="true" nameIsGenerated="true">
-      <option name="ENABLE_JMX_AUTH" value="true" />
-      <option name="FRAME_DEACTIVATION_UPDATE_POLICY" value="UnknownPolicyInFreeMode" />
-      <module name="ConnectionService" />
-      <option name="SPRING_BOOT_MAIN_CLASS" value="com.Nishant.LinkedIn_Mini.ConnectionService.ConnectionServiceApplication" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="com.Nishant.LinkedIn_Mini.ConnectionService.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="NotificationServiceApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" temporary="true" nameIsGenerated="true">
       <option name="ENABLE_JMX_AUTH" value="true" />
       <option name="FRAME_DEACTIVATION_UPDATE_POLICY" value="UnknownPolicyInFreeMode" />
@@ -145,20 +122,35 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="UserServiceApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" temporary="true" nameIsGenerated="true">
+      <option name="ENABLE_JMX_AUTH" value="true" />
+      <option name="FRAME_DEACTIVATION_UPDATE_POLICY" value="UnknownPolicyInFreeMode" />
+      <module name="UserService" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.Nishant.LinkedIn_Mini.UserService.UserServiceApplication" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.Nishant.LinkedIn_Mini.UserService.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <list>
       <item itemvalue="Spring Boot.ApiGatewayApplication" />
       <item itemvalue="Spring Boot.PostServiceApplication" />
       <item itemvalue="Spring Boot.UploaderServiceApplication" />
-      <item itemvalue="Spring Boot.ConnectionServiceApplication" />
       <item itemvalue="Spring Boot.NotificationServiceApplication" />
+      <item itemvalue="Spring Boot.UserServiceApplication" />
     </list>
     <recent_temporary>
       <list>
         <item itemvalue="Spring Boot.PostServiceApplication" />
+        <item itemvalue="Spring Boot.UserServiceApplication" />
         <item itemvalue="Spring Boot.NotificationServiceApplication" />
         <item itemvalue="Spring Boot.ApiGatewayApplication" />
         <item itemvalue="Spring Boot.UploaderServiceApplication" />
-        <item itemvalue="Spring Boot.ConnectionServiceApplication" />
       </list>
     </recent_temporary>
   </component>
