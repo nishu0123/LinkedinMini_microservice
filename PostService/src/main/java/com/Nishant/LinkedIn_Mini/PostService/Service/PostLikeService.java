@@ -4,6 +4,7 @@ import com.Nishant.LinkedIn_Mini.PostService.Dto.PostDislikeRequestDto;
 import com.Nishant.LinkedIn_Mini.PostService.Dto.PostLikeDto;
 import com.Nishant.LinkedIn_Mini.PostService.Dto.PostLikeRequestDto;
 import com.Nishant.LinkedIn_Mini.PostService.Entity.PostLikeEntity;
+import com.Nishant.LinkedIn_Mini.PostService.Exception.PostAlreadyLikedException;
 import com.Nishant.LinkedIn_Mini.PostService.Exception.ResourceNotFoundException;
 import com.Nishant.LinkedIn_Mini.PostService.Repositroy.PostLikeRepository;
 import lombok.AllArgsConstructor;
@@ -25,16 +26,21 @@ public class PostLikeService {
     @Autowired
     private final PostLikeRepository postLikeRepository;
 
-    public PostLikeDto addLike(PostLikeRequestDto postLikeRequestDto, Long tempUserId) {
+    public PostLikeDto addLike(PostLikeRequestDto postLikeRequestDto , Long userId) {
         PostLikeEntity postLikeEntity = new PostLikeEntity();
         postLikeEntity.setPostId(postLikeRequestDto.getPostId());
-        postLikeEntity.setUserId(tempUserId);
+        postLikeEntity.setUserId(userId);
 
-        PostLikeEntity savedPostLike =  postLikeRepository.save(postLikeEntity); //saving the data into the database
-
-        PostLikeDto postLikeDto = modelMapper.map(savedPostLike , PostLikeDto.class);
-        return postLikeDto;
-
+        //first check if likes already has been recorded
+        if(true == postLikeRepository.existsByPost_IdAndUserId(postLikeRequestDto.getPostId(),userId) )
+        {
+            throw new PostAlreadyLikedException(
+                    "User has already liked this post"
+            );
+        }else{
+            PostLikeEntity savedPostLike =  postLikeRepository.save(postLikeEntity); //saving the data into the database
+            return modelMapper.map(savedPostLike , PostLikeDto.class);
+        }
     }
 
     public void deleteLike(PostDislikeRequestDto postDislikeRequestDto, Long tempUserId) throws AccessDeniedException {

@@ -37,11 +37,11 @@ public class PostLikeController {
 
 //this is also working
     @PostMapping("/addLike")
-    public ResponseEntity<PostLikeDto> addLike(@RequestBody PostLikeRequestDto postLikeRequestDto)
+    public ResponseEntity<PostLikeDto> addLike(@RequestBody PostLikeRequestDto postLikeRequestDto , @RequestHeader("X-User-Id") Long userId)
     {
         //now we have to save this like
-        Long tempUserId = 1L; //this is the temporary user id
-        PostLikeDto postLikeDto = postLikeService.addLike(postLikeRequestDto , tempUserId);
+//        Long tempUserId = 1L; //this is the temporary user id
+        PostLikeDto postLikeDto = postLikeService.addLike(postLikeRequestDto , userId);
         return new ResponseEntity<>(postLikeDto , HttpStatus.ACCEPTED); //constructor
         /*
         //another approach
