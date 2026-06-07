@@ -1,6 +1,8 @@
 package com.Nishant.LinkedIn_Mini.UploaderService.Service;
 
 import com.Nishant.LinkedIn_Mini.UploaderService.Dto.CreatePostResponseDto;
+import com.Nishant.LinkedIn_Mini.UploaderService.Dto.DeleteImageResponseDto;
+import com.Nishant.LinkedIn_Mini.UploaderService.Exception.CloudinaryDeleteException;
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import lombok.RequiredArgsConstructor;
@@ -17,8 +19,8 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class CloudinaryUploaderService implements UploaderService {
 
-//      ("request has been passed to the service layer ");
     private final Cloudinary cloudinary;
+
     @Override
     public CreatePostResponseDto upload(MultipartFile file) {
 
@@ -54,4 +56,48 @@ public class CloudinaryUploaderService implements UploaderService {
 //        System.out.println(
 //                cloudinary.uploader().upload("https://cloudinary-devs.github.io/cld-docs-assets/assets/images/coffee_cup.jpg", params1));
     }
+
+
+
+
+//    public DeleteImageResponseDto deletePost(String publicId){
+//        DeleteImageResponseDto deleteImageResponseDto = new DeleteImageResponseDto();
+//
+//        return deleteImageResponseDto;
+//    }
+
+    @Override
+    public DeleteImageResponseDto deletePost(String publicId) {
+        DeleteImageResponseDto deleteImageResponseDto = new DeleteImageResponseDto();
+
+        try {
+            Map result = cloudinary.uploader().destroy(
+                    publicId,
+                    ObjectUtils.emptyMap()
+            );
+
+            String cloudinaryResult =
+                    (String) result.get("result");
+
+            if ("ok".equals(cloudinaryResult)) {
+
+                deleteImageResponseDto.setStatus("SUCCESS");
+                deleteImageResponseDto.setMessage("Image deleted successfully");
+                return deleteImageResponseDto;
+            }
+
+            throw new CloudinaryDeleteException(
+                    "Cloudinary returned: "
+                            + cloudinaryResult
+            );
+
+        } catch (IOException e) {
+
+            throw new CloudinaryDeleteException(
+                    "Failed to communicate with Cloudinary",
+                    e
+            );
+        }
+    }
+
 }

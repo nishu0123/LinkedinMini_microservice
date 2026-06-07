@@ -1,16 +1,14 @@
-package com.Nishant.LinkedIn_Mini.PostService.Dto;
+package com.Nishant.LinkedIn_Mini.UploaderService.Dto;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
 @AllArgsConstructor
-@Data
-public class ErrorResponseDto {
+public class ErrorResponse {
 
+    private String errorCode;
     private String message;
-    private int statusCode;
 }

@@ -5,15 +5,26 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="95c9979f-48c5-4464-b41f-d32d437848b1" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/PostService/src/main/java/com/Nishant/LinkedIn_Mini/PostService/Dto/ErrorResponseDto.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/PostService/src/main/java/com/Nishant/LinkedIn_Mini/PostService/Exception/PostAlreadyLikedException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/PostService/src/main/java/com/Nishant/LinkedIn_Mini/PostService/Dto/DeleteImageRequestDto.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/PostService/src/main/java/com/Nishant/LinkedIn_Mini/PostService/Dto/DeleteImageResponseDto.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/PostService/src/main/java/com/Nishant/LinkedIn_Mini/PostService/Exception/PostDeletionException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/PostService/src/main/java/com/Nishant/LinkedIn_Mini/PostService/Exception/PostNotFoundException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/PostService/src/main/java/com/Nishant/LinkedIn_Mini/PostService/Repositroy/PostDeleteRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/PostService/src/main/java/com/Nishant/LinkedIn_Mini/PostService/Repositroy/PostRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/PostService/src/main/java/com/Nishant/LinkedIn_Mini/PostService/Service/PostDeleteService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/UploaderService/src/main/java/com/Nishant/LinkedIn_Mini/UploaderService/Dto/DeleteImageRequestDto.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/UploaderService/src/main/java/com/Nishant/LinkedIn_Mini/UploaderService/Dto/DeleteImageResponseDto.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/UploaderService/src/main/java/com/Nishant/LinkedIn_Mini/UploaderService/Dto/ErrorResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/UploaderService/src/main/java/com/Nishant/LinkedIn_Mini/UploaderService/Exception/CloudinaryDeleteException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/UploaderService/src/main/java/com/Nishant/LinkedIn_Mini/UploaderService/Exception/GlobalExceptionHandler.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PostService/src/main/java/com/Nishant/LinkedIn_Mini/PostService/Config/PostConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/PostService/src/main/java/com/Nishant/LinkedIn_Mini/PostService/Config/PostConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PostService/src/main/java/com/Nishant/LinkedIn_Mini/PostService/Controller/PostLikeController.java" beforeDir="false" afterPath="$PROJECT_DIR$/PostService/src/main/java/com/Nishant/LinkedIn_Mini/PostService/Controller/PostLikeController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PostService/src/main/java/com/Nishant/LinkedIn_Mini/PostService/Entity/PostLikeEntity.java" beforeDir="false" afterPath="$PROJECT_DIR$/PostService/src/main/java/com/Nishant/LinkedIn_Mini/PostService/Entity/PostLikeEntity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PostService/src/main/java/com/Nishant/LinkedIn_Mini/PostService/Controller/PostController.java" beforeDir="false" afterPath="$PROJECT_DIR$/PostService/src/main/java/com/Nishant/LinkedIn_Mini/PostService/Controller/PostController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PostService/src/main/java/com/Nishant/LinkedIn_Mini/PostService/Dto/ErrorResponseDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/PostService/src/main/java/com/Nishant/LinkedIn_Mini/PostService/Dto/ErrorResponseDto.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/PostService/src/main/java/com/Nishant/LinkedIn_Mini/PostService/Exception/GlobalExceptionHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/PostService/src/main/java/com/Nishant/LinkedIn_Mini/PostService/Exception/GlobalExceptionHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PostService/src/main/java/com/Nishant/LinkedIn_Mini/PostService/Repositroy/PostLikeRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/PostService/src/main/java/com/Nishant/LinkedIn_Mini/PostService/Repositroy/PostLikeRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PostService/src/main/java/com/Nishant/LinkedIn_Mini/PostService/Service/PostLikeService.java" beforeDir="false" afterPath="$PROJECT_DIR$/PostService/src/main/java/com/Nishant/LinkedIn_Mini/PostService/Service/PostLikeService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PostService/src/main/java/com/Nishant/LinkedIn_Mini/PostService/FeignClient/imageUploaderFeign.java" beforeDir="false" afterPath="$PROJECT_DIR$/PostService/src/main/java/com/Nishant/LinkedIn_Mini/PostService/FeignClient/imageUploaderFeign.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UploaderService/src/main/java/com/Nishant/LinkedIn_Mini/UploaderService/Controller/UploadController.java" beforeDir="false" afterPath="$PROJECT_DIR$/UploaderService/src/main/java/com/Nishant/LinkedIn_Mini/UploaderService/Controller/UploadController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UploaderService/src/main/java/com/Nishant/LinkedIn_Mini/UploaderService/Service/CloudinaryUploaderService.java" beforeDir="false" afterPath="$PROJECT_DIR$/UploaderService/src/main/java/com/Nishant/LinkedIn_Mini/UploaderService/Service/CloudinaryUploaderService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UploaderService/src/main/java/com/Nishant/LinkedIn_Mini/UploaderService/Service/UploaderService.java" beforeDir="false" afterPath="$PROJECT_DIR$/UploaderService/src/main/java/com/Nishant/LinkedIn_Mini/UploaderService/Service/UploaderService.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -23,6 +34,7 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
+        <option value="Interface" />
         <option value="Class" />
       </list>
     </option>
@@ -74,6 +86,11 @@
     &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;
   }
 }</component>
+  <component name="RecentsManager">
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.Nishant.LinkedIn_Mini.UploaderService.Dto" />
+    </key>
+  </component>
   <component name="RunManager" selected="Spring Boot.PostServiceApplication">
     <configuration name="ApiGatewayApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" temporary="true" nameIsGenerated="true">
       <option name="ENABLE_JMX_AUTH" value="true" />

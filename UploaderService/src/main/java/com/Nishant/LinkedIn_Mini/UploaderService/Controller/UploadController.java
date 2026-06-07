@@ -1,10 +1,14 @@
 package com.Nishant.LinkedIn_Mini.UploaderService.Controller;
 
 import com.Nishant.LinkedIn_Mini.UploaderService.Dto.CreatePostResponseDto;
+import com.Nishant.LinkedIn_Mini.UploaderService.Dto.DeleteImageRequestDto;
+import com.Nishant.LinkedIn_Mini.UploaderService.Dto.DeleteImageResponseDto;
 import com.Nishant.LinkedIn_Mini.UploaderService.Service.UploaderService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.hc.client5.http.entity.mime.MultipartPart;
+import org.apache.http.protocol.HTTP;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -36,6 +40,19 @@ public class UploadController {
         CreatePostResponseDto createPostResponseDto = uploaderService.upload(file);
 
         return ResponseEntity.ok(createPostResponseDto);
+    }
+
+    @DeleteMapping("/delete")
+    public ResponseEntity<DeleteImageResponseDto> deleteImage(
+            @RequestBody DeleteImageRequestDto request
+    ) {
+        DeleteImageResponseDto deleteImageResponseDto =  uploaderService.deletePost(
+                request.getPublicId()
+        );
+
+        //we will reach to this statement if image/post will be deleted successfully
+        //other it will throw exception and will not reach at this point
+        return new ResponseEntity<>(deleteImageResponseDto , HttpStatus.OK);
     }
 
 

@@ -1,13 +1,12 @@
 package com.Nishant.LinkedIn_Mini.PostService.Controller;
 
 import com.Nishant.LinkedIn_Mini.PostService.Auth.AuthContextHolder;
+import com.Nishant.LinkedIn_Mini.PostService.Dto.*;
 import com.Nishant.LinkedIn_Mini.PostService.Dto.EventDto.PostCreatedEventDto;
-import com.Nishant.LinkedIn_Mini.PostService.Dto.PostCreateRequestDto;
-import com.Nishant.LinkedIn_Mini.PostService.Dto.PostDto;
 import com.Nishant.LinkedIn_Mini.PostService.Entity.PostEntity;
 import com.Nishant.LinkedIn_Mini.PostService.Service.PostCreateService;
 import com.Nishant.LinkedIn_Mini.PostService.Service.PostCreatedEventProducer;
-import lombok.NoArgsConstructor;
+import com.Nishant.LinkedIn_Mini.PostService.Service.PostDeleteService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -33,6 +32,9 @@ public class PostController {
 
     @Autowired
     private final PostCreatedEventProducer postCreatedEventProducer;
+
+    @Autowired
+    private  final PostDeleteService postDeleteService;
 
 
     @GetMapping("/greet")
@@ -115,13 +117,17 @@ public class PostController {
     //now implement the delete post logic
 
     @PostMapping("/deletePost")
-    public ResponseEntity<PostDto> deletePost(@RequestBody PostDto postDto){
-        //write logic to delete the post
-        //we have post_id against this post ,
-        Long postId = postDto.getId();
-        //now we have to delete post by id , and its our choice that we want to delete
-        //post from the cloudinary service or not
-        //we have to also delete post from cloudinary or google cloud service
+    public ResponseEntity<PostDto> deletePost(@RequestBody DeleteImageRequestDto deleteImageRequestDto){
+        //get the post_id from request body
+        String publicId = deleteImageRequestDto.getPublicId();
+
+        //write the logic to call the api of the uploader service to delete the
+        //image from the uploader service
+        //at first get the public id using the post id
+
+
+        PostDto postDto = postDeleteService.deletePost(publicId);
+
         return new ResponseEntity<>(postDto , HttpStatus.ACCEPTED);
 
     }
