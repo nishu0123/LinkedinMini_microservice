@@ -5,11 +5,13 @@ import com.Nishant.LinkedIn_Mini.UserService.Dto.PersonDto;
 import com.Nishant.LinkedIn_Mini.UserService.Dto.SignInRequestDto;
 import com.Nishant.LinkedIn_Mini.UserService.Dto.UserDto;
 import com.Nishant.LinkedIn_Mini.UserService.Entity.UserEntity;
+import com.Nishant.LinkedIn_Mini.UserService.Exception.DuplicateUserNameException;
 import com.Nishant.LinkedIn_Mini.UserService.Exception.InvalidCredentialsException;
 import com.Nishant.LinkedIn_Mini.UserService.Exception.UserNotFoundException;
 import com.Nishant.LinkedIn_Mini.UserService.FeignClient.UserFeign;
 import com.Nishant.LinkedIn_Mini.UserService.Repositroy.UserRepository;
 import com.Nishant.LinkedIn_Mini.UserService.Util.BCrypt;
+import feign.FeignException;
 import jakarta.transaction.Transactional;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -78,17 +80,22 @@ public class AuthService {
             ResponseEntity<PersonDto> response =  userFeign.addUserNode(userEntity.getId() , personDto);
             log.info("node created for username : " + personDto.getUserName());
         }
-        catch (Exception e){
+        catch (FeignException ex){
+
+            //check the status code
+            if (ex.status() == 409) {
+                throw new DuplicateUserNameException(
+                        "Username already exists"
+                );
+            }
+
             log.error(
                     "Failed to create node for username: {}",
                     personDto.getUserName(),
-                    e
+                    ex
             );
 
-            throw new RuntimeException(
-                    "Failed to create user node in Connection Service",
-                    e
-            );
+            throw ex;
         }
 
         //now return it

@@ -3,6 +3,7 @@ package com.Nishant.LinkedIn_Mini.ConnectionService.Service;
 import com.Nishant.LinkedIn_Mini.ConnectionService.Dto.PersonDto;
 import com.Nishant.LinkedIn_Mini.ConnectionService.Dto.UserInfoDto;
 import com.Nishant.LinkedIn_Mini.ConnectionService.Entity.PersonEntity;
+import com.Nishant.LinkedIn_Mini.ConnectionService.Exception.DuplicateUserNameException;
 import com.Nishant.LinkedIn_Mini.ConnectionService.Repository.PersonRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -123,7 +124,9 @@ public class ConnectionService {
         {
             personRepository.save(personEntity);
         } catch (RuntimeException e) {
-            throw new RuntimeException(e);
+            throw new DuplicateUserNameException(
+                    "Username already exists"
+            );
         }
 
         return personDtoRequest;
