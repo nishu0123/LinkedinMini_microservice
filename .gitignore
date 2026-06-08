@@ -12,3 +12,6 @@ build/
 # Compiled Java Files
 *.class
 *.jar
+
+#desing and architecture related document
+Design_related_document/
