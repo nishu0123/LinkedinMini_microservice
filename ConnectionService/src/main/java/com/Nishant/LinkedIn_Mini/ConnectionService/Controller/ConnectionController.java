@@ -1,16 +1,16 @@
 package com.Nishant.LinkedIn_Mini.ConnectionService.Controller;
 
 import com.Nishant.LinkedIn_Mini.ConnectionService.Dto.PersonDto;
+import com.Nishant.LinkedIn_Mini.ConnectionService.Dto.UserInfoDto;
 import com.Nishant.LinkedIn_Mini.ConnectionService.Service.ConnectionService;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 @Slf4j
@@ -65,6 +65,22 @@ public class ConnectionController {
 
         log.info("connection data received  from service in controller = " + allConnection);
         return allConnection;
+
+    }
+
+    @PostMapping("/addUserNode")
+    public ResponseEntity<PersonDto> addUserNode(@RequestBody PersonDto personDto)
+    {
+        //implement the logic here
+        //in the request dto i am expecting the unsername and email
+        //node will consist of username and userId ,
+        //we will receive username and the email from userService
+        //here i will create the userId
+        //then i will create node that will consist of the userid and the username
+        PersonDto personDtoresponse = connectionService.addUserNode(personDto);
+
+        //Return the response
+        return new ResponseEntity<>(personDtoresponse ,HttpStatus.CREATED);
 
     }
 }
