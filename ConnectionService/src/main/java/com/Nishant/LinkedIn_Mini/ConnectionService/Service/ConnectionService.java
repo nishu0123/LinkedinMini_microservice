@@ -1,6 +1,7 @@
 package com.Nishant.LinkedIn_Mini.ConnectionService.Service;
 
 import com.Nishant.LinkedIn_Mini.ConnectionService.Dto.PersonDto;
+import com.Nishant.LinkedIn_Mini.ConnectionService.Dto.UserInfoDto;
 import com.Nishant.LinkedIn_Mini.ConnectionService.Entity.PersonEntity;
 import com.Nishant.LinkedIn_Mini.ConnectionService.Repository.PersonRepository;
 import lombok.RequiredArgsConstructor;
@@ -110,5 +111,22 @@ public class ConnectionService {
             allPersonDto.add(personDtovalue);
         }
         return allPersonDto;
+    }
+
+    public PersonDto addUserNode(PersonDto personDtoRequest) {
+        //create the personDto
+        PersonEntity personEntity = new PersonEntity();
+        personEntity.setUserId(personDtoRequest.getUserId());
+        personEntity.setUserName(personDtoRequest.getUserName());
+
+        try
+        {
+            personRepository.save(personEntity);
+        } catch (RuntimeException e) {
+            throw new RuntimeException(e);
+        }
+
+        return personDtoRequest;
+
     }
 }

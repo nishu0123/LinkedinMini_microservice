@@ -129,6 +129,12 @@
 			<version>3.0.0</version>
 		</dependency>
 
+<!--		Feignclient -->
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-openfeign</artifactId>
+		</dependency>
+
 
 	</dependencies>
 

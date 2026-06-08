@@ -32,4 +32,12 @@ public class UserEntity {
     )
     String password;
 
+    //in future if required we can implement it
+//    @Column(
+//            name = "user_uuid",
+//            nullable = false,
+//            unique = true
+//    )
+//    private String userUuid;
+
 }
