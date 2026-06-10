@@ -58,6 +58,7 @@ public class PostDeleteService {
 
         if (response.getStatusCode() == HttpStatus.OK && "SUCCESS".equals(response.getBody().getStatus())) {
 
+            log.info("post deleted Successfully !");
             postDeleteRepository.delete(postEntity);
 
         }else{

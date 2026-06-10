@@ -71,16 +71,16 @@ public class ConnectionController {
     @PostMapping("/addUserNode")
     public ResponseEntity<PersonDto> addUserNode(@RequestBody PersonDto personDto)
     {
-        //implement the logic here
-        //in the request dto i am expecting the unsername and email
-        //node will consist of username and userId ,
-        //we will receive username and the email from userService
-        //here i will create the userId
-        //then i will create node that will consist of the userid and the username
+        //adding a node of user whose have signed in to the system
         PersonDto personDtoresponse = connectionService.addUserNode(personDto);
 
         //Return the response
         return new ResponseEntity<>(personDtoresponse ,HttpStatus.CREATED);
 
     }
+
+    //
+
+
+
 }

@@ -53,18 +53,8 @@ public class CloudinaryUploaderService implements UploaderService {
             throw new RuntimeException("Image upload failed", e);
         }
 
-//        System.out.println(
-//                cloudinary.uploader().upload("https://cloudinary-devs.github.io/cld-docs-assets/assets/images/coffee_cup.jpg", params1));
     }
 
-
-
-
-//    public DeleteImageResponseDto deletePost(String publicId){
-//        DeleteImageResponseDto deleteImageResponseDto = new DeleteImageResponseDto();
-//
-//        return deleteImageResponseDto;
-//    }
 
     @Override
     public DeleteImageResponseDto deletePost(String publicId) {
@@ -78,6 +68,8 @@ public class CloudinaryUploaderService implements UploaderService {
 
             String cloudinaryResult =
                     (String) result.get("result");
+
+            log.info("status of deleting post from cloudinary service : " + cloudinaryResult);
 
             if ("ok".equals(cloudinaryResult)) {
 
