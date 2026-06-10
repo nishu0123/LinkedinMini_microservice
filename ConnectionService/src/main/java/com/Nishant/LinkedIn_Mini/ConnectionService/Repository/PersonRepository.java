@@ -46,4 +46,40 @@ RETURN DISTINCT
        f3.userName AS userName
 """)
     List<PersonEntity> findThirdDegreeConnections(Long userId);
+
+
+    @Query("""
+    MATCH (source:Person {userId: $sourceUserId})-[r:CONNECTED_TO]->(destination:person {userId: $destinationUserId})
+    DELETE r
+    """)
+    void unfollow(Long sourceUserId, Long destinationUserId);
+
+
+
+    @Query("""
+    MATCH (destination:Person {userId: $destinationUserId})
+          -[r:REQUESTED_TO]->
+          (source:Person {userId: $sourceUserId})
+    DELETE r
+    """)
+    void rejectConnection(Long sourceUserId, Long destinationUserId);
+
+
+    @Query("""
+    MATCH (destination:Person {userId: $destinationUserId})
+          -[r:REQUESTED_TO]->
+          (source:Person {userId: $sourceUserId})
+    DELETE r
+    MERGE (source)-[:CONNECTED_TO]->(destination)
+    MERGE (destination)-[:CONNECTED_TO]->(source)
+    """)
+    void acceptConnection(Long sourceUserId, Long destinationUserId);
+
+
+    @Query("""
+    MATCH (source:Person {userId: $sourceUserId}),
+          (destination:Person {userId: $destinationUserId})
+    MERGE (source)-[:REQUESTED_TO]->(destination)
+    """)
+    void connectionRequest(Long sourceUserId, Long destinationUserId);
 }

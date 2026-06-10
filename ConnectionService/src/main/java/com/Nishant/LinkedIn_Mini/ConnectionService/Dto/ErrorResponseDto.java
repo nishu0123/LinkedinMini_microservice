@@ -28,7 +28,6 @@ public class ErrorResponseDto {
         this.message = message;
     }
 
-
     private String errorCode;
     private String message;
 }
