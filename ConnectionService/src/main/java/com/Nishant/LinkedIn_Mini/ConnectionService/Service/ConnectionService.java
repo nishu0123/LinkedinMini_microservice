@@ -1,8 +1,11 @@
 package com.Nishant.LinkedIn_Mini.ConnectionService.Service;
 
+import com.Nishant.LinkedIn_Mini.ConnectionService.Dto.ConnectUserRequestDto;
+import com.Nishant.LinkedIn_Mini.ConnectionService.Dto.ErrorResponseDto;
 import com.Nishant.LinkedIn_Mini.ConnectionService.Dto.PersonDto;
 import com.Nishant.LinkedIn_Mini.ConnectionService.Dto.UserInfoDto;
 import com.Nishant.LinkedIn_Mini.ConnectionService.Entity.PersonEntity;
+import com.Nishant.LinkedIn_Mini.ConnectionService.Exception.ConnectionOperationException;
 import com.Nishant.LinkedIn_Mini.ConnectionService.Exception.DuplicateUserNameException;
 import com.Nishant.LinkedIn_Mini.ConnectionService.Repository.PersonRepository;
 import lombok.RequiredArgsConstructor;
@@ -130,6 +133,83 @@ public class ConnectionService {
         }
 
         return personDtoRequest;
+
+    }
+
+    public void unfollowUser(Long sourceUserId, ConnectUserRequestDto connectUserRequestDto) {
+        //here we will use the try catch block if operation in the database will not be
+        //successful the exception will be thrown with the custom message and the status code
+        Long destinationUserId = connectUserRequestDto.getDestinationUserId();
+        try
+        {
+            personRepository.unfollow(sourceUserId , destinationUserId);
+        }catch (Exception e){
+//            return new ErrorResponseDto(e.getStackTrace().toString() , "something went wrong");
+            log.error(
+                    "Failed to process unfollow request. sourceUserId={}, destinationUserId={}",
+                    sourceUserId,
+                    destinationUserId,
+                    e);
+
+            throw new ConnectionOperationException(
+                    "Unable to unfollow  at this time. Try after some time",
+                    e);
+        }
+
+    }
+
+    public void rejectConnection(Long sourceUserId, ConnectUserRequestDto connectUserRequestDto) {
+        Long destinationUserId = connectUserRequestDto.getDestinationUserId();
+        try{
+            personRepository.rejectConnection(sourceUserId , destinationUserId);
+
+        }catch(Exception e){
+            log.error(
+                    "Failed to reject connection request. sourceUserId={}, destinationUserId={}",
+                    sourceUserId,
+                    destinationUserId,
+                    e);
+
+            throw new ConnectionOperationException(
+                    "Unable to reject connection request at this time.",
+                    e);
+        }
+    }
+
+    public void acceptConnection(Long sourceUserId, ConnectUserRequestDto connectUserRequestDto) {
+        Long destinationUserId = connectUserRequestDto.getDestinationUserId();
+        try{
+            personRepository.acceptConnection(sourceUserId , destinationUserId);
+
+        }catch(Exception e){
+            log.error(
+                    "Failed to accept connection request. sourceUserId={}, destinationUserId={}",
+                    sourceUserId,
+                    destinationUserId,
+                    e);
+
+            throw new ConnectionOperationException(
+                    "Unable to accept connection request at this time.",
+                    e);
+        }
+    }
+
+    public void connectionRequest(Long sourceUserId, ConnectUserRequestDto connectUserRequestDto) {
+        Long destinationUserId = connectUserRequestDto.getDestinationUserId();
+        try{
+            personRepository.connectionRequest(sourceUserId , destinationUserId);
+
+        }catch(Exception e){
+            log.error(
+                    "Failed to create connection request. sourceUserId={}, destinationUserId={}",
+                    sourceUserId,
+                    destinationUserId,
+                    e);
+
+            throw new ConnectionOperationException(
+                    "Unable to create connection request at this time.",
+                    e);
+        }
 
     }
 }
