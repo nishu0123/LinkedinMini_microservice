@@ -7,4 +7,8 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface UserRepository extends JpaRepository<UserEntity, Long> {
     UserEntity findByEmail(String email);
+
+    //practice a case  in which  , write the sql query to fetch the data from the
+    //database rather than using the conventional name to generate the sql query
+    
 }

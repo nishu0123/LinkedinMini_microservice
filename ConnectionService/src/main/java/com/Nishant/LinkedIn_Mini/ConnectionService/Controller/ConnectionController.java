@@ -151,6 +151,7 @@ public class ConnectionController {
         //implement the api to accept the connection request and update graph database neo4j accordingly
         //remove the connection between them
 
+        log.info("unfollowUser request reached to the controller");
         connectionService.unfollowUser(sourceUserId , connectUserRequestDto);
 
         ConnectUserResponseDto connectUserResponseDto = new ConnectUserResponseDto();

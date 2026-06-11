@@ -142,7 +142,10 @@ public class ConnectionService {
         Long destinationUserId = connectUserRequestDto.getDestinationUserId();
         try
         {
+            log.info("unfollowUser request reached to the service layer");
             personRepository.unfollow(sourceUserId , destinationUserId);
+            log.info("unfollowUser request return back from the service layer");
+
         }catch (Exception e){
 //            return new ErrorResponseDto(e.getStackTrace().toString() , "something went wrong");
             log.error(
