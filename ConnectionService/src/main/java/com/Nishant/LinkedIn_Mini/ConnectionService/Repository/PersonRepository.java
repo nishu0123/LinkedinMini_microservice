@@ -49,7 +49,7 @@ RETURN DISTINCT
 
 
     @Query("""
-    MATCH (source:Person {userId: $sourceUserId})-[r:CONNECTED_TO]->(destination:person {userId: $destinationUserId})
+    MATCH (source:Person {userId: $sourceUserId})-[r:CONNECTED_TO]->(destination:Person {userId: $destinationUserId})
     DELETE r
     """)
     void unfollow(Long sourceUserId, Long destinationUserId);
