@@ -32,6 +32,10 @@ public class UserEntity {
     )
     String password;
 
+
+    @Column(name = "user_role" , nullable = false)
+    String userRole;
+
     //in future if required we can implement it
 //    @Column(
 //            name = "user_uuid",
@@ -39,5 +43,4 @@ public class UserEntity {
 //            unique = true
 //    )
 //    private String userUuid;
-
 }
