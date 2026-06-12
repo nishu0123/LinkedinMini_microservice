@@ -17,7 +17,7 @@ spring:
               order: -1 # lesser the number higher the priority
               predicates:
                 # This catches login and signup specifically
-                - Path=/api/v1/user/auth/signup,/api/v1/user/auth/login
+                - Path=/api/v1/user/auth/signup,/api/v1/user/auth/login , /api/v1/user/token/refreshAcessToken
 
               filters:
                 - StripPrefix=2

@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.security.Key;
+import java.time.Duration;
 import java.util.Date;
 
 @Service
@@ -18,6 +19,9 @@ public class JwtService {
 
     @Value("${jwt.secretKey}")
     private String secretKey;
+
+    @Value("${jwt.access-token-expiry-minutes}")
+    private Long accessTokenExpiryInMinutes;
 
     private Key getSigningKey() {
         return Keys.hmacShaKeyFor(secretKey.getBytes());
@@ -30,20 +34,20 @@ public class JwtService {
                 .claim("userId", userId)
                 .claim("role", role)
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + + 15 * 60 * 1000)) // 15 min -  for testing purpose
+                .setExpiration(new Date(System.currentTimeMillis() + Duration.ofMinutes(accessTokenExpiryInMinutes).toMillis())) // accessTokenExpiryTimeInMinute min
                 .signWith(getSigningKey())
                 .compact();
     }
 
-    //Create Refresh Token
-    public String generateRefreshToken(UserEntity user) {
-        return Jwts.builder()
-                .setSubject(user.getEmail())
-                .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + 7 * 24 * 60 * 60 * 1000))
-                .signWith(getSigningKey())
-                .compact();
-    }
+//    //Create Refresh Token
+//    public String generateRefreshToken(UserEntity user) {
+//        return Jwts.builder()
+//                .setSubject(user.getEmail())
+//                .setIssuedAt(new Date())
+//                .setExpiration(new Date(System.currentTimeMillis() + 7 * 24 * 60 * 60 * 1000))
+//                .signWith(getSigningKey())
+//                .compact();
+//    }
 
 
     // 🔹 CLAIMS EXTRACTION

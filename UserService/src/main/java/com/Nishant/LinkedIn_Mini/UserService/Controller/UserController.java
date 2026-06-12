@@ -1,9 +1,6 @@
 package com.Nishant.LinkedIn_Mini.UserService.Controller;
 
-import com.Nishant.LinkedIn_Mini.UserService.Dto.LoginDto;
-import com.Nishant.LinkedIn_Mini.UserService.Dto.SignInRequestDto;
-import com.Nishant.LinkedIn_Mini.UserService.Dto.UserDto;
-import com.Nishant.LinkedIn_Mini.UserService.Dto.UserInfoDto;
+import com.Nishant.LinkedIn_Mini.UserService.Dto.*;
 import com.Nishant.LinkedIn_Mini.UserService.Entity.UserEntity;
 import com.Nishant.LinkedIn_Mini.UserService.Service.AuthService;
 import com.Nishant.LinkedIn_Mini.UserService.Service.UserService;
@@ -18,6 +15,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.UUID;
 
 @Slf4j
 @RestController
@@ -55,14 +54,15 @@ public class UserController {
 
     /// login logic need to change , for every user and password it response null data in userDto
     @PostMapping("/login")
-    public ResponseEntity<String> logIn(@RequestBody LoginDto loginDto)
+    public ResponseEntity<LoginResponseDto> logIn(@RequestBody LoginDto loginDto)
     {
         //here we have to verify the userName and password , using the same bcrypt or we can
         //give this responsibility to
         log.info("login request reached to the controller");
         //lets implement the login
 
-        String response = authService.logIn(loginDto);
+        LoginResponseDto response = authService.logIn(loginDto);
+
         return ResponseEntity.ok(response);//just returning it so that we can compile the code successfully
     }
 
