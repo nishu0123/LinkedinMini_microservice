@@ -65,6 +65,15 @@ public class UserController {
 
         return ResponseEntity.ok(response);//just returning it so that we can compile the code successfully
     }
+    @PostMapping("/logout")
+    public ResponseEntity<HttpStatus> logout(@RequestHeader("X-USER-ID") Long UserId)
+    {
+        //implement the logic in the service layer
+        userService.logout(UserId);
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
 
     //use id will be passed and it will return the user info in which only username and mail will be there
     @GetMapping("/{userId}/getUserInfo")
