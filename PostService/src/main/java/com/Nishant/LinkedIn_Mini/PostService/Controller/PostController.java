@@ -116,7 +116,7 @@ public class PostController {
 
     //now implement the delete post logic
 
-    @PostMapping("/deletePost")
+    @DeleteMapping("/deletePost")
     public ResponseEntity<PostDto> deletePost(@RequestBody DeleteImageRequestDto deleteImageRequestDto){
         //get the post_id from request body
         String publicId = deleteImageRequestDto.getPublicId();
