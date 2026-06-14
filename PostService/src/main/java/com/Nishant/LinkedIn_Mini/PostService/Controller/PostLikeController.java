@@ -20,27 +20,21 @@ import java.nio.file.AccessDeniedException;
 @RequiredArgsConstructor
 @RequestMapping("/likes")
 public class PostLikeController {
-    //add the required api
     @Autowired
     public ModelMapper modelMapper;
 
     @Autowired
     public PostLikeService postLikeService;
 
-
-    //this is also working
     @GetMapping("/greet")
     public String greet()
     {
         return "welcome to likes";
     }
 
-//this is also working
     @PostMapping("/addLike")
     public ResponseEntity<PostLikeDto> addLike(@RequestBody PostLikeRequestDto postLikeRequestDto , @RequestHeader("X-User-Id") Long userId)
     {
-        //now we have to save this like
-//        Long tempUserId = 1L; //this is the temporary user id
         PostLikeDto postLikeDto = postLikeService.addLike(postLikeRequestDto , userId);
         return new ResponseEntity<>(postLikeDto , HttpStatus.ACCEPTED); //constructor
         /*
@@ -51,15 +45,11 @@ public class PostLikeController {
          */
     }
 
-
-    //this is now working
     @DeleteMapping("/deleteLike")
-    public ResponseEntity<HttpStatus> deleteLike(@RequestBody PostDislikeRequestDto postDislikeRequestDto)
+    public ResponseEntity<HttpStatus> deleteLike(@RequestBody PostDislikeRequestDto postDislikeRequestDto , @RequestHeader("X-User-Id") Long userId)
     {
-        //now we have to dislike this post
-        Long tempUserId = 1L;//this is the temporary user id
         try {
-            postLikeService.deleteLike(postDislikeRequestDto , tempUserId);
+            postLikeService.deleteLike(postDislikeRequestDto , userId);
         } catch (AccessDeniedException e) {
             throw new RuntimeException(e);
         }

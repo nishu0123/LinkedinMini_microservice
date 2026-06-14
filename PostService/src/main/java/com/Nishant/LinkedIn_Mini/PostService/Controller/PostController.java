@@ -27,6 +27,7 @@ import java.util.List;
 public class PostController {
     @Autowired
     private final ModelMapper modelMapper;
+
     @Autowired
     private final PostCreateService postCreateService;
 
@@ -36,49 +37,30 @@ public class PostController {
     @Autowired
     private  final PostDeleteService postDeleteService;
 
-
     @GetMapping("/greet")
     public String greetFromPostService()
     {
         return "hello world from post service ";
     }
-    /*
-    implement the post mapping  , which will create the post and will return the post
-    we will get the request from the user to create the post , in which only post related info
-    will be there we will create the post id and will fetch the user id from api header
-    or any other method we can apply (like using api-gateway we can inject userid in the header
-    this part will be handled later at this time i will hardcore the user id
-    */
-
-
     //this is working
     @PostMapping("/createPost")
     public ResponseEntity<PostDto> CreatePost(@RequestBody PostCreateRequestDto postRequestDto  , @RequestHeader ("X-User-Id")Long userId)
     {
-        //here i have to create the post and then return the post
-
-        //here we have to save the data into the database
         log.info("received user id in PostService from the Request Header  = " + userId);
-//        Long tempUserId = 1L; //here using the temporary id , later this will be integrated with api-gateway
 //        Long tempUserId = userId; //here using the temporary id ,now updating the userId
         //now with the help of the AuthContextHolder , we can get the userId anywhere in the service
         Long tempUserId = AuthContextHolder.getCurrentUserId(); //get the id using interceptor
 
-        log.info("received user id in PostService from the Interceptor  = " + tempUserId);
-        /*
-        TO do : using feignCLient get the image or video url and save it to the db
-         */
-
+        log.info("userId fetched from the header : " + userId + " userId fetched using interceptor : " + tempUserId);
 
         PostEntity postEntity = postCreateService.savePostIntoDb(postRequestDto , tempUserId);
         log.info("Post saved into the database successfully!");
         PostDto postDto = modelMapper.map(postEntity , PostDto.class); //mapping the postEntity data with PostDto
 
-
         //now imageUrl have been saved into the database
         //produce the event -> post-created
 
-        String imageUrl = postDto.getImgUrl();//we will pass this imageUrl into the event
+        String imageUrl = postDto.getImgUrl();
 
         //producing event when post is created
         PostCreatedEventDto postCreatedEventDto = new PostCreatedEventDto();
@@ -89,13 +71,9 @@ public class PostController {
         return new ResponseEntity<>(postDto , HttpStatus.CREATED);
     }
 
-
-    //this is also working
     @GetMapping("/{postId}")
     public ResponseEntity<PostDto> getPost(@PathVariable Long postId)
     {
-        //here we will get the post id in the request done by the user
-        //and the we will return the post having that id
         PostEntity postEntity = postCreateService.getPost(postId);
         PostDto postDto = modelMapper.map(postEntity , PostDto.class);
         if(postDto.getImgUrl() == null)
@@ -103,10 +81,8 @@ public class PostController {
             return new ResponseEntity<>(postDto , HttpStatus.NO_CONTENT);
         }
         return new ResponseEntity<>(postDto , HttpStatus.ACCEPTED);
-//        return ResponseEntity.ok(postDto); //return the post be fetching the data from the database
     }
 
-    //below is also working
     @GetMapping("/user/{userId}/allPost")
     public ResponseEntity<List<PostDto>> getAllPost(@PathVariable Long userId)
     {
@@ -114,26 +90,14 @@ public class PostController {
         return ResponseEntity.ok(allPost);
     }
 
-    //now implement the delete post logic
-
     @DeleteMapping("/deletePost")
     public ResponseEntity<PostDto> deletePost(@RequestBody DeleteImageRequestDto deleteImageRequestDto){
         //get the post_id from request body
         String publicId = deleteImageRequestDto.getPublicId();
 
-        //write the logic to call the api of the uploader service to delete the
-        //image from the uploader service
         //at first get the public id using the post id
-
-
         PostDto postDto = postDeleteService.deletePost(publicId);
 
         return new ResponseEntity<>(postDto , HttpStatus.ACCEPTED);
-
     }
-
-
-
-
-
 }
