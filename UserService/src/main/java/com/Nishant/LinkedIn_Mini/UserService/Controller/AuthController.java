@@ -40,30 +40,4 @@ public class AuthController {
         return new ResponseEntity<>(response , HttpStatus.CREATED);
     }
 
-
-
-    //api for refresh token
-    /*
-    //here need to add the Dto for RequestTokenRequest and other dependency
-
-    @PostMapping("/refresh")
-    public AuthResponse refresh(@RequestBody RefreshTokenRequest request) {
-
-        if (!jwtService.isTokenValid(request.getRefreshToken())) {
-            throw new RuntimeException("Invalid refresh token");
-        }
-
-        Long userId = jwtService.extractUserId(request.getRefreshToken());
-        UserEntity user = userRepository.findById(userId).orElseThrow();
-
-        String newAccessToken = jwtService.generateToken(
-                user.getId(),
-                user.getUsername(),
-                user.getRole()
-        );
-
-        return new AuthResponse(newAccessToken, request.getRefreshToken());
-    }
-    */
-
 }

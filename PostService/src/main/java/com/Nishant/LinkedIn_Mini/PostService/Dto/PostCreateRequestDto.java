@@ -4,5 +4,6 @@ import lombok.Data;
 
 @Data
 public class PostCreateRequestDto {
+    //insert the validation
     String content;
 }

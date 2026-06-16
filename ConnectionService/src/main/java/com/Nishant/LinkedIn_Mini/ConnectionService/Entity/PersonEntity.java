@@ -26,10 +26,6 @@ import java.util.List;
 @Node("Person")
 public class PersonEntity {
 
-//    @Id
-//    @Property("id")
-//    private Long id;
-
     @Id
     private Long userId;
     private String userName;

@@ -56,11 +56,7 @@ public class UserController {
     @PostMapping("/login")
     public ResponseEntity<LoginResponseDto> logIn(@RequestBody LoginDto loginDto)
     {
-        //here we have to verify the userName and password , using the same bcrypt or we can
-        //give this responsibility to
         log.info("login request reached to the controller");
-        //lets implement the login
-
         LoginResponseDto response = authService.logIn(loginDto);
 
         return ResponseEntity.ok(response);//just returning it so that we can compile the code successfully
