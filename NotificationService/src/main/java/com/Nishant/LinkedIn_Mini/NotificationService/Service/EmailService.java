@@ -3,6 +3,7 @@ package com.Nishant.LinkedIn_Mini.NotificationService.Service;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -15,6 +16,7 @@ public class EmailService {
         this.mailSender = mailSender;
     }
 
+    @Async("notificationExecutor") //find (notificationExecutor) this in the config
     public void sendPostNotificationEmail(String recipientEmail, String senderName, String postContent) {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(recipientEmail);
@@ -24,7 +26,5 @@ public class EmailService {
 
         mailSender.send(message);
         log.info("Email sent successfully to {}", recipientEmail);
-
-        //adding comment for test 
     }
 }

@@ -16,6 +16,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @Slf4j
@@ -73,7 +74,7 @@ public class UserController {
 
     //use id will be passed and it will return the user info in which only username and mail will be there
     @GetMapping("/{userId}/getUserInfo")
-    public ResponseEntity<UserInfoDto> GetUserInfo(@PathVariable Long userId , @RequestHeader("X-USER-ID") Long xUserId)
+    public ResponseEntity<UserInfoDto> GetUserInfo(@PathVariable Long userId)
     {
         log.info("request received in controller to getUserInfo for id = " + userId);
         //Here we will return the userInfoDto which only contain username and the mail
@@ -81,5 +82,14 @@ public class UserController {
         UserInfoDto userInfoDto = userService.GetUserInfo(userId);
         return ResponseEntity.ok(userInfoDto);
     }
+
+    @GetMapping("/user/auth/userInfo/bulk")
+    List<NotificationUserInfoDto> GetUserInfoInBulk(@RequestBody List<Long> userIdList)
+    {
+        //return the list of the user info
+        List<NotificationUserInfoDto> response = userService.getUserInfoInBulk(userIdList);
+        return response;
+    }
+
 
 }
