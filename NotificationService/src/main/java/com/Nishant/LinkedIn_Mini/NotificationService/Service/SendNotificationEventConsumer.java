@@ -1,23 +1,50 @@
 package com.Nishant.LinkedIn_Mini.NotificationService.Service;
 
 import com.Nishant.LinkedIn_Mini.NotificationService.Dto.EventDto.SendNotificationEventDto;
+import com.Nishant.LinkedIn_Mini.NotificationService.Dto.FeignDto.UserInfoDto;
+import com.Nishant.LinkedIn_Mini.NotificationService.FeignClient.GetUserInfoFeign;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.stereotype.Service;
+
 
 @Slf4j
-public class SendNotificationEventConsumer {
+@Service
+public class SendNotificationEventConsumer
+{
+    private final GetUserInfoFeign getUserInfoFeign;
 
-    @KafkaListener(topics = "send-notification-topic", groupId = "notification-group")
-    private void SendNotificationEventConsume(SendNotificationEventDto event)
+    private final EmailService emailService;
+
+    public SendNotificationEventConsumer(
+            GetUserInfoFeign getUserInfoFeign,
+            EmailService emailService)
     {
-        //here we have the details about the user and the follower and the conent
+        this.getUserInfoFeign = getUserInfoFeign;
+        this.emailService = emailService;
+    }
 
-        //do a feign call to user service to get the email of the follower
-        log.info("consuming send-notificaton-topic event");
+    @KafkaListener(
+            topics = "send-notification-topic",
+            groupId = "notification-group"
+    )
+    public void consume(
+            SendNotificationEventDto event)
+    {
+        log.info(
+                "Received notification event for follower {}",
+                event.getUsersFollowerId()
+        );
 
+        UserInfoDto follower =
+                getUserInfoFeign.GetUserInfo(
+                        event.getUsersFollowerId()
+                );
 
-
-        //and then send the email to the follower
-
+        emailService.sendPostNotificationEmail(
+                event.getReceipientEmail(),
+                follower.getUserName(),
+                event.getContent()
+        );
     }
 }

@@ -1,5 +1,6 @@
 package com.Nishant.LinkedIn_Mini.UserService.Service;
 
+import com.Nishant.LinkedIn_Mini.UserService.Dto.NotificationUserInfoDto;
 import com.Nishant.LinkedIn_Mini.UserService.Dto.UserInfoDto;
 import com.Nishant.LinkedIn_Mini.UserService.Entity.UserEntity;
 import com.Nishant.LinkedIn_Mini.UserService.Exception.InvalidCredentialsException;
@@ -10,6 +11,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -58,5 +60,18 @@ public class UserService {
 
         log.info("/logout api deleted refresh token");
 
+    }
+
+    public List<NotificationUserInfoDto> getUserInfoInBulk(List<Long> userIdList)
+    {
+        List<UserEntity> userEntityList =
+                userRepository.findAllById(userIdList);
+
+        return userEntityList.stream()
+                .map(user -> modelMapper.map(
+                        user,
+                        NotificationUserInfoDto.class
+                ))
+                .toList();
     }
 }
