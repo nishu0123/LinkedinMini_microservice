@@ -1,8 +1,6 @@
 package com.Nishant.LinkedIn_Mini.NotificationService.Service;
 
-import com.Nishant.LinkedIn_Mini.NotificationService.Dto.EventDto.PostCreatedEventDto;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 
 @Service

@@ -1,6 +1,6 @@
 package com.Nishant.LinkedIn_Mini.PostService.Service;
 
-import com.Nishant.LinkedIn_Mini.PostService.Dto.EventDto.PostCreatedEventDto;
+import com.nishant.linkedinmini.common.contracts.KafkaEventDto.PostCreatedEventDto;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 

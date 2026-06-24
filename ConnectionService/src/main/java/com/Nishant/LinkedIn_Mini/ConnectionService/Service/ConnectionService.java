@@ -33,7 +33,8 @@ public class ConnectionService {
                 personRepository.findFirstDegreeConnections(userId);
 
         log.info("Fetched connections size: {}", connections.size());
-        log.info("connection data received  from repository in service = " + connections.get(0));
+        //below line will give out of bound if there is no any connection
+//        log.info("connection data received  from repository in service = " + connections.get(0));
 
         List<PersonDto> allPersonDto = new ArrayList<>();
 

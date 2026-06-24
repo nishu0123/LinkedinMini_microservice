@@ -12,7 +12,7 @@ public class KafkaConfig {
 
     @Bean
     public NewTopic postCreatedTopic() {
-        return TopicBuilder.name("post.created")
+        return TopicBuilder.name("post-created-topic")
                 .partitions(3)
                 .replicas(1)
                 .build();

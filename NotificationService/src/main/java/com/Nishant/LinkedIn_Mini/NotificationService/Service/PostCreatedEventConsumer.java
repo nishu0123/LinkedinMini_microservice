@@ -1,12 +1,11 @@
 package com.Nishant.LinkedIn_Mini.NotificationService.Service;
 
-import com.Nishant.LinkedIn_Mini.NotificationService.Dto.EventDto.PostCreatedEventDto;
 import com.Nishant.LinkedIn_Mini.NotificationService.Dto.EventDto.SendNotificationEventDto;
 import com.Nishant.LinkedIn_Mini.NotificationService.Dto.FeignDto.NotificationUserInfoDto;
 import com.Nishant.LinkedIn_Mini.NotificationService.Dto.FeignDto.PersonDto;
-import com.Nishant.LinkedIn_Mini.NotificationService.Dto.FeignDto.UserInfoDto;
 import com.Nishant.LinkedIn_Mini.NotificationService.FeignClient.GetFollowerFeign;
 import com.Nishant.LinkedIn_Mini.NotificationService.FeignClient.GetUserInfoFeign;
+import com.nishant.linkedinmini.common.contracts.KafkaEventDto.PostCreatedEventDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
@@ -40,7 +39,7 @@ public class PostCreatedEventConsumer {
     }
 
 
-    @KafkaListener(topics = "post-created-topic", groupId = "notification-group")
+    @KafkaListener(topics = "post-created-topic", groupId = "notification-group-v2")
     public void consumePostEvent(PostCreatedEventDto postCreatedEventDto) {
         System.out.println("New post by: " + postCreatedEventDto.getUserId());
         System.out.println("Image URL: " + postCreatedEventDto.getImageUrl());

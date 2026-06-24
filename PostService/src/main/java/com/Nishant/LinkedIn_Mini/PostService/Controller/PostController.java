@@ -2,11 +2,11 @@ package com.Nishant.LinkedIn_Mini.PostService.Controller;
 
 import com.Nishant.LinkedIn_Mini.PostService.Auth.AuthContextHolder;
 import com.Nishant.LinkedIn_Mini.PostService.Dto.*;
-import com.Nishant.LinkedIn_Mini.PostService.Dto.EventDto.PostCreatedEventDto;
 import com.Nishant.LinkedIn_Mini.PostService.Entity.PostEntity;
 import com.Nishant.LinkedIn_Mini.PostService.Service.PostCreateService;
 import com.Nishant.LinkedIn_Mini.PostService.Service.PostCreatedEventProducer;
 import com.Nishant.LinkedIn_Mini.PostService.Service.PostDeleteService;
+import com.nishant.linkedinmini.common.contracts.KafkaEventDto.PostCreatedEventDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -66,6 +66,8 @@ public class PostController {
         PostCreatedEventDto postCreatedEventDto = new PostCreatedEventDto();
         postCreatedEventDto.setImageUrl(imageUrl);
         postCreatedEventDto.setUserId(tempUserId);
+        //check if there is requirement of the userName and email then we need to call the feign for that information
+//        postCreatedEventDto.setEmail();
         postCreatedEventProducer.sendPostEvent(postCreatedEventDto);
 
         return new ResponseEntity<>(postDto , HttpStatus.CREATED);
