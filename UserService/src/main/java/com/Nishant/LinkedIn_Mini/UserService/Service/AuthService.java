@@ -12,6 +12,7 @@ import com.Nishant.LinkedIn_Mini.UserService.Repositroy.UserRepository;
 import com.Nishant.LinkedIn_Mini.UserService.Util.BCrypt;
 import feign.FeignException;
 import jakarta.transaction.Transactional;
+import jakarta.validation.constraints.Null;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -76,6 +77,10 @@ public class AuthService {
         //BCrypt the password before saving it into the database
         String encryptedPassword =  bCrypt.hash( signInRequestDto.getPassword() );
         userEntity.setPassword(encryptedPassword);
+        if(userEntity.getUserRole() == null)
+        {
+            userEntity.setUserRole("Default");
+        }
         userRepository.save(userEntity);
 
         //after user data has been saved on signup now we will create a node in the connection

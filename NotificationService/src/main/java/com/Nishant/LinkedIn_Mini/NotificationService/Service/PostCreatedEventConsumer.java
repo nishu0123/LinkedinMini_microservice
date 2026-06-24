@@ -54,7 +54,7 @@ public class PostCreatedEventConsumer {
         //chek if there is no followers then avoid feign call
         if(followersList == null || followersList.isEmpty())
         {
-            log.info("No followers found for user {}",
+            log.info("NO followers found for user {}",
                     postCreatedEventDto.getUserId());
             return;
         }
@@ -64,13 +64,15 @@ public class PostCreatedEventConsumer {
 
 
         List<Long> userIdList = new ArrayList<>();
+
         //just for logging purpose
+        log.info("inside consumer function of  postEventCreated topic ");
         for(int i = 0; i<followersList.size(); i++)
         {
             int followerCount = i + 1;
             PersonDto tempval = followersList.get(i); //tempval will store the followers details
             log.info("follower " + followerCount + " = " + tempval);
-            log.info("notification sent to " + tempval.getUserName());
+//            log.info("notification sent to " + tempval.getUserName());
 
             //creating the list of the userId
             userIdList.add(followersList.get(i).getUserId());
@@ -98,6 +100,7 @@ public class PostCreatedEventConsumer {
                 sendNotificationEventDto.setUserName(postCreatedEventDto.getUserName());
 
                 sendNotificationEventProducer.sendNotificationEvent(sendNotificationEventDto);
+                log.info(" sendNotificationEvent produced");
 
             }
         }else{

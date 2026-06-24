@@ -2,12 +2,28 @@ package com.Nishant.LinkedIn_Mini.UserService.Auth;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
+import java.util.List;
+import java.util.Set;
+
+@Slf4j
 @Component
 public class RequestInterceptor implements HandlerInterceptor {
+
+
+    private static final List<String> PUBLIC_ENDPOINTS = List.of(
+            "/user/auth/userInfo/bulk",
+            "/user/auth/userInfo",
+            "/swagger-ui",
+            "/v3/api-docs",
+            "/swagger-resources",
+            "/user/error",
+            "http://UserService/user/auth/userInfo/bulk"
+    );
 
     //this will be called before request goes to the controller , so here we can handle the user-id
     @Override
@@ -18,11 +34,23 @@ public class RequestInterceptor implements HandlerInterceptor {
 
         //         Allow Swagger/OpenAPI endpoints
         String path = request.getRequestURI();
-        if (path.contains("/swagger-ui")
-                || path.contains("/v3/api-docs")
-                || path.contains("/swagger-resources")) {
+        log.info("uri path = {}" , path);
+//        if (path.contains("/swagger-ui")
+//                || path.contains("/v3/api-docs")
+//                || path.contains("/swagger-resources")) {
+//            return true;
+//        }
+
+//bypass the public endpoints
+        boolean isPublic = PUBLIC_ENDPOINTS.stream()
+                .anyMatch(path::startsWith);
+
+        log.info("Path = {}", path);
+        log.info("isPublic = {}", isPublic);
+        if (isPublic) {
             return true;
         }
+
 
 
         String userIdHeader = request.getHeader("X-USER-ID");

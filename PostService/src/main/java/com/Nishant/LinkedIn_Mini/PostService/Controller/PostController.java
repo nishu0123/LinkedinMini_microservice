@@ -69,6 +69,7 @@ public class PostController {
         //check if there is requirement of the userName and email then we need to call the feign for that information
 //        postCreatedEventDto.setEmail();
         postCreatedEventProducer.sendPostEvent(postCreatedEventDto);
+        log.info("sending postCreateEvent Dto");
 
         return new ResponseEntity<>(postDto , HttpStatus.CREATED);
     }

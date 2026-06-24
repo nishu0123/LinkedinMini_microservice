@@ -5,10 +5,7 @@ import com.Nishant.LinkedIn_Mini.NotificationService.Dto.FeignDto.NotificationUs
 import com.Nishant.LinkedIn_Mini.NotificationService.Dto.FeignDto.UserInfoDto;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -21,6 +18,6 @@ public interface GetUserInfoFeign {
     @GetMapping("/user/auth/{userId}/getUserInfo")
     UserInfoDto GetUserInfo(@PathVariable Long userId);
 
-    @GetMapping("/user/auth/userInfo/bulk")
+    @PostMapping("/user/auth/userInfo/bulk")
     List<NotificationUserInfoDto> GetUserInfoInBulk(@RequestBody List<Long> userIdList);
 }

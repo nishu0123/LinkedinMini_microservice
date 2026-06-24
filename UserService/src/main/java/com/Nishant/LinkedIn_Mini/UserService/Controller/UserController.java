@@ -83,7 +83,12 @@ public class UserController {
         return ResponseEntity.ok(userInfoDto);
     }
 
-    @GetMapping("/user/auth/userInfo/bulk")
+
+
+//    @PostMapping("/user/auth/userInfo/bulk")
+//    List<NotificationUserInfoDto> GetUserInfoInBulk(@RequestBody List<Long> userIdList);
+
+    @PostMapping("/userInfo/bulk")
     List<NotificationUserInfoDto> GetUserInfoInBulk(@RequestBody List<Long> userIdList)
     {
         //return the list of the user info

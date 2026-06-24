@@ -33,7 +33,7 @@ public class UserEntity {
     String password;
 
 
-    @Column(name = "user_role" , nullable = false)
+    @Column(name = "user_role")
     String userRole;
 
     //in future if required we can implement it
