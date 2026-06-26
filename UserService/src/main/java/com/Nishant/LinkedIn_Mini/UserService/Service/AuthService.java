@@ -10,6 +10,7 @@ import com.Nishant.LinkedIn_Mini.UserService.FeignClient.UserFeign;
 import com.Nishant.LinkedIn_Mini.UserService.Repositroy.RefreshTokenRepository;
 import com.Nishant.LinkedIn_Mini.UserService.Repositroy.UserRepository;
 import com.Nishant.LinkedIn_Mini.UserService.Util.BCrypt;
+import com.nishant.linkedinmini.common.contracts.FeignDto.PersonDto;
 import feign.FeignException;
 import jakarta.transaction.Transactional;
 import jakarta.validation.constraints.Null;

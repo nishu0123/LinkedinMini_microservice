@@ -1,7 +1,7 @@
 package com.Nishant.LinkedIn_Mini.UserService.FeignClient;
 
 
-import com.Nishant.LinkedIn_Mini.UserService.Dto.PersonDto;
+import com.nishant.linkedinmini.common.contracts.FeignDto.PersonDto;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;

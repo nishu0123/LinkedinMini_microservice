@@ -1,13 +1,11 @@
 package com.Nishant.LinkedIn_Mini.ConnectionService.Service;
 
 import com.Nishant.LinkedIn_Mini.ConnectionService.Dto.ConnectUserRequestDto;
-import com.Nishant.LinkedIn_Mini.ConnectionService.Dto.ErrorResponseDto;
-import com.Nishant.LinkedIn_Mini.ConnectionService.Dto.PersonDto;
-import com.Nishant.LinkedIn_Mini.ConnectionService.Dto.UserInfoDto;
 import com.Nishant.LinkedIn_Mini.ConnectionService.Entity.PersonEntity;
 import com.Nishant.LinkedIn_Mini.ConnectionService.Exception.ConnectionOperationException;
 import com.Nishant.LinkedIn_Mini.ConnectionService.Exception.DuplicateUserNameException;
 import com.Nishant.LinkedIn_Mini.ConnectionService.Repository.PersonRepository;
+import com.nishant.linkedinmini.common.contracts.FeignDto.PersonDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -16,7 +14,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Slf4j

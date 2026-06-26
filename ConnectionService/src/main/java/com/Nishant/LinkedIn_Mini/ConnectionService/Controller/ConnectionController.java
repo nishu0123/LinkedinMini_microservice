@@ -2,10 +2,8 @@ package com.Nishant.LinkedIn_Mini.ConnectionService.Controller;
 
 import com.Nishant.LinkedIn_Mini.ConnectionService.Dto.ConnectUserRequestDto;
 import com.Nishant.LinkedIn_Mini.ConnectionService.Dto.ConnectUserResponseDto;
-import com.Nishant.LinkedIn_Mini.ConnectionService.Dto.PersonDto;
-import com.Nishant.LinkedIn_Mini.ConnectionService.Dto.UserInfoDto;
 import com.Nishant.LinkedIn_Mini.ConnectionService.Service.ConnectionService;
-import lombok.Getter;
+import com.nishant.linkedinmini.common.contracts.FeignDto.PersonDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
