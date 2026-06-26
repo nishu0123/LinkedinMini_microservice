@@ -40,13 +40,12 @@ public class PostCreateService {
 
     private final ModelMapper modelMapper;
     public PostEntity savePostIntoDb(PostCreateRequestDto postRequestDto, Long tempUserId) {
-        //here i have to save the post into the database and then return the saved data to the user
-//        PostEntity postEntity = modelMapper.map(postRequestDto , PostEntity.class);
         PostEntity postEntity = new PostEntity();
         Date now = new Date();//it will set the current data automatically
         postEntity.setCreatedAt(now);
         postEntity.setUserId(tempUserId);
         log.info("postEntity data = {} " , postEntity);//print the post entity value
+
 //handling the content if it does not contains the comma
 //        //Before setting the content get the content url , after uploading the content
 //        String base64Image = postRequestDto.getContent();//image
@@ -86,28 +85,15 @@ public class PostCreateService {
 
         String publicId = response.getBody().getPublicId();//we will get the public_id from the uploader service and save it into the post table
 
-
-        /*
-        String base64Image = postRequestDto.getContent();//image
-        MultipartFile multipartFile =
-                MultipartFileUtil.base64ToMultipart(base64Image);
-
-        ResponseEntity<String> response =
-                imageUploaderFeign.upload(multipartFile);
-
-        String imageUrl = response.getBody();
-
-         */
-
-
-
-//        String response = imageUploaderFeign.upload(postRequestDto);
         postEntity.setImgUrl(imageUrl); //store the string of the response that contains the url of the image
         postEntity.setPublicId(publicId);
 //        PostEntity savedPost = postCreateRepository.save(postEntity);
 //        return savedPost;
         //upper two commented line can be written as
         return postCreateRepository.save(postEntity);
+        //detached state
+        //operation
+//        save
     }
 
     public PostEntity getPost(Long postId) {
@@ -126,7 +112,6 @@ public class PostCreateService {
             PostDto postDto =  modelMapper.map(postEntity , PostDto.class);
             allPostDto.add(postDto); //by mapping each object and then creating a list
         }
-//        List<PostDto> allPostDto = modelMapper.map(allPostEntity , PostDto.class);
         return allPostDto;
     }
 }
