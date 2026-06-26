@@ -1,4 +1,4 @@
-package com.Nishant.LinkedIn_Mini.NotificationService.Dto.FeignDto;
+package com.nishant.linkedinmini.common.contracts.FeignDto;
 
 import lombok.Data;
 
