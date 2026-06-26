@@ -1,11 +1,11 @@
 package com.Nishant.LinkedIn_Mini.UserService.Service;
 
-import com.Nishant.LinkedIn_Mini.UserService.Dto.NotificationUserInfoDto;
 import com.Nishant.LinkedIn_Mini.UserService.Dto.UserInfoDto;
 import com.Nishant.LinkedIn_Mini.UserService.Entity.UserEntity;
 import com.Nishant.LinkedIn_Mini.UserService.Exception.InvalidCredentialsException;
 import com.Nishant.LinkedIn_Mini.UserService.Repositroy.RefreshTokenRepository;
 import com.Nishant.LinkedIn_Mini.UserService.Repositroy.UserRepository;
+import com.nishant.linkedinmini.common.contracts.FeignDto.NotificationUserInfoDto;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;

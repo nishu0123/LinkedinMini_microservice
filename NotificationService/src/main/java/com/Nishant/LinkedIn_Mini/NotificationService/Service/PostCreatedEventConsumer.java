@@ -1,10 +1,10 @@
 package com.Nishant.LinkedIn_Mini.NotificationService.Service;
 
 import com.Nishant.LinkedIn_Mini.NotificationService.Dto.EventDto.SendNotificationEventDto;
-import com.Nishant.LinkedIn_Mini.NotificationService.Dto.FeignDto.NotificationUserInfoDto;
 import com.Nishant.LinkedIn_Mini.NotificationService.Dto.FeignDto.PersonDto;
 import com.Nishant.LinkedIn_Mini.NotificationService.FeignClient.GetFollowerFeign;
 import com.Nishant.LinkedIn_Mini.NotificationService.FeignClient.GetUserInfoFeign;
+import com.nishant.linkedinmini.common.contracts.FeignDto.NotificationUserInfoDto;
 import com.nishant.linkedinmini.common.contracts.KafkaEventDto.PostCreatedEventDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;

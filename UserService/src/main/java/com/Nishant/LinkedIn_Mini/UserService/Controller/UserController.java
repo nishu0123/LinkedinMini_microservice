@@ -4,6 +4,7 @@ import com.Nishant.LinkedIn_Mini.UserService.Dto.*;
 import com.Nishant.LinkedIn_Mini.UserService.Entity.UserEntity;
 import com.Nishant.LinkedIn_Mini.UserService.Service.AuthService;
 import com.Nishant.LinkedIn_Mini.UserService.Service.UserService;
+import com.nishant.linkedinmini.common.contracts.FeignDto.NotificationUserInfoDto;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

@@ -1,10 +1,9 @@
 package com.Nishant.LinkedIn_Mini.NotificationService.FeignClient;
 
 
-import com.Nishant.LinkedIn_Mini.NotificationService.Dto.FeignDto.NotificationUserInfoDto;
 import com.Nishant.LinkedIn_Mini.NotificationService.Dto.FeignDto.UserInfoDto;
+import com.nishant.linkedinmini.common.contracts.FeignDto.NotificationUserInfoDto;
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
