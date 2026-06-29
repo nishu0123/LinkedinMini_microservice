@@ -1,6 +1,8 @@
 package com.Nishant.LinkedIn_Mini.NotificationService.Service;
 
+import com.Nishant.LinkedIn_Mini.NotificationService.Constant.NotificationChannel;
 import com.Nishant.LinkedIn_Mini.NotificationService.Dto.EventDto.SendNotificationEventDto;
+import com.Nishant.LinkedIn_Mini.NotificationService.Dto.NotificationRequest;
 import com.Nishant.LinkedIn_Mini.NotificationService.FeignClient.GetUserInfoFeign;
 import com.nishant.linkedinmini.common.contracts.FeignDto.UserInfoDto;
 import lombok.extern.slf4j.Slf4j;
@@ -16,12 +18,15 @@ public class SendNotificationEventConsumer
 
     private final EmailService emailService;
 
+    private final NotificationStrategyOrchestrator notificationStrategyOrchestrator;
+
     public SendNotificationEventConsumer(
             GetUserInfoFeign getUserInfoFeign,
-            EmailService emailService)
+            EmailService emailService, NotificationStrategyOrchestrator notificationStrategyOrchestrator)
     {
         this.getUserInfoFeign = getUserInfoFeign;
         this.emailService = emailService;
+        this.notificationStrategyOrchestrator = notificationStrategyOrchestrator;
     }
 
     @KafkaListener(
@@ -41,10 +46,22 @@ public class SendNotificationEventConsumer
                         event.getUsersFollowerId()
                 );
 
+
+        NotificationRequest notificationRequest = new NotificationRequest();
+        notificationRequest.setMessage(event.getContent());
+        notificationRequest.setSenderUserName(follower.getUserName());
+        notificationRequest.setReceiverEmailId(event.getReceipientEmail());
+        notificationRequest.setChannel(NotificationChannel.EMAIL);//this will decide which method of notify will be used
+
+        notificationStrategyOrchestrator.notify(notificationRequest);
+
+        //now new implementation using strategy pattern should work
+        /*
         emailService.sendPostNotificationEmail(
                 event.getReceipientEmail(),
                 follower.getUserName(),
                 event.getContent()
         );
+         */
     }
 }
