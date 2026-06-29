@@ -1,6 +1,8 @@
 package com.Nishant.LinkedIn_Mini.NotificationService.Service;
 
+import com.Nishant.LinkedIn_Mini.NotificationService.Constant.NotificationChannel;
 import com.Nishant.LinkedIn_Mini.NotificationService.Dto.EventDto.SendNotificationEventDto;
+import com.Nishant.LinkedIn_Mini.NotificationService.Dto.NotificationRequest;
 import com.Nishant.LinkedIn_Mini.NotificationService.FeignClient.GetFollowerFeign;
 import com.Nishant.LinkedIn_Mini.NotificationService.FeignClient.GetUserInfoFeign;
 import com.nishant.linkedinmini.common.contracts.FeignDto.NotificationUserInfoDto;
@@ -30,12 +32,15 @@ public class PostCreatedEventConsumer {
 
     private final EmailService emailService;
 
-    public PostCreatedEventConsumer(GetFollowerFeign getFollowerFeign, SendNotificationEventProducer sendNotificationEventProducer, GetUserInfoFeign getUserInfoFeign, EmailService emailService) {
+    private final NotificationStrategyOrchestrator notificationStrategyOrchestrator;
+
+    public PostCreatedEventConsumer(GetFollowerFeign getFollowerFeign, SendNotificationEventProducer sendNotificationEventProducer, GetUserInfoFeign getUserInfoFeign, EmailService emailService, NotificationStrategyOrchestrator notificationStrategyOrchestrator) {
         this.getFollowerFeign = getFollowerFeign;
         this.sendNotificationEventProducer = sendNotificationEventProducer;
         this.getUserInfoFeign = getUserInfoFeign;
 
         this.emailService = emailService;
+        this.notificationStrategyOrchestrator = notificationStrategyOrchestrator;
     }
 
 
@@ -109,12 +114,27 @@ public class PostCreatedEventConsumer {
             int noOfFollowers = followersInfoList.size();
             for(int i = 0; i<noOfFollowers; i++)
             {
+
+                String sendername = postCreatedEventDto.getUserName();
+                String receipientMail = followersInfoList.get(i).getEmail();
+                String postUrl = postCreatedEventDto.getImageUrl();
+
+                NotificationRequest notificationRequest = new NotificationRequest();
+                notificationRequest.setMessage(postUrl);
+                notificationRequest.setSenderUserName(sendername);
+                notificationRequest.setReceiverEmailId(receipientMail);
+                notificationRequest.setChannel(NotificationChannel.EMAIL);//this will decide , user will be notified with which means of communication
+
+
+                notificationStrategyOrchestrator.notify(notificationRequest);
+                /*
                 //To Do rather than sender mail , i have to set the sender name implement
                 String sendername = postCreatedEventDto.getUserName();
                 String receipientMail = followersInfoList.get(i).getEmail();
                 String postUrl = postCreatedEventDto.getImageUrl();
                 emailService.sendPostNotificationEmail(receipientMail , sendername , postUrl);
                 log.info("email sent to " + receipientMail + " successfully");
+                 */
             }
 
         }
