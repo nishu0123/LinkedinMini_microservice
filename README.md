@@ -8,87 +8,67 @@ The project focuses on backend system design, distributed systems, event-driven 
 
 ## Tech Stack
 
-* Java 17/21
-* Spring Boot
-* Spring Security
-* Spring Cloud
-* Spring Cloud Gateway
-* Spring Cloud OpenFeign
-* Spring Cloud Netflix Eureka
-* Apache Kafka
-* Neo4j
-* PostgreSQL
-* Docker
-* JWT Authentication
-* Cloudinary / google could(planned)
-* Mailtrap (Development Email)
+Backend
+- Java 17/21
+- Spring Boot
+
+Security
+- Spring Security
+- JWT
+
+Microservices
+- Eureka
+- OpenFeign
+- Gateway
+
+Messaging
+- Kafka
+
+Databases
+- PostgreSQL
+- Neo4j
+
+Storage
+- Cloudinary
+
+Containerization
+- Docker
 
 ---
 
 ## Microservices
 
-* User Service
-* Post Service
-* Notification Service
-* Uploader Service
-* Connection Service
-* API Gateway
-* Eureka Discovery Server
-* Common Contracts Module 
+### User Service
 
----
+Owns user identity and authentication. It manages user profiles, JWT authentication, refresh tokens, and exposes internal APIs that allow other microservices to retrieve user information.
 
-## Features
+### Post Service
 
-### Authentication
+Owns all post-related operations. It coordinates media uploads through the Uploader Service, persists posts, and publishes Kafka events whenever a new post is created.
 
-* User Registration
-* Login using JWT
-* Refresh Token Authentication
-* Secure Logout
-* Request Interceptor for User Context
+### Notification Service
 
-### User
+Consumes Kafka events and orchestrates notification delivery. It fetches the target audience from the Connection Service and delegates notification delivery to the appropriate notification strategy (Email, SMS, Push, etc.) using the Strategy Pattern.
 
-* User Profile
-* Follow / Unfollow
-* Followers & Following Management
+### Uploader Service
 
-### Posts
+Provides a dedicated media management service. It handles file uploads, integrates with Cloudinary, and returns publicly accessible URLs to other microservices.
 
-* Create Post
-* Delete Post
-* Upload Images
-* Cloudinary Integration
-* User Feed (planned)
-* Post Like/Dislike
+### Connection Service
 
-### Notifications
+Owns the social graph of the application. It manages follower/following relationships and provides connection data required by services such as the Notification Service.
 
-* Event-driven notification system using Kafka
-* Email Notifications
-* Strategy Pattern based notification architecture
-* Easily extensible for SMS, WhatsApp, Push Notifications
+### API Gateway
 
-### Architecture
+Acts as the single entry point for all client requests. It performs request routing, authentication, and forwards requests to the appropriate microservice.
 
-* Microservices
-* Event Driven Communication using Kafka
-* Service Discovery using Eureka
-* API Gateway
-* Feign Client Communication
-* Shared DTOs using Common Contracts Module
+### Eureka Discovery Server
 
----
+Provides service discovery for the microservices ecosystem. It enables services to register themselves and discover other services dynamically without hardcoding host addresses.
 
-## Design Principles
+### Common Contracts Module
 
-* SOLID Principles
-* Strategy Design Pattern
-* Constructor Dependency Injection
-* Low Coupling
-* High Cohesion
-* Event-Driven Architecture
+A shared library used across all microservices. It contains common DTOs, Kafka event models, enums, constants, and other shared contracts to ensure consistent communication and eliminate code duplication.
 
 ---
 
@@ -174,6 +154,61 @@ Notification Delivered
 ```
 ---
 
+## Features
+
+### Authentication
+
+* User Registration
+* Login using JWT
+* Refresh Token Authentication
+* Secure Logout
+* Request Interceptor for User Context
+
+### User
+
+* User Profile
+* Follow / Unfollow
+* Followers & Following Management
+
+### Posts
+
+* Create Post
+* Delete Post
+* Upload Images
+* Cloudinary Integration
+* User Feed (planned)
+* Post Like/Dislike
+
+### Notifications
+
+* Event-driven notification system using Kafka
+* Email Notifications
+* Strategy Pattern based notification architecture
+* Easily extensible for SMS, WhatsApp, Push Notifications
+
+### Architecture
+
+* Microservices
+* Event Driven Communication using Kafka
+* Service Discovery using Eureka
+* API Gateway
+* Feign Client Communication
+* Shared DTOs using Common Contracts Module
+
+---
+
+## Design Principles
+
+* SOLID Principles
+* Strategy Design Pattern
+* Constructor Dependency Injection
+* Low Coupling
+* High Cohesion
+* Event-Driven Architecture
+
+---
+
+
 ## Current Progress
 
 * JWT Authentication
@@ -211,5 +246,17 @@ This project is being developed to gain practical experience in:
 * Distributed Systems
 * Kafka
 * Spring Boot Ecosystem
-* Design Patterns
-* Understanding the system end to end  in depth Designing -> development -> testing -> deployment -> maintainance 
+* Design patterns and SOLID principles
+* End-to-end software development lifecycle from design to deployment
+
+## Challenges & Learnings
+
+During the development of this project I encountered and solved several production-like problems:
+
+- Implemented JWT authentication across multiple services.
+- Designed event-driven communication using Kafka.
+- Refactored the notification module using the Strategy Pattern following the Open/Closed Principle.
+- Shared DTOs and Kafka events through a Common Contracts module.
+- Debugged Feign communication and service discovery issues.
+- Integrated asynchronous email notifications.
+- Managed Kafka consumer replay and event processing behaviour.
