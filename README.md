@@ -115,8 +115,8 @@ The project focuses on backend system design, distributed systems, event-driven 
                  Common Contracts Module
         (Shared DTOs, Events, Enums, Models)
 
-
-## Crete Post/create post Notification Flow
+```
+## Crete Post / Create post Notification Flow
 
 ```text
 User creates a post
