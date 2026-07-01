@@ -13,6 +13,11 @@ public class PostCreatedEventProducer {
     }
 
     public void sendPostEvent(PostCreatedEventDto event) {
+        //here set the username in the event payload
+        if(event.getUserName() == null){
+            //fetch the userdetails with the help of the userId using the feign call
+
+        }
         kafkaTemplate.send("post-created-topic", event);
     }
 }

@@ -1,25 +1,25 @@
 package com.Nishant.LinkedIn_Mini.UserService.Controller;
 
 import com.Nishant.LinkedIn_Mini.UserService.Dto.*;
-import com.Nishant.LinkedIn_Mini.UserService.Entity.UserEntity;
+//import com.Nishant.LinkedIn_Mini.UserService.Entity.UserEntity;
 import com.Nishant.LinkedIn_Mini.UserService.Service.AuthService;
 import com.Nishant.LinkedIn_Mini.UserService.Service.UserService;
 import com.nishant.linkedinmini.common.contracts.FeignDto.NotificationUserInfoDto;
 import com.nishant.linkedinmini.common.contracts.FeignDto.UserInfoDto;
-import lombok.NoArgsConstructor;
+//import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.catalina.User;
+//import org.apache.catalina.User;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.stereotype.Controller;
+//import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+//import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.UUID;
+//import java.util.UUID;
 
 @Slf4j
 @RestController

@@ -49,11 +49,11 @@ public class PostController {
         log.info("received user id in PostService from the Request Header  = " + userId);
 //        Long tempUserId = userId; //here using the temporary id ,now updating the userId
         //now with the help of the AuthContextHolder , we can get the userId anywhere in the service
-        Long tempUserId = AuthContextHolder.getCurrentUserId(); //get the id using interceptor
+        Long interceptorUserId = AuthContextHolder.getCurrentUserId(); //get the id using interceptor
 
-        log.info("userId fetched from the header : " + userId + " userId fetched using interceptor : " + tempUserId);
+        log.info("userId fetched from the header : " + userId + " userId fetched using interceptor : " + interceptorUserId);
 
-        PostEntity postEntity = postCreateService.savePostIntoDb(postRequestDto , tempUserId);
+        PostEntity postEntity = postCreateService.savePostIntoDb(postRequestDto , interceptorUserId);
         log.info("Post saved into the database successfully!");
         PostDto postDto = modelMapper.map(postEntity , PostDto.class); //mapping the postEntity data with PostDto
 
@@ -65,7 +65,7 @@ public class PostController {
         //producing event when post is created
         PostCreatedEventDto postCreatedEventDto = new PostCreatedEventDto();
         postCreatedEventDto.setImageUrl(imageUrl);
-        postCreatedEventDto.setUserId(tempUserId);
+        postCreatedEventDto.setUserId(interceptorUserId);
         //check if there is requirement of the userName and email then we need to call the feign for that information
 //        postCreatedEventDto.setEmail();
         postCreatedEventProducer.sendPostEvent(postCreatedEventDto);

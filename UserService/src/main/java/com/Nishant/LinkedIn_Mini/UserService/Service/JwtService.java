@@ -1,14 +1,14 @@
 package com.Nishant.LinkedIn_Mini.UserService.Service;
 
 
-import com.Nishant.LinkedIn_Mini.UserService.Entity.UserEntity;
+//import com.Nishant.LinkedIn_Mini.UserService.Entity.UserEntity;
 import org.springframework.stereotype.Service;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
+//import org.springframework.stereotype.Service;
 
 import java.security.Key;
 import java.time.Duration;

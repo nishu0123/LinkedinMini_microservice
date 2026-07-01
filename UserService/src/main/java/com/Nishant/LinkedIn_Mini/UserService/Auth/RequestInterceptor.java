@@ -21,8 +21,7 @@ public class RequestInterceptor implements HandlerInterceptor {
             "/swagger-ui",
             "/v3/api-docs",
             "/swagger-resources",
-            "/user/error",
-            "http://UserService/user/auth/userInfo/bulk"
+            "/user/error"
     );
 
     //this will be called before request goes to the controller , so here we can handle the user-id
@@ -42,8 +41,9 @@ public class RequestInterceptor implements HandlerInterceptor {
 //        }
 
 //bypass the public endpoints
+
         boolean isPublic = PUBLIC_ENDPOINTS.stream()
-                .anyMatch(path::startsWith);
+                .anyMatch(path::startsWith) || path.matches("/user/auth/\\d+/getUserInfo");
 
         log.info("Path = {}", path);
         log.info("isPublic = {}", isPublic);

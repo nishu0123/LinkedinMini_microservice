@@ -51,6 +51,7 @@ public class SendNotificationEventConsumer
         notificationRequest.setMessage(event.getContent());
         notificationRequest.setSenderUserName(follower.getUserName());
         notificationRequest.setReceiverEmailId(event.getReceipientEmail());
+        //decision making logic
         notificationRequest.setChannel(NotificationChannel.EMAIL);//this will decide which method of notify will be used
 
         notificationStrategyOrchestrator.notify(notificationRequest);

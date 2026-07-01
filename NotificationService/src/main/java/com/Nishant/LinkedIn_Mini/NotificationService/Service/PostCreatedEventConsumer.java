@@ -7,6 +7,7 @@ import com.Nishant.LinkedIn_Mini.NotificationService.FeignClient.GetFollowerFeig
 import com.Nishant.LinkedIn_Mini.NotificationService.FeignClient.GetUserInfoFeign;
 import com.nishant.linkedinmini.common.contracts.FeignDto.NotificationUserInfoDto;
 import com.nishant.linkedinmini.common.contracts.FeignDto.PersonDto;
+import com.nishant.linkedinmini.common.contracts.FeignDto.UserInfoDto;
 import com.nishant.linkedinmini.common.contracts.KafkaEventDto.PostCreatedEventDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -124,9 +125,18 @@ public class PostCreatedEventConsumer {
                 notificationRequest.setSenderUserName(sendername);
                 notificationRequest.setReceiverEmailId(receipientMail);
                 notificationRequest.setChannel(NotificationChannel.EMAIL);//this will decide , user will be notified with which means of communication
-
+                //set the sender user name if null
+                if(notificationRequest.getSenderUserName() == null)
+                {
+                    UserInfoDto senderUserInfoDto =
+                            getUserInfoFeign.GetUserInfo(
+                                    postCreatedEventDto.getUserId()
+                            );
+                    notificationRequest.setSenderUserName(senderUserInfoDto.getUserName());
+                }
 
                 notificationStrategyOrchestrator.notify(notificationRequest);
+
                 /*
                 //To Do rather than sender mail , i have to set the sender name implement
                 String sendername = postCreatedEventDto.getUserName();
