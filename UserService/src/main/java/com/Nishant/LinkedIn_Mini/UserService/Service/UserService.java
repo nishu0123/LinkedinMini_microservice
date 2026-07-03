@@ -44,20 +44,23 @@ public class UserService {
 
     public void logout(Long userId) {
         log.info("/logout api reached the service layer userId = {}" , userId);
-        try
-        {
-//            userRepository.deleteById(userId);
-//            String token = refreshTokenRepository.findById()
-            refreshTokenRepository.deleteById(userId);
-
-        }catch (Exception e){
-            log.error("Failed to DELETE refresh token for");
-
-
-            throw new InvalidCredentialsException(
-                    "Unable to logout something went wrong");
-        }
-
+        //try catch block should not be used in the database operation let database give
+        //the error information
+        refreshTokenRepository.deleteById(userId);
+//        try
+//        {
+////            userRepository.deleteById(userId);
+////            String token = refreshTokenRepository.findById()
+//
+//
+//        }catch (Exception e){
+//            log.error("Failed to DELETE refresh token for");
+//
+//
+//            throw new InvalidCredentialsException(
+//                    "Unable to logout something went wrong");
+//        }
+//
         log.info("/logout api deleted refresh token");
 
     }
