@@ -73,7 +73,6 @@ public class UserController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-
     //use id will be passed and it will return the user info in which only username and mail will be there
     @GetMapping("/{userId}/getUserInfo")
     public ResponseEntity<UserInfoDto> GetUserInfo(@PathVariable Long userId)
@@ -85,18 +84,12 @@ public class UserController {
         return ResponseEntity.ok(userInfoDto);
     }
 
-
-
-//    @PostMapping("/user/auth/userInfo/bulk")
-//    List<NotificationUserInfoDto> GetUserInfoInBulk(@RequestBody List<Long> userIdList);
-
     @PostMapping("/userInfo/bulk")
     List<NotificationUserInfoDto> GetUserInfoInBulk(@RequestBody List<Long> userIdList)
     {
-        //return the list of the user info
+
         List<NotificationUserInfoDto> response = userService.getUserInfoInBulk(userIdList);
         return response;
     }
-
 
 }

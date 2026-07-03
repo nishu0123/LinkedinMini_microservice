@@ -26,13 +26,11 @@ public class AuthController {
     @Autowired
     private final AuthService authService;
 
-
     @PostMapping("/refreshAcessToken")
     public ResponseEntity<RefreshTokenResponseDto> refreshAcessToken(@RequestBody RefreshTokenRequestDto refreshTokenRequestDto)
     {
         //call the service that will refresh the token
         String accessToken =  authService.refreshAcessToken(refreshTokenRequestDto);
-
 
         RefreshTokenResponseDto response = new RefreshTokenResponseDto();
         response.setAccessToken(accessToken);
