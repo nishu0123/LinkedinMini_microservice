@@ -26,17 +26,13 @@ public class ConnectionService {
     private final PersonRepository personRepository;
 
     public List<PersonDto> getFirstDegreeConnection(Long userId) {
+
         List<PersonEntity> connections =
                 personRepository.findFirstDegreeConnections(userId);
 
-        log.info("Fetched connections size: {}", connections.size());
-        //below line will give out of bound if there is no any connection
-//        log.info("connection data received  from repository in service = " + connections.get(0));
+        log.info("Fetched first degree connections having size: {}", connections.size());
 
         List<PersonDto> allPersonDto = new ArrayList<>();
-
-
-
 
         for(PersonEntity value :  connections)
         {
@@ -45,31 +41,6 @@ public class ConnectionService {
             allPersonDto.add(personDtovalue);
         }
         return allPersonDto;
-
-//        return connections.stream()
-//                .map(connection -> modelMapper.map(connection, PersonDto.class))
-//                .toList();
-
-
-        /*
-        Optional<PersonEntity> allConnection = personRepository.findByUserId(userId);
-
-
-        Optional<PersonEntity> allConnection1 = personRepository.findById(1L); // i have hardcode the value
-        log.info("ConnectionService logs : fetched all connection using id " + allConnection1);
-
-
-        //checked the log its empty , getching data from the databse is not working
-        log.info("ConnectionService logs : fetched all connection using usereId " + allConnection);
-
-        //repository will return the list of all the person and we will map it with the PersonDto
-        //and then we will return this .
-
-        //at this time returning the dummy data checking if the data has been fetched correctly or not
-        List<PersonDto> dummyReturn = List.of(new PersonDto());
-        return dummyReturn;
-
-        */
     }
 
     public List<PersonDto> getThirdDegreeConnection(Long userId) {
@@ -80,9 +51,6 @@ public class ConnectionService {
         log.info("connection data received  from repository in service = " + connections.get(0));
 
         List<PersonDto> allPersonDto = new ArrayList<>();
-
-
-
 
         for(PersonEntity value :  connections)
         {
@@ -103,13 +71,12 @@ public class ConnectionService {
 
         List<PersonDto> allPersonDto = new ArrayList<>();
 
-
-
-
         for(PersonEntity value :  connections)
         {
             PersonDto personDtovalue = modelMapper.map(value , PersonDto.class);
+
             log.info("person " + value.toString());
+
             allPersonDto.add(personDtovalue);
         }
         return allPersonDto;
@@ -120,16 +87,19 @@ public class ConnectionService {
         PersonEntity personEntity = new PersonEntity();
         personEntity.setUserId(personDtoRequest.getUserId());
         personEntity.setUserName(personDtoRequest.getUserName());
-
-        try
-        {
-            personRepository.save(personEntity);
-        } catch (RuntimeException e) {
-            throw new DuplicateUserNameException(
-                    "Username already exists"
-            );
-        }
-
+        //this api will only create a new node for the new user
+        //if user already exist then nothing have to do, update api will do the updation part
+        //but there will be one more db call , so i have to make sure that this api will not
+        //be called by user-service for user already exist
+        personRepository.save(personEntity);
+//        try
+//        {
+//            personRepository.save(personEntity);
+//        } catch (RuntimeException e) {
+//            throw new DuplicateUserNameException(
+//                    "Username already exists"
+//            );
+//        }
         return personDtoRequest;
 
     }
@@ -153,7 +123,7 @@ public class ConnectionService {
                     e);
 
             throw new ConnectionOperationException(
-                    "Unable to unfollow  at this time. Try after some time",
+                    "Unable to unfollow  at this time.Something went wrong Try after some time",
                     e);
         }
 

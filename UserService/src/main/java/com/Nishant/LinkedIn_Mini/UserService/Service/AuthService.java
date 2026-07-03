@@ -31,6 +31,7 @@ import org.springframework.stereotype.Service;
 //import javax.swing.text.html.Option;
 import java.time.LocalDateTime;
 //import java.util.Optional;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -82,7 +83,15 @@ public class AuthService {
         {
             userEntity.setUserRole("Default");
         }
-        userRepository.save(userEntity);
+
+        //check if user already exist in the database or not
+        UserEntity userInfo = userRepository.findByEmail(signInRequestDto.getEmail());
+        if(null != userInfo){
+            log.error("user trying to sign up already exist");
+            throw new DuplicateUserNameException("user already exist");
+        }else{
+            userRepository.save(userEntity);
+        }
 
         //after user data has been saved on signup now we will create a node in the connection
         //service and for that we will call feign client api
@@ -115,7 +124,6 @@ public class AuthService {
             throw ex;
         }
 
-        //now return it
         return modelMapper.map(userEntity , UserDto.class); //map the user entity value to the userDto and then return the userDto
     }
 
@@ -124,7 +132,6 @@ public class AuthService {
 
         UserEntity userEntity = userRepository
                 .findByEmail(loginDto.getEmail());
-
 
         if(userEntity == null)
         {
@@ -170,7 +177,6 @@ public class AuthService {
             throw new InvalidCredentialsException (
                     "Unable to save refresh token");
         }
-
 
         //now we have to return the access token as well as the refresh token
         LoginResponseDto response = new LoginResponseDto();
