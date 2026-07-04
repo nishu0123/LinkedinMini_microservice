@@ -6,8 +6,4 @@ import lombok.Data;
 public class DeleteImageResponseDto {
     private String status;
     private String message;
-
-//    public DeleteImageResponseDto(String cloudinaryDeleteFailed, String message) {
-//        this.message =
-//    }
 }
