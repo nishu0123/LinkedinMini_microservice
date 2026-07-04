@@ -1,4 +1,4 @@
-package com.Nishant.LinkedIn_Mini.UserService.Exception;
+package com.nishant.linkedinmini.common.contracts.Dto.Exception;
 
 import lombok.Data;
 import lombok.Getter;

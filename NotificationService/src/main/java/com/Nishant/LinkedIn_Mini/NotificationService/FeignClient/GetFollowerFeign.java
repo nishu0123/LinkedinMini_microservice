@@ -1,7 +1,7 @@
 package com.Nishant.LinkedIn_Mini.NotificationService.FeignClient;
 
 
-import com.nishant.linkedinmini.common.contracts.FeignDto.PersonDto;
+import com.nishant.linkedinmini.common.contracts.Dto.FeignDto.PersonDto;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;

@@ -1,4 +1,4 @@
-package com.nishant.linkedinmini.common.contracts.KafkaEventDto;
+package com.nishant.linkedinmini.common.contracts.Dto.KafkaEventDto;
 
 
 import lombok.Data;

@@ -1,5 +1,6 @@
 package com.Nishant.LinkedIn_Mini.UserService.Exception;
 
+import com.nishant.linkedinmini.common.contracts.Dto.Exception.ApiError;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -78,22 +79,4 @@ public class GlobalExceptionHandler {
                 .body(apiError);
     }
 
-
-
-
-//    @ExceptionHandler(DuplicateUserNameException.class)
-//    public ResponseEntity<ErrorResponseDto>
-//    handleDuplicateUserNameException(
-//            DuplicateUserNameException ex) {
-//
-//        ErrorResponseDto errorResponse =
-//                new ErrorResponseDto(
-//                        "DUPLICATE_USERNAME",
-//                        ex.getMessage()
-//                );
-//
-//        return ResponseEntity
-//                .status(HttpStatus.CONFLICT)
-//                .body(errorResponse);
-//    }
 }

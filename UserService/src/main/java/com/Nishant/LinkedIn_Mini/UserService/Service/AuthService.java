@@ -10,7 +10,7 @@ import com.Nishant.LinkedIn_Mini.UserService.FeignClient.UserFeign;
 import com.Nishant.LinkedIn_Mini.UserService.Repositroy.RefreshTokenRepository;
 import com.Nishant.LinkedIn_Mini.UserService.Repositroy.UserRepository;
 import com.Nishant.LinkedIn_Mini.UserService.Util.BCrypt;
-import com.nishant.linkedinmini.common.contracts.FeignDto.PersonDto;
+import com.nishant.linkedinmini.common.contracts.Dto.FeignDto.PersonDto;
 import feign.FeignException;
 import jakarta.transaction.Transactional;
 //import jakarta.validation.constraints.Null;
@@ -31,7 +31,6 @@ import org.springframework.stereotype.Service;
 //import javax.swing.text.html.Option;
 import java.time.LocalDateTime;
 //import java.util.Optional;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service

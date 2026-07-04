@@ -6,7 +6,7 @@ import com.Nishant.LinkedIn_Mini.PostService.Entity.PostEntity;
 import com.Nishant.LinkedIn_Mini.PostService.Service.PostCreateService;
 import com.Nishant.LinkedIn_Mini.PostService.Service.PostCreatedEventProducer;
 import com.Nishant.LinkedIn_Mini.PostService.Service.PostDeleteService;
-import com.nishant.linkedinmini.common.contracts.KafkaEventDto.PostCreatedEventDto;
+import com.nishant.linkedinmini.common.contracts.Dto.KafkaEventDto.PostCreatedEventDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
