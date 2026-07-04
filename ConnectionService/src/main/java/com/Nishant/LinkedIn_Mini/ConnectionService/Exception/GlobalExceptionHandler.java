@@ -1,28 +1,74 @@
 package com.Nishant.LinkedIn_Mini.ConnectionService.Exception;
 
 import com.Nishant.LinkedIn_Mini.ConnectionService.Dto.ErrorResponseDto;
+import com.nishant.linkedinmini.common.contracts.Dto.Exception.ApiError;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.ErrorResponse;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.time.LocalDateTime;
+
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
+    private ApiError buildApiError(
+            HttpStatus status,
+            String message,
+            HttpServletRequest request) {
+        ApiError apiError = new ApiError();
+
+        apiError.setTimestamp(LocalDateTime.now());
+        apiError.setStatus(status.value());
+        apiError.setError(status.getReasonPhrase());
+        apiError.setMessage(message);
+        apiError.setPath(request.getRequestURI());
+
+        return apiError;
+    }
+
+
+//    @ExceptionHandler(DuplicateUserNameException.class)
+//    public ResponseEntity<ApiError> handleDuplicateUserNameException(
+//            DuplicateUserNameException ex,
+//            HttpServletRequest request) {
+//
+//        ApiError apiError = buildApiError(
+//                HttpStatus.CONFLICT,
+//                ex.getMessage(),
+//                request
+//        );
+//
+//        return ResponseEntity
+//                .status(HttpStatus.CONFLICT)
+//                .body(apiError);
+//    }
     @ExceptionHandler(DuplicateUserNameException.class)
-    public ResponseEntity<ErrorResponseDto> handleDuplicateUserNameException(
-            DuplicateUserNameException ex) {
+    public ResponseEntity<ApiError> handleDuplicateUserNameException(
+            DuplicateUserNameException ex,
+            HttpServletRequest request) {
 
-
-
-        ErrorResponseDto errorResponse = new ErrorResponseDto(
-                "DUPLICATE_USERNAME",
-                ex.getMessage()
+        ApiError apiError = buildApiError(
+                HttpStatus.CONFLICT,
+                ex.getMessage(),
+                request
         );
 
         return ResponseEntity
-                .status(HttpStatus.CONFLICT) // 409
-                .body(errorResponse);
+                .status(HttpStatus.CONFLICT)
+                .body(apiError);
     }
+
+//        ErrorResponseDto errorResponse = new ErrorResponseDto(
+//                "DUPLICATE_USERNAME",
+//                ex.getMessage()
+//        );
+//
+//        return ResponseEntity
+//                .status(HttpStatus.CONFLICT) // 409
+//                .body(errorResponse);
+//    }
+
 }
