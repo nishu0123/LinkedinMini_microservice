@@ -64,4 +64,38 @@ public class GlobalExceptionHandler {
                 .body(apiError);
 
     }
+
+    @ExceptionHandler(InvalidImageException.class)
+    public ResponseEntity<ApiError>
+    handleInvalidImageException(
+            InvalidImageException ex , HttpServletRequest request) {
+
+        ApiError apiError = buildApiError(
+                HttpStatus.BAD_REQUEST,
+                ex.getMessage(),
+                request
+        );
+
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(apiError);
+
+    }
+
+    @ExceptionHandler(PostNotFoundException.class)
+    public ResponseEntity<ApiError>
+    handleInvalidImageException(
+            PostNotFoundException ex , HttpServletRequest request) {
+
+        ApiError apiError = buildApiError(
+                HttpStatus.NOT_FOUND,
+                ex.getMessage(),
+                request
+        );
+
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(apiError);
+
+    }
 }

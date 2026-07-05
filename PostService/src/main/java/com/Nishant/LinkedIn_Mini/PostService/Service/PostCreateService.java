@@ -6,6 +6,7 @@ import com.Nishant.LinkedIn_Mini.PostService.Dto.CreatePostUploaderResponseDto;
 import com.Nishant.LinkedIn_Mini.PostService.Dto.PostCreateRequestDto;
 import com.Nishant.LinkedIn_Mini.PostService.Dto.PostDto;
 import com.Nishant.LinkedIn_Mini.PostService.Entity.PostEntity;
+import com.Nishant.LinkedIn_Mini.PostService.Exception.InvalidImageException;
 import com.Nishant.LinkedIn_Mini.PostService.FeignClient.imageUploaderFeign;
 import com.Nishant.LinkedIn_Mini.PostService.Repositroy.PostCreateRepository;
 import com.Nishant.LinkedIn_Mini.PostService.Util.MultipartFileUtil;
@@ -69,8 +70,14 @@ public class PostCreateService {
             log.info("Processing direct raw Base64 string (no metadata prefix detected).");
         }
 
-        // 2. Decode to byte array
-        byte[] decodedBytes = Base64.getDecoder().decode(base64Data);
+        // 2. Decode to byte array and also handle the exception
+        byte[] decodedBytes;
+
+        try {
+            decodedBytes = Base64.getDecoder().decode(base64Data);
+        } catch (IllegalArgumentException e) {
+            throw new InvalidImageException("Invalid Base64 image.");
+        }
 
         // 3. Convert to our custom MultipartFile
         MultipartFile customMultipartFile = new Base64ToMultipartFile(decodedBytes, "upload.png");

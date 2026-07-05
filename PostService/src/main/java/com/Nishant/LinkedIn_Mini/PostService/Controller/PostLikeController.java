@@ -37,12 +37,7 @@ public class PostLikeController {
     {
         PostLikeDto postLikeDto = postLikeService.addLike(postLikeRequestDto , userId);
         return new ResponseEntity<>(postLikeDto , HttpStatus.ACCEPTED); //constructor
-        /*
-        //another approach
-        return ResponseEntity
-        .status(HttpStatus.ACCEPTED)
-        .body(postLikeDto);
-         */
+
     }
 
     @DeleteMapping("/deleteLike")
