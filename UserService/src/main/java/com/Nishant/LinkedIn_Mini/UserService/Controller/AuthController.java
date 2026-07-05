@@ -3,6 +3,7 @@ package com.Nishant.LinkedIn_Mini.UserService.Controller;
 import com.Nishant.LinkedIn_Mini.UserService.Dto.RefreshTokenRequestDto;
 import com.Nishant.LinkedIn_Mini.UserService.Dto.RefreshTokenResponseDto;
 import com.Nishant.LinkedIn_Mini.UserService.Service.AuthService;
+import jakarta.validation.Valid;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -27,7 +28,7 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/refreshAcessToken")
-    public ResponseEntity<RefreshTokenResponseDto> refreshAcessToken(@RequestBody RefreshTokenRequestDto refreshTokenRequestDto)
+    public ResponseEntity<RefreshTokenResponseDto> refreshAcessToken(@Valid @RequestBody RefreshTokenRequestDto refreshTokenRequestDto)
     {
         //call the service that will refresh the token
         String accessToken =  authService.refreshAcessToken(refreshTokenRequestDto);

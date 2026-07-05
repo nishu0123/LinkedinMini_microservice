@@ -1,6 +1,5 @@
 package com.Nishant.LinkedIn_Mini.PostService.Service;
 
-import com.Nishant.LinkedIn_Mini.PostService.Dto.DeleteImageRequestDto;
 import com.Nishant.LinkedIn_Mini.PostService.Dto.DeleteImageResponseDto;
 import com.Nishant.LinkedIn_Mini.PostService.Dto.PostDto;
 import com.Nishant.LinkedIn_Mini.PostService.Entity.PostEntity;
@@ -8,6 +7,7 @@ import com.Nishant.LinkedIn_Mini.PostService.Exception.PostDeletionException;
 import com.Nishant.LinkedIn_Mini.PostService.Exception.PostNotFoundException;
 import com.Nishant.LinkedIn_Mini.PostService.FeignClient.imageUploaderFeign;
 import com.Nishant.LinkedIn_Mini.PostService.Repositroy.PostDeleteRepository;
+import com.nishant.linkedinmini.common.contracts.Dto.FeignDto.DeleteImageRequestDto;
 import jakarta.transaction.Transactional;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

@@ -2,8 +2,8 @@ package com.Nishant.LinkedIn_Mini.PostService.FeignClient;
 
 import com.Nishant.LinkedIn_Mini.PostService.Config.FeignMultipartConfig;
 import com.Nishant.LinkedIn_Mini.PostService.Dto.CreatePostUploaderResponseDto;
-import com.Nishant.LinkedIn_Mini.PostService.Dto.DeleteImageRequestDto;
 import com.Nishant.LinkedIn_Mini.PostService.Dto.DeleteImageResponseDto;
+import com.nishant.linkedinmini.common.contracts.Dto.FeignDto.DeleteImageRequestDto;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

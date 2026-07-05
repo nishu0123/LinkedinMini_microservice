@@ -7,6 +7,7 @@ import com.Nishant.LinkedIn_Mini.UserService.Service.UserService;
 import com.nishant.linkedinmini.common.contracts.Dto.FeignDto.NotificationUserInfoDto;
 import com.nishant.linkedinmini.common.contracts.Dto.FeignDto.UserInfoDto;
 //import lombok.NoArgsConstructor;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 //import org.apache.catalina.User;
@@ -44,7 +45,7 @@ public class UserController {
 
     //this is working data is being saved into the database , before adding the authentication
     @PostMapping("/signup")
-    public ResponseEntity<UserDto> signUp(@RequestBody SignInRequestDto signInRequestDto)
+    public ResponseEntity<UserDto> signUp(@Valid @RequestBody SignInRequestDto signInRequestDto)
     {
         //here we will get the username and the password
 
@@ -57,7 +58,7 @@ public class UserController {
 
     /// login logic need to change , for every user and password it response null data in userDto
     @PostMapping("/login")
-    public ResponseEntity<LoginResponseDto> logIn(@RequestBody LoginDto loginDto)
+    public ResponseEntity<LoginResponseDto> logIn(@Valid @RequestBody LoginDto loginDto)
     {
         log.info("login request reached to the controller");
         LoginResponseDto response = authService.logIn(loginDto);
