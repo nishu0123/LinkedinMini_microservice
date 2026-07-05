@@ -3,6 +3,7 @@ package com.Nishant.LinkedIn_Mini.UploaderService.Service;
 import com.Nishant.LinkedIn_Mini.UploaderService.Dto.CreatePostResponseDto;
 import com.Nishant.LinkedIn_Mini.UploaderService.Dto.DeleteImageResponseDto;
 import com.Nishant.LinkedIn_Mini.UploaderService.Exception.CloudinaryDeleteException;
+import com.Nishant.LinkedIn_Mini.UploaderService.Exception.ImageUploadException;
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import lombok.RequiredArgsConstructor;
@@ -34,7 +35,7 @@ public class CloudinaryUploaderService implements UploaderService {
                     "overwrite", false
             );
 
-            Map uploadResult = cloudinary.uploader().upload(
+            Map<String, Object>  uploadResult = cloudinary.uploader().upload(
                     file.getBytes(),
                     params
             );
@@ -49,8 +50,16 @@ public class CloudinaryUploaderService implements UploaderService {
             return createPostResponseDto;
 
         } catch (IOException e) {
-            log.error("Error uploading image to Cloudinary", e);
-            throw new RuntimeException("Image upload failed", e);
+            log.error(
+                    "Failed to upload image '{}' to Cloudinary",
+                    file.getOriginalFilename(),
+                    e
+            );
+
+            throw new ImageUploadException(
+                    "Failed to upload image",
+                    e
+            );
         }
 
     }

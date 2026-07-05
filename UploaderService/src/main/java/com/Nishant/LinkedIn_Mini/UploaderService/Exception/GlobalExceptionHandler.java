@@ -29,7 +29,6 @@ public class GlobalExceptionHandler {
         return apiError;
     }
 
-
     @ExceptionHandler(CloudinaryDeleteException.class)
     public ResponseEntity<ApiError> handleCloudinaryDeleteException(
             CloudinaryDeleteException ex ,HttpServletRequest request) {
@@ -45,4 +44,23 @@ public class GlobalExceptionHandler {
                 .body(apiError);
 
     }
+
+//    ImageUploadException
+@ExceptionHandler(ImageUploadException.class)
+public ResponseEntity<ApiError> handleImageUploadException(
+        CloudinaryDeleteException ex ,HttpServletRequest request) {
+
+    ApiError apiError = buildApiError(
+            HttpStatus.SERVICE_UNAVAILABLE,
+            ex.getMessage(),
+            request
+    );
+
+    return ResponseEntity
+            .status(HttpStatus.SERVICE_UNAVAILABLE)
+            .body(apiError);
+
+}
+
+
 }
