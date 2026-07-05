@@ -1,6 +1,7 @@
 package com.Nishant.LinkedIn_Mini.UserService.Service;
 
 import com.Nishant.LinkedIn_Mini.UserService.Entity.UserEntity;
+import com.Nishant.LinkedIn_Mini.UserService.Exception.UserNotFoundException;
 import com.Nishant.LinkedIn_Mini.UserService.Repositroy.RefreshTokenRepository;
 import com.Nishant.LinkedIn_Mini.UserService.Repositroy.UserRepository;
 import com.nishant.linkedinmini.common.contracts.Dto.FeignDto.NotificationUserInfoDto;
@@ -20,10 +21,6 @@ public class UserService {
     @Autowired
     private final UserRepository userRepository;
 
-
-//    @Autowired
-//    private final RefreshTokenRepository refreshTokenRepository;
-//
     @Autowired
     private final RefreshTokenRepository refreshTokenRepository;
 
@@ -37,6 +34,10 @@ public class UserService {
 
     public UserInfoDto GetUserInfo(Long userId) {
         Optional<UserEntity> userEntity = userRepository.findById(userId);
+        //check if user data is avaialble in the database or not
+        if(userEntity.isEmpty()){
+            throw new UserNotFoundException("user with user id : "  + userId + " does not exist");
+        }
         //map the userEntity to userInfoDto
         return modelMapper.map(userEntity , UserInfoDto.class);
     }
@@ -46,20 +47,7 @@ public class UserService {
         //try catch block should not be used in the database operation let database give
         //the error information
         refreshTokenRepository.deleteById(userId);
-//        try
-//        {
-////            userRepository.deleteById(userId);
-////            String token = refreshTokenRepository.findById()
-//
-//
-//        }catch (Exception e){
-//            log.error("Failed to DELETE refresh token for");
-//
-//
-//            throw new InvalidCredentialsException(
-//                    "Unable to logout something went wrong");
-//        }
-//
+
         log.info("/logout api deleted refresh token");
 
     }
