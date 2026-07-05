@@ -8,6 +8,8 @@ import lombok.Setter;
 @Data
 @Getter
 @Setter
+//For this dto no validation is required because data in this dto will depend of the method
+//of notification .
 public class NotificationRequest {
     private Long senderUserId;
     private String senderUserName;

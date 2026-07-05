@@ -4,6 +4,7 @@ import com.Nishant.LinkedIn_Mini.ConnectionService.Dto.ConnectUserRequestDto;
 import com.Nishant.LinkedIn_Mini.ConnectionService.Dto.ConnectUserResponseDto;
 import com.Nishant.LinkedIn_Mini.ConnectionService.Service.ConnectionService;
 import com.nishant.linkedinmini.common.contracts.Dto.FeignDto.PersonDto;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -82,7 +83,7 @@ public class ConnectionController {
     }
 
     @PostMapping("/addUserNode")
-    public ResponseEntity<PersonDto> addUserNode(@RequestBody PersonDto personDto)
+    public ResponseEntity<PersonDto> addUserNode(@Valid @RequestBody PersonDto personDto)
     {
         //adding a node of user whose have signed in to the system
         PersonDto personDtoresponse = connectionService.addUserNode(personDto);
@@ -97,7 +98,7 @@ public class ConnectionController {
     //responsedto - contains both sourceUserId and destinationUserId to give information
     //about the connection
     @PostMapping("/sendConnectionRequest")
-    ResponseEntity<ConnectUserResponseDto> connectionRequest(@RequestHeader("X-User-Id") Long sourceUserId , @RequestBody ConnectUserRequestDto connectUserRequestDto)
+    ResponseEntity<ConnectUserResponseDto> connectionRequest(@RequestHeader("X-User-Id") Long sourceUserId ,@Valid @RequestBody ConnectUserRequestDto connectUserRequestDto)
     {
         //implement the api for making connection between two user
         //at this time keep the relationship type - REQUESTED

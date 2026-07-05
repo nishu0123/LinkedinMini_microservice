@@ -6,7 +6,9 @@ import com.Nishant.LinkedIn_Mini.PostService.Entity.PostEntity;
 import com.Nishant.LinkedIn_Mini.PostService.Service.PostCreateService;
 import com.Nishant.LinkedIn_Mini.PostService.Service.PostCreatedEventProducer;
 import com.Nishant.LinkedIn_Mini.PostService.Service.PostDeleteService;
+import com.nishant.linkedinmini.common.contracts.Dto.FeignDto.DeleteImageRequestDto;
 import com.nishant.linkedinmini.common.contracts.Dto.KafkaEventDto.PostCreatedEventDto;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -44,7 +46,7 @@ public class PostController {
     }
     //this is working
     @PostMapping("/createPost")
-    public ResponseEntity<PostDto> CreatePost(@RequestBody PostCreateRequestDto postRequestDto  , @RequestHeader ("X-User-Id")Long userId)
+    public ResponseEntity<PostDto> CreatePost(@Valid @RequestBody PostCreateRequestDto postRequestDto  , @RequestHeader ("X-User-Id")Long userId)
     {
         log.info("received user id in PostService from the Request Header  = " + userId);
 //        Long tempUserId = userId; //here using the temporary id ,now updating the userId
@@ -94,7 +96,7 @@ public class PostController {
     }
 
     @DeleteMapping("/deletePost")
-    public ResponseEntity<PostDto> deletePost(@RequestBody DeleteImageRequestDto deleteImageRequestDto){
+    public ResponseEntity<PostDto> deletePost(@Valid @RequestBody DeleteImageRequestDto deleteImageRequestDto){
         //get the post_id from request body
         String publicId = deleteImageRequestDto.getPublicId();
 
