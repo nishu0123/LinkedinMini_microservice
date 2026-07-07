@@ -4,6 +4,7 @@ import com.Nishant.LinkedIn_Mini.PostService.Dto.DeleteImageResponseDto;
 import com.Nishant.LinkedIn_Mini.PostService.Dto.ErrorResponseDto;
 import com.nishant.linkedinmini.common.contracts.Dto.Exception.ApiError;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.ErrorResponse;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.time.LocalDateTime;
 
+@Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
@@ -105,12 +107,15 @@ public class GlobalExceptionHandler {
             MethodArgumentNotValidException ex,
             HttpServletRequest request) {
 
+
         String message = ex.getBindingResult()
                 .getFieldErrors()
                 .stream()
                 .map(error -> error.getDefaultMessage())
                 .findFirst()
                 .orElse("Validation failed");
+
+        log.info("Validation exception handler reached");
 
         return ResponseEntity.badRequest()
                 .body(buildApiError(

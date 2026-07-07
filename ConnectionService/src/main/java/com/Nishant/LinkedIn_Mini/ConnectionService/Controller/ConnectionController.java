@@ -114,7 +114,7 @@ public class ConnectionController {
 
     //API for AcceptConnectionRequest
     @PostMapping("/acceptConnectionRequest")
-    ResponseEntity<ConnectUserResponseDto> acceptConnection(@RequestHeader("X-User-Id") Long sourceUserId , @RequestBody ConnectUserRequestDto connectUserRequestDto)
+    ResponseEntity<ConnectUserResponseDto> acceptConnection(@RequestHeader("X-User-Id") Long sourceUserId ,@Valid @RequestBody ConnectUserRequestDto connectUserRequestDto)
     {
         //implement the api to accept the connection request and update graph database neo4j accordingly
         //now delete the relationship type REQUESTED
@@ -130,7 +130,7 @@ public class ConnectionController {
 
     //API for RejectConnectionRequest
     @PostMapping("/rejectConnectionRequest")
-    ResponseEntity<ConnectUserResponseDto> rejectConnection(@RequestHeader("X-User-Id") Long sourceUserId,@RequestBody ConnectUserRequestDto connectUserRequestDto)
+    ResponseEntity<ConnectUserResponseDto> rejectConnection(@RequestHeader("X-User-Id") Long sourceUserId,@Valid @RequestBody ConnectUserRequestDto connectUserRequestDto)
     {
         //implement the api to accept the connection request and update graph database neo4j accordingly
         //delete the relationship type - REQUESTED_TO
@@ -145,7 +145,7 @@ public class ConnectionController {
 
     //API for unfollowUser - disconnect from the already connected user
     @PostMapping("/unfollowUser")
-    ResponseEntity<ConnectUserResponseDto> unfollowUser(@RequestHeader("X-User-Id") Long sourceUserId , @RequestBody ConnectUserRequestDto connectUserRequestDto)
+    ResponseEntity<ConnectUserResponseDto> unfollowUser(@RequestHeader("X-User-Id") Long sourceUserId , @Valid @RequestBody ConnectUserRequestDto connectUserRequestDto)
     {
         //implement the api to accept the connection request and update graph database neo4j accordingly
         //remove the connection between them

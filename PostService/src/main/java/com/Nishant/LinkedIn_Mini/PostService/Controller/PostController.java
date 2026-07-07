@@ -48,6 +48,7 @@ public class PostController {
     @PostMapping("/createPost")
     public ResponseEntity<PostDto> CreatePost(@Valid @RequestBody PostCreateRequestDto postRequestDto  , @RequestHeader ("X-User-Id")Long userId)
     {
+        log.info("CreatePost api reached Controller");
         log.info("received user id in PostService from the Request Header  = " + userId);
 //        Long tempUserId = userId; //here using the temporary id ,now updating the userId
         //now with the help of the AuthContextHolder , we can get the userId anywhere in the service
