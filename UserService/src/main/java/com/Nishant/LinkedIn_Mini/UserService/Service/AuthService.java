@@ -10,6 +10,7 @@ import com.Nishant.LinkedIn_Mini.UserService.FeignClient.UserFeign;
 import com.Nishant.LinkedIn_Mini.UserService.Repositroy.RefreshTokenRepository;
 import com.Nishant.LinkedIn_Mini.UserService.Repositroy.UserRepository;
 import com.Nishant.LinkedIn_Mini.UserService.Util.BCrypt;
+import com.nishant.linkedinmini.common.contracts.ApiResponse;
 import com.nishant.linkedinmini.common.contracts.Dto.FeignDto.PersonDto;
 import feign.FeignException;
 import jakarta.transaction.Transactional;
@@ -102,7 +103,7 @@ public class AuthService {
 
         try
         {
-            ResponseEntity<PersonDto> response =  userFeign.addUserNode(userEntity.getId() , personDto);
+            ResponseEntity<ApiResponse<PersonDto>> response =  userFeign.addUserNode(userEntity.getId() , personDto);
             log.info("node created for username : " + personDto.getUserName());
         }
         catch (FeignException ex){

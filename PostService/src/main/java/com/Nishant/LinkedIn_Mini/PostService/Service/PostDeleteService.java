@@ -7,6 +7,7 @@ import com.Nishant.LinkedIn_Mini.PostService.Exception.PostDeletionException;
 import com.Nishant.LinkedIn_Mini.PostService.Exception.PostNotFoundException;
 import com.Nishant.LinkedIn_Mini.PostService.FeignClient.imageUploaderFeign;
 import com.Nishant.LinkedIn_Mini.PostService.Repositroy.PostDeleteRepository;
+import com.nishant.linkedinmini.common.contracts.ApiResponse;
 import com.nishant.linkedinmini.common.contracts.Dto.FeignDto.DeleteImageRequestDto;
 import jakarta.transaction.Transactional;
 import lombok.Getter;
@@ -51,12 +52,12 @@ public class PostDeleteService {
         DeleteImageRequestDto request = new DeleteImageRequestDto();
         request.setPublicId(postEntity.getPublicId());
 
-        ResponseEntity<DeleteImageResponseDto> response = imageUploaderFeign.deleteImage(request);
+        ResponseEntity<ApiResponse<DeleteImageResponseDto>> response = imageUploaderFeign.deleteImage(request);
 
 
-        log.info("response status = " + response.getBody().getStatus());
+        log.info("response status = " + response.getBody().getData().getStatus());
 
-        if (response.getStatusCode() == HttpStatus.OK && "SUCCESS".equals(response.getBody().getStatus())) {
+        if (response.getStatusCode() == HttpStatus.OK && "SUCCESS".equals(response.getBody().getData().getStatus())) {
 
             log.info("post deleted Successfully !");
             postDeleteRepository.delete(postEntity);

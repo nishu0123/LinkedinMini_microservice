@@ -3,9 +3,12 @@ package com.Nishant.LinkedIn_Mini.PostService.Controller;
 import com.Nishant.LinkedIn_Mini.PostService.Auth.AuthContextHolder;
 import com.Nishant.LinkedIn_Mini.PostService.Dto.*;
 import com.Nishant.LinkedIn_Mini.PostService.Entity.PostEntity;
+import com.Nishant.LinkedIn_Mini.PostService.Exception.PostNotFoundException;
 import com.Nishant.LinkedIn_Mini.PostService.Service.PostCreateService;
 import com.Nishant.LinkedIn_Mini.PostService.Service.PostCreatedEventProducer;
 import com.Nishant.LinkedIn_Mini.PostService.Service.PostDeleteService;
+import com.Nishant.LinkedIn_Mini.PostService.Util.ResponseBuilder;
+import com.nishant.linkedinmini.common.contracts.ApiResponse;
 import com.nishant.linkedinmini.common.contracts.Dto.FeignDto.DeleteImageRequestDto;
 import com.nishant.linkedinmini.common.contracts.Dto.KafkaEventDto.PostCreatedEventDto;
 import jakarta.validation.Valid;
@@ -46,7 +49,7 @@ public class PostController {
     }
     //this is working
     @PostMapping("/createPost")
-    public ResponseEntity<PostDto> CreatePost(@Valid @RequestBody PostCreateRequestDto postRequestDto  , @RequestHeader ("X-User-Id")Long userId)
+    public ResponseEntity<ApiResponse<PostDto>> CreatePost(@Valid @RequestBody PostCreateRequestDto postRequestDto  , @RequestHeader ("X-User-Id")Long userId)
     {
         log.info("CreatePost api reached Controller");
         log.info("received user id in PostService from the Request Header  = " + userId);
@@ -74,36 +77,61 @@ public class PostController {
         postCreatedEventProducer.sendPostEvent(postCreatedEventDto);
         log.info("sending postCreateEvent Dto");
 
-        return new ResponseEntity<>(postDto , HttpStatus.CREATED);
+//        return new ResponseEntity<>(postDto , HttpStatus.CREATED);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(ResponseBuilder.buildSuccessResponse(
+                        HttpStatus.CREATED,
+                        "Post created successfully",
+                        postDto
+                ));
     }
 
     @GetMapping("/{postId}")
-    public ResponseEntity<PostDto> getPost(@PathVariable Long postId)
+    public ResponseEntity<ApiResponse<PostDto>> getPost(@PathVariable Long postId)
     {
         PostEntity postEntity = postCreateService.getPost(postId);
         PostDto postDto = modelMapper.map(postEntity , PostDto.class);
-        if(postDto.getImgUrl() == null)
+        if(postDto == null)
         {
-            return new ResponseEntity<>(postDto , HttpStatus.NO_CONTENT);
+            throw new PostNotFoundException("post with Post id " + postId + "not found");
         }
-        return new ResponseEntity<>(postDto , HttpStatus.ACCEPTED);
+//        return new ResponseEntity<>(postDto , HttpStatus.ACCEPTED);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ResponseBuilder.buildSuccessResponse(
+                        HttpStatus.OK,
+                        "Post Fetched successfully",
+                        postDto
+                ));
     }
 
     @GetMapping("/user/{userId}/allPost")
-    public ResponseEntity<List<PostDto>> getAllPost(@PathVariable Long userId)
+    public ResponseEntity<ApiResponse<List<PostDto>>> getAllPost(@PathVariable Long userId)
     {
         List<PostDto> allPost= postCreateService.getAllPost(userId);
-        return ResponseEntity.ok(allPost);
+//        return ResponseEntity.ok(allPost);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ResponseBuilder.buildSuccessResponse(
+                        HttpStatus.OK,
+                        "All Post Fetched successfully",
+                        allPost
+                ));
     }
 
+
     @DeleteMapping("/deletePost")
-    public ResponseEntity<PostDto> deletePost(@Valid @RequestBody DeleteImageRequestDto deleteImageRequestDto){
+    public ResponseEntity<ApiResponse<PostDto>> deletePost(@Valid @RequestBody DeleteImageRequestDto deleteImageRequestDto){
         //get the post_id from request body
         String publicId = deleteImageRequestDto.getPublicId();
 
         //at first get the public id using the post id
         PostDto postDto = postDeleteService.deletePost(publicId);
 
-        return new ResponseEntity<>(postDto , HttpStatus.ACCEPTED);
+//        return new ResponseEntity<>(postDto , HttpStatus.ACCEPTED);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ResponseBuilder.buildSuccessResponse(
+                        HttpStatus.OK,
+                        "post deleted successfully",
+                        postDto
+                ));
     }
 }

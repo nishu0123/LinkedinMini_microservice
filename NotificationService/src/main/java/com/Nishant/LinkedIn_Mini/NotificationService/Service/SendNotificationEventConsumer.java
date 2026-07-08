@@ -44,7 +44,7 @@ public class SendNotificationEventConsumer
         UserInfoDto follower =
                 getUserInfoFeign.GetUserInfo(
                         event.getUsersFollowerId()
-                );
+                ).getBody().getData();
 
 
         NotificationRequest notificationRequest = new NotificationRequest();

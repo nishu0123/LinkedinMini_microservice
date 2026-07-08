@@ -1,6 +1,7 @@
 package com.Nishant.LinkedIn_Mini.UserService.FeignClient;
 
 
+import com.nishant.linkedinmini.common.contracts.ApiResponse;
 import com.nishant.linkedinmini.common.contracts.Dto.FeignDto.PersonDto;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 public interface UserFeign {
 
     @PostMapping("/connection/people/addUserNode")
-    public ResponseEntity<PersonDto> addUserNode(
+    public ResponseEntity<ApiResponse<PersonDto>> addUserNode(
             @RequestHeader("X-USER-ID") Long userId,
             @RequestBody PersonDto personDto);
     //example implement the similar
