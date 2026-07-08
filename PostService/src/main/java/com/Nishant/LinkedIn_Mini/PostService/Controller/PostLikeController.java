@@ -5,6 +5,8 @@ import com.Nishant.LinkedIn_Mini.PostService.Dto.PostDto;
 import com.Nishant.LinkedIn_Mini.PostService.Dto.PostLikeDto;
 import com.Nishant.LinkedIn_Mini.PostService.Dto.PostLikeRequestDto;
 import com.Nishant.LinkedIn_Mini.PostService.Service.PostLikeService;
+import com.Nishant.LinkedIn_Mini.PostService.Util.ResponseBuilder;
+import com.nishant.linkedinmini.common.contracts.ApiResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -34,22 +36,36 @@ public class PostLikeController {
     }
 
     @PostMapping("/addLike")
-    public ResponseEntity<PostLikeDto> addLike(@Valid  @RequestBody PostLikeRequestDto postLikeRequestDto , @RequestHeader("X-User-Id") Long userId)
+    public ResponseEntity<ApiResponse<PostLikeDto>> addLike(@Valid  @RequestBody PostLikeRequestDto postLikeRequestDto , @RequestHeader("X-User-Id") Long userId)
     {
         PostLikeDto postLikeDto = postLikeService.addLike(postLikeRequestDto , userId);
-        return new ResponseEntity<>(postLikeDto , HttpStatus.ACCEPTED); //constructor
+//        return new ResponseEntity<>(postLikeDto , HttpStatus.ACCEPTED);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ResponseBuilder.buildSuccessResponse(
+                        HttpStatus.OK,
+                        "Post Liked successfully",
+                        postLikeDto
+                ));
+
 
     }
 
     @DeleteMapping("/deleteLike")
-    public ResponseEntity<HttpStatus> deleteLike(@Valid @RequestBody PostDislikeRequestDto postDislikeRequestDto , @RequestHeader("X-User-Id") Long userId)
+    public ResponseEntity<ApiResponse<HttpStatus>> deleteLike(@Valid @RequestBody PostDislikeRequestDto postDislikeRequestDto , @RequestHeader("X-User-Id") Long userId)
     {
         try {
             postLikeService.deleteLike(postDislikeRequestDto , userId);
         } catch (AccessDeniedException e) {
+            //check it
             throw new RuntimeException(e);
         }
-        return ResponseEntity.ok(HttpStatus.ACCEPTED);
+//        return ResponseEntity.ok(HttpStatus.ACCEPTED);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ResponseBuilder.buildSuccessResponse(
+                        HttpStatus.OK,
+                        "Post Disliked successfully",
+                        null
+                ));
     }
 
 }

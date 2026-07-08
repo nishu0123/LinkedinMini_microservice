@@ -10,6 +10,7 @@ import com.Nishant.LinkedIn_Mini.PostService.Exception.InvalidImageException;
 import com.Nishant.LinkedIn_Mini.PostService.FeignClient.imageUploaderFeign;
 import com.Nishant.LinkedIn_Mini.PostService.Repositroy.PostCreateRepository;
 import com.Nishant.LinkedIn_Mini.PostService.Util.MultipartFileUtil;
+import com.nishant.linkedinmini.common.contracts.ApiResponse;
 import lombok.Generated;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -83,14 +84,25 @@ public class PostCreateService {
         MultipartFile customMultipartFile = new Base64ToMultipartFile(decodedBytes, "upload.png");
 
         // 4. Call Feign Client
-        ResponseEntity<CreatePostUploaderResponseDto> response =
+        ResponseEntity<ApiResponse<CreatePostUploaderResponseDto>> response =
                 imageUploaderFeign.upload(customMultipartFile);
 
 //        uploaderClient.uploadFile(customMultipartFile);
 
-        String imageUrl = response.getBody().getImgUrl();
+        String imageUrl;
+        if(response.getBody().getData() != null){
+            imageUrl = response.getBody().getData().getImgUrl();
+        }else{
+            imageUrl = null;
+        }
 
-        String publicId = response.getBody().getPublicId();//we will get the public_id from the uploader service and save it into the post table
+
+        String publicId;
+        if(response.getBody().getData() != null){
+            publicId = response.getBody().getData().getPublicId();
+        }else{
+            publicId = null;//we will get the public_id from the uploader service and save it into the post table
+        }
 
         postEntity.setImgUrl(imageUrl); //store the string of the response that contains the url of the image
         postEntity.setPublicId(publicId);
@@ -105,8 +117,7 @@ public class PostCreateService {
 
     public PostEntity getPost(Long postId) {
         //here we will fetch the data from the database with the help of the repository
-        PostEntity postEntity = postCreateRepository.getReferenceById(postId);
-        return postEntity;
+        return postCreateRepository.getReferenceById(postId);
     }
 
     public List<PostDto> getAllPost(Long userId) {

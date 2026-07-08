@@ -54,7 +54,7 @@ public class PostCreatedEventConsumer {
 
 
         //now call the connection service to get the first-degree connection and send the email to all the user
-        List<PersonDto> followersList =  getFollowerFeign.getFirstDegreeConnection(postCreatedEventDto.getUserId() , postCreatedEventDto.getUserId().toString());
+        List<PersonDto> followersList =  getFollowerFeign.getFirstDegreeConnection(postCreatedEventDto.getUserId() , postCreatedEventDto.getUserId().toString()).getBody().getData();
 
 
         //chek if there is no followers then avoid feign call
@@ -87,7 +87,7 @@ public class PostCreatedEventConsumer {
 
         //with the help of only one feign call fetch all the users data from userService
         //creating an another api which will implement the bulk
-        List<NotificationUserInfoDto> followersInfoList =  getUserInfoFeign.GetUserInfoInBulk(userIdList);
+        List<NotificationUserInfoDto> followersInfoList =  getUserInfoFeign.GetUserInfoInBulk(userIdList).getBody().getData();
 
         //now i have list of the user to whom i have to send the mail or notification
 
@@ -131,7 +131,7 @@ public class PostCreatedEventConsumer {
                     UserInfoDto senderUserInfoDto =
                             getUserInfoFeign.GetUserInfo(
                                     postCreatedEventDto.getUserId()
-                            );
+                            ).getBody().getData();
                     notificationRequest.setSenderUserName(senderUserInfoDto.getUserName());
                 }
 

@@ -4,6 +4,8 @@ import com.Nishant.LinkedIn_Mini.UserService.Dto.*;
 //import com.Nishant.LinkedIn_Mini.UserService.Entity.UserEntity;
 import com.Nishant.LinkedIn_Mini.UserService.Service.AuthService;
 import com.Nishant.LinkedIn_Mini.UserService.Service.UserService;
+import com.Nishant.LinkedIn_Mini.UserService.Util.ResponseBuilder;
+import com.nishant.linkedinmini.common.contracts.ApiResponse;
 import com.nishant.linkedinmini.common.contracts.Dto.FeignDto.NotificationUserInfoDto;
 import com.nishant.linkedinmini.common.contracts.Dto.FeignDto.UserInfoDto;
 //import lombok.NoArgsConstructor;
@@ -45,7 +47,7 @@ public class UserController {
 
     //this is working data is being saved into the database , before adding the authentication
     @PostMapping("/signup")
-    public ResponseEntity<UserDto> signUp(@Valid @RequestBody SignInRequestDto signInRequestDto)
+    public ResponseEntity<ApiResponse<UserDto>> signUp(@Valid @RequestBody SignInRequestDto signInRequestDto)
     {
         //here we will get the username and the password
 
@@ -53,44 +55,76 @@ public class UserController {
         //we can use any library to decrypt the password
         log.info("signUp request reached to the controller");
         UserDto userDto =  authService.signUp( signInRequestDto);
-        return new ResponseEntity<>(userDto , HttpStatus.CREATED);
+//        return new ResponseEntity<>(userDto , HttpStatus.CREATED);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(ResponseBuilder.buildSuccessResponse(
+                        HttpStatus.CREATED,
+                        "NEW User signed up successfully",
+                        userDto                ));
     }
 
     /// login logic need to change , for every user and password it response null data in userDto
     @PostMapping("/login")
-    public ResponseEntity<LoginResponseDto> logIn(@Valid @RequestBody LoginDto loginDto)
+    public ResponseEntity<ApiResponse<LoginResponseDto>> logIn(@Valid @RequestBody LoginDto loginDto)
     {
         log.info("login request reached to the controller");
         LoginResponseDto response = authService.logIn(loginDto);
 
-        return ResponseEntity.ok(response);//just returning it so that we can compile the code successfully
+//        return ResponseEntity.ok(response);//just returning it so that we can compile the code successfully
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ResponseBuilder.buildSuccessResponse(
+                        HttpStatus.OK,
+                        "User logged in successfully",
+                        response
+                ));
+
     }
     @PostMapping("/logout")
-    public ResponseEntity<HttpStatus> logout(@RequestHeader("X-USER-ID") Long UserId)
+    public ResponseEntity<ApiResponse<HttpStatus>> logout(@RequestHeader("X-USER-ID") Long UserId)
     {
         //implement the logic in the service layer
         userService.logout(UserId);
 
-        return new ResponseEntity<>(HttpStatus.OK);
+//        return new ResponseEntity<>(HttpStatus.OK);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ResponseBuilder.buildSuccessResponse(
+                        HttpStatus.OK,
+                        "User Logged out successfully",
+                        HttpStatus.OK
+                ));
     }
 
     //use id will be passed and it will return the user info in which only username and mail will be there
     @GetMapping("/{userId}/getUserInfo")
-    public ResponseEntity<UserInfoDto> GetUserInfo(@PathVariable Long userId)
+    public ResponseEntity<ApiResponse<UserInfoDto>> GetUserInfo(@PathVariable Long userId)
+//    public ResponseEntity<UserInfoDto> GetUserInfo(@PathVariable Long userId)
     {
         log.info("request received in controller to getUserInfo for id = " + userId);
         //Here we will return the userInfoDto which only contain username and the mail
         //call the service layer to get the info from the database
         UserInfoDto userInfoDto = userService.GetUserInfo(userId);
-        return ResponseEntity.ok(userInfoDto);
+//        return ResponseEntity.ok(userInfoDto);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ResponseBuilder.buildSuccessResponse(
+                        HttpStatus.OK,
+                        "User info fetched successfully",
+                        userInfoDto
+                ));
     }
 
     @PostMapping("/userInfo/bulk")
-    List<NotificationUserInfoDto> GetUserInfoInBulk(@RequestBody List<Long> userIdList)
+    public ResponseEntity<ApiResponse<List<NotificationUserInfoDto>>> GetUserInfoInBulk(@RequestBody List<Long> userIdList)
     {
 
         List<NotificationUserInfoDto> response = userService.getUserInfoInBulk(userIdList);
-        return response;
+//        return response;
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ResponseBuilder.buildSuccessResponse(
+                        HttpStatus.OK,
+                        "User data Fetched successfully",
+                        response
+                ));
     }
 
 }
