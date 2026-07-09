@@ -76,7 +76,7 @@ public class ConnectionController {
     public ResponseEntity<ApiResponse<List<PersonDto>>> getSecondDegreeConnection(@PathVariable Long userId)
     {
         //for the given userId i have to fetch the second degree connection
-        List<PersonDto> allConnection = connectionService.geSecondDegreeConnection(userId);
+        List<PersonDto> allConnection = connectionService.getSecondDegreeConnection(userId);
 
         log.info("connection data received  from service in controller = " + allConnection);
 //        return allConnection;

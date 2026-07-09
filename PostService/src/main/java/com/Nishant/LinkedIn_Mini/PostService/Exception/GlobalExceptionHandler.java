@@ -102,6 +102,23 @@ public class GlobalExceptionHandler {
 
     }
 
+    @ExceptionHandler(ImageUploadException.class)
+    public ResponseEntity<ApiError>
+    handleImageUploadException(
+            ImageUploadException ex , HttpServletRequest request) {
+
+        ApiError apiError = buildApiError(
+                HttpStatus.BAD_REQUEST,
+                ex.getMessage(),
+                request
+        );
+
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(apiError);
+
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ApiError> handleValidationException(
             MethodArgumentNotValidException ex,

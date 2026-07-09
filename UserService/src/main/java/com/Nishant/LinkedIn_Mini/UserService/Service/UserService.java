@@ -36,6 +36,7 @@ public class UserService {
         Optional<UserEntity> userEntity = userRepository.findById(userId);
         //check if user data is avaialble in the database or not
         if(userEntity.isEmpty()){
+            log.info("user not found - userId = {} " , userId);
             throw new UserNotFoundException("user with user id : "  + userId + " does not exist");
         }
         //map the userEntity to userInfoDto
@@ -48,7 +49,7 @@ public class UserService {
         //the error information
         refreshTokenRepository.deleteById(userId);
 
-        log.info("/logout api deleted refresh token");
+        log.info("refresh token deleted");
 
     }
 

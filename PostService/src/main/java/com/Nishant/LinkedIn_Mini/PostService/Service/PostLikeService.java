@@ -34,6 +34,7 @@ public class PostLikeService {
         //first check if likes already has been recorded
         if(true == postLikeRepository.existsByPost_IdAndUserId(postLikeRequestDto.getPostId(),userId) )
         {
+            log.warn("post id = {} already liked by userid = {}" , postLikeRequestDto.getPostId() , userId);
             throw new PostAlreadyLikedException(
                     "User has already liked this post"
             );

@@ -40,11 +40,13 @@ public class PostDeleteService {
 
         PostEntity postEntity = postDeleteRepository.findByPublicId(publicId);
         if(postEntity == null){
+            log.warn("Post not found. publicId={}", publicId);
             throw new PostNotFoundException("Post not found");
         }
 
         // THE SAFETY SHIELD: Stop execution if the public_id column is blank
         if (postEntity.getPublicId() == null || postEntity.getPublicId().trim().isEmpty()) {
+            log.error("Post {} has no Cloudinary publicId. Cannot delete image.", postEntity.getId());
             throw new PostDeletionException("Cannot delete cloud assets: This post does not have a valid Cloudinary public ID reference.");
         }
 
@@ -52,17 +54,23 @@ public class PostDeleteService {
         DeleteImageRequestDto request = new DeleteImageRequestDto();
         request.setPublicId(postEntity.getPublicId());
 
+        log.info("Requesting image deletion from PostService. publicId={}", publicId);
+
         ResponseEntity<ApiResponse<DeleteImageResponseDto>> response = imageUploaderFeign.deleteImage(request);
 
-
-        log.info("response status = " + response.getBody().getData().getStatus());
+        log.info("Cloudinary delete status={}", response.getBody().getData().getStatus());
 
         if (response.getStatusCode() == HttpStatus.OK && "SUCCESS".equals(response.getBody().getData().getStatus())) {
 
-            log.info("post deleted Successfully !");
+            log.info("Post deleted successfully. postId={}, publicId={}",
+                    postEntity.getId(),
+                    publicId);
             postDeleteRepository.delete(postEntity);
 
         }else{
+            log.error("Post deletion failed. publicId={}, reason={}",
+                    publicId,
+                    response.getBody().getMessage());
             throw new PostDeletionException(
                     response.getBody().getMessage()
             );

@@ -53,10 +53,12 @@ public class PostLikeController {
     @DeleteMapping("/deleteLike")
     public ResponseEntity<ApiResponse<HttpStatus>> deleteLike(@Valid @RequestBody PostDislikeRequestDto postDislikeRequestDto , @RequestHeader("X-User-Id") Long userId)
     {
+
         try {
             postLikeService.deleteLike(postDislikeRequestDto , userId);
         } catch (AccessDeniedException e) {
             //check it
+            log.error("post-dislike operation was not successful " + e);
             throw new RuntimeException(e);
         }
 //        return ResponseEntity.ok(HttpStatus.ACCEPTED);
