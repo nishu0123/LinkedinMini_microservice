@@ -81,6 +81,7 @@ public class AuthService {
         userEntity.setPassword(encryptedPassword);
         if(userEntity.getUserRole() == null)
         {
+            log.warn("user Role is null , setting user Role as 'Default' for user = {} " , signInRequestDto.getUserName());
             userEntity.setUserRole("Default");
         }
 
@@ -104,6 +105,7 @@ public class AuthService {
         try
         {
             ResponseEntity<ApiResponse<PersonDto>> response =  userFeign.addUserNode(userEntity.getId() , personDto);
+            //if execution reached to the below logs it means that node has been created
             log.info("node created for username : " + personDto.getUserName());
         }
         catch (FeignException ex){
@@ -128,6 +130,7 @@ public class AuthService {
     }
 
     public LoginResponseDto logIn(LoginDto loginDto) {
+
         log.info("login request reached to the service layer");
 
         UserEntity userEntity = userRepository
@@ -135,6 +138,7 @@ public class AuthService {
 
         if(userEntity == null)
         {
+            log.warn("Login failed. Enter the correct credentials");
             throw new InvalidCredentialsException("Invalid username or password");
         }
 
@@ -144,6 +148,7 @@ public class AuthService {
         UserDto userDto  = new UserDto();
         if(!isValidPassword)
         {
+            log.warn("Login failed. Enter the correct credentials");
             throw new InvalidCredentialsException("Invalid username or password");
         }else{
             userDto.setEmail(userEntity.getEmail());
@@ -188,31 +193,39 @@ public class AuthService {
 
     public String refreshAcessToken(RefreshTokenRequestDto request) {
 
-            String refreshToken = request.getRefreshToken();
+        String refreshToken = request.getRefreshToken();
+
+        log.info("Refresh token request received");
 
             RefreshTokenEntity tokenEntity =
                     refreshTokenRepository.findByToken(refreshToken)
-                            .orElseThrow(() ->
-                                    new RuntimeException(
-                                            "Invalid refresh token"));
+                            .orElseThrow(() -> {
+                                log.warn("Invalid refresh token received");
+                                return new RuntimeException("Invalid refresh token");
+                            });
+
 
 
             if(tokenEntity.getExpiryTime()
                     .isBefore(LocalDateTime.now())) {
-
+                log.warn("Expired refresh token used for userId={}", tokenEntity.getUserId());
                 throw new RuntimeException(
                         "Refresh token expired");
             }
 
             UserEntity user = userRepository.findById(
                             tokenEntity.getUserId())
-                    .orElseThrow(() ->
-                            new RuntimeException(
-                                    "User not found"));
+                    .orElseThrow(() -> {
+                        log.warn("User not found for refresh token. userId={}", tokenEntity.getUserId());
+                        return new RuntimeException("User not found");
+                    });
+
 
             String userRole = user.getUserRole();
             String newAccessToken =
                     jwtService.generateAccessToken(user.getId() , user.getUserName() ,userRole);
+
+        log.info("Access token refreshed successfully for userId={}", user.getId());
 
             return newAccessToken;
     }

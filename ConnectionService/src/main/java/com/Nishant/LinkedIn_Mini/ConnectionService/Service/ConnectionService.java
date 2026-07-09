@@ -26,47 +26,59 @@ public class ConnectionService {
 
     public List<PersonDto> getFirstDegreeConnection(Long userId) {
 
+        log.info("Fetching First-degree connections for userId={}", userId);
+
         List<PersonEntity> connections =
                 personRepository.findFirstDegreeConnections(userId);
 
-        log.info("Fetched first degree connections having size: {}", connections.size());
+        log.info("Retrieved {} First-degree connection(s) for userId={}",
+                connections.size(),
+                userId);
 
         List<PersonDto> allPersonDto = new ArrayList<>();
 
         for(PersonEntity value :  connections)
         {
             PersonDto personDtovalue = modelMapper.map(value , PersonDto.class);
-            log.info("person " + value.toString());
+//            log.info("person " + value.toString());
             allPersonDto.add(personDtovalue);
         }
         return allPersonDto;
     }
 
     public List<PersonDto> getThirdDegreeConnection(Long userId) {
+
+        log.info("Fetching Third-degree connections for userId={}", userId);
+
         List<PersonEntity> connections =
                 personRepository.findThirdDegreeConnections(userId);
 
-        log.info("Fetched connections size: {}", connections.size());
-        log.info("connection data received  from repository in service = " + connections.get(0));
+        log.info("Retrieved {} Third-degree connection(s) for userId={}",
+                connections.size(),
+                userId);
+//        log.info("connection data received  from repository in service = " + connections.get(0));
 
         List<PersonDto> allPersonDto = new ArrayList<>();
 
         for(PersonEntity value :  connections)
         {
             PersonDto personDtovalue = modelMapper.map(value , PersonDto.class);
-            log.info("person " + value.toString());
+//            log.info("person " + value.toString());
             allPersonDto.add(personDtovalue);
         }
         return allPersonDto;
     }
 
-    public List<PersonDto> geSecondDegreeConnection(Long userId) {
+    public List<PersonDto> getSecondDegreeConnection(Long userId) {
+
+        log.info("Fetching second-degree connections for userId={}", userId);
 
         List<PersonEntity> connections =
                 personRepository.findSecondDegreeConnections(userId);
 
-        log.info("Fetched connections size: {}", connections.size());
-        log.info("connection data received  from repository in service = " + connections.get(0));
+        log.info("Retrieved {} second-degree connection(s) for userId={}",
+                connections.size(),
+                userId);
 
         List<PersonDto> allPersonDto = new ArrayList<>();
 
@@ -74,7 +86,7 @@ public class ConnectionService {
         {
             PersonDto personDtovalue = modelMapper.map(value , PersonDto.class);
 
-            log.info("person " + value.toString());
+//            log.info("person " + value.toString());
 
             allPersonDto.add(personDtovalue);
         }
@@ -91,14 +103,9 @@ public class ConnectionService {
         //but there will be one more db call , so i have to make sure that this api will not
         //be called by user-service for user already exist
         personRepository.save(personEntity);
-//        try
-//        {
-//            personRepository.save(personEntity);
-//        } catch (RuntimeException e) {
-//            throw new DuplicateUserNameException(
-//                    "Username already exists"
-//            );
-//        }
+
+        log.info("node in the neo4j database added for userId={}", personDtoRequest.getUserId());
+
         return personDtoRequest;
 
     }
@@ -109,9 +116,9 @@ public class ConnectionService {
         Long destinationUserId = connectUserRequestDto.getDestinationUserId();
         try
         {
-            log.info("unfollowUser request reached to the service layer");
+            log.info("processing unfollow user id = {} ,  request by user id = {}" ,destinationUserId ,  sourceUserId);
             personRepository.unfollow(sourceUserId , destinationUserId);
-            log.info("unfollowUser request return back from the service layer");
+            log.info("user id = {} successfully unfollowed user id = {}" , sourceUserId , destinationUserId);
 
         }catch (Exception e){
 //            return new ErrorResponseDto(e.getStackTrace().toString() , "something went wrong");

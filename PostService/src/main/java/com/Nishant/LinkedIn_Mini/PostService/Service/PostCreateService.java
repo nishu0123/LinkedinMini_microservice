@@ -6,6 +6,7 @@ import com.Nishant.LinkedIn_Mini.PostService.Dto.CreatePostUploaderResponseDto;
 import com.Nishant.LinkedIn_Mini.PostService.Dto.PostCreateRequestDto;
 import com.Nishant.LinkedIn_Mini.PostService.Dto.PostDto;
 import com.Nishant.LinkedIn_Mini.PostService.Entity.PostEntity;
+import com.Nishant.LinkedIn_Mini.PostService.Exception.ImageUploadException;
 import com.Nishant.LinkedIn_Mini.PostService.Exception.InvalidImageException;
 import com.Nishant.LinkedIn_Mini.PostService.FeignClient.imageUploaderFeign;
 import com.Nishant.LinkedIn_Mini.PostService.Repositroy.PostCreateRepository;
@@ -46,14 +47,8 @@ public class PostCreateService {
         Date now = new Date();//it will set the current data automatically
         postEntity.setCreatedAt(now);
         postEntity.setUserId(tempUserId);
-        log.info("postEntity data = {} " , postEntity);//print the post entity value
 
-//handling the content if it does not contains the comma
-//        //Before setting the content get the content url , after uploading the content
-//        String base64Image = postRequestDto.getContent();//image
-//
-//        // 1. Remove the header (e.g., "data:image/png;base64,")
-//        String base64Data = base64Image.split(",")[1];
+        log.info("Creating post for userId={}", tempUserId);
 
         // Before setting the content get the content url, after uploading the content
         String base64Image = postRequestDto.getContent(); // image
@@ -77,52 +72,46 @@ public class PostCreateService {
         try {
             decodedBytes = Base64.getDecoder().decode(base64Data);
         } catch (IllegalArgumentException e) {
+            log.error("Failed to decode Base64 image", e);
             throw new InvalidImageException("Invalid Base64 image.");
         }
 
         // 3. Convert to our custom MultipartFile
         MultipartFile customMultipartFile = new Base64ToMultipartFile(decodedBytes, "upload.png");
 
+        log.info("Uploading image to UploaderService");
         // 4. Call Feign Client
         ResponseEntity<ApiResponse<CreatePostUploaderResponseDto>> response =
                 imageUploaderFeign.upload(customMultipartFile);
 
 //        uploaderClient.uploadFile(customMultipartFile);
-
-        String imageUrl;
-        if(response.getBody().getData() != null){
-            imageUrl = response.getBody().getData().getImgUrl();
-        }else{
-            imageUrl = null;
+        ApiResponse<CreatePostUploaderResponseDto> apiResponse = response.getBody();
+        if (apiResponse == null || apiResponse.getData() == null) {
+            log.error("UploaderService returned an invalid response");
+            throw new ImageUploadException("Image upload failed.");
         }
 
-
-        String publicId;
-        if(response.getBody().getData() != null){
-            publicId = response.getBody().getData().getPublicId();
-        }else{
-            publicId = null;//we will get the public_id from the uploader service and save it into the post table
-        }
+        String imageUrl = response.getBody().getData().getImgUrl();
+        String publicId = response.getBody().getData().getPublicId();
 
         postEntity.setImgUrl(imageUrl); //store the string of the response that contains the url of the image
         postEntity.setPublicId(publicId);
-//        PostEntity savedPost = postCreateRepository.save(postEntity);
-//        return savedPost;
-        //upper two commented line can be written as
+
         return postCreateRepository.save(postEntity);
-        //detached state
-        //operation
-//        save
+
     }
 
     public PostEntity getPost(Long postId) {
+
         //here we will fetch the data from the database with the help of the repository
         return postCreateRepository.getReferenceById(postId);
+
     }
 
     public List<PostDto> getAllPost(Long userId) {
-//        List<PostEntity> allPostEntity =  postCreateRepository.getAllPostByUserId(userId);
+
         List<PostEntity> allPostEntity =  postCreateRepository.getAllPostByUserId(userId);
+
         //but here we have to do this with each object , so here we will use loop
         List<PostDto> allPostDto = new ArrayList<>();
         for(PostEntity postEntity : allPostEntity)

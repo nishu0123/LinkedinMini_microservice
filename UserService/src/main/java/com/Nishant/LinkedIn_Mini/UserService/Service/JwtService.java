@@ -27,7 +27,7 @@ public class JwtService {
         return Keys.hmacShaKeyFor(secretKey.getBytes());
     }
 
-    // 🔹 TOKEN CREATION
+    // TOKEN CREATION
     public String generateAccessToken(Long userId, String username, String role) {
         return Jwts.builder()
                 .setSubject(username)
@@ -39,18 +39,7 @@ public class JwtService {
                 .compact();
     }
 
-//    //Create Refresh Token
-//    public String generateRefreshToken(UserEntity user) {
-//        return Jwts.builder()
-//                .setSubject(user.getEmail())
-//                .setIssuedAt(new Date())
-//                .setExpiration(new Date(System.currentTimeMillis() + 7 * 24 * 60 * 60 * 1000))
-//                .signWith(getSigningKey())
-//                .compact();
-//    }
-
-
-    // 🔹 CLAIMS EXTRACTION
+    // CLAIMS EXTRACTION
     private Claims extractAllClaims(String token) {
         return Jwts.parserBuilder()
                 .setSigningKey(getSigningKey())
@@ -71,7 +60,7 @@ public class JwtService {
         return extractAllClaims(token).getSubject();
     }
 
-    // 🔹 VALIDATION
+    //VALIDATION
     private boolean isTokenExpired(String token) {
         return extractAllClaims(token)
                 .getExpiration()
@@ -85,7 +74,6 @@ public class JwtService {
             return false;
         }
     }
-
 
 }
 

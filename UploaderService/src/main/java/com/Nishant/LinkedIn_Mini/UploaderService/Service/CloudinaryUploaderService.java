@@ -84,9 +84,11 @@ public class CloudinaryUploaderService implements UploaderService {
 
                 deleteImageResponseDto.setStatus("SUCCESS");
                 deleteImageResponseDto.setMessage("Image deleted successfully");
+                log.info("post deleted with publid id = {} from cloudinary successfully" , publicId);
                 return deleteImageResponseDto;
             }
 
+            log.error("some thing went wrong while deleting post from cloudinary");
             throw new CloudinaryDeleteException(
                     "Cloudinary returned: "
                             + cloudinaryResult
@@ -94,6 +96,7 @@ public class CloudinaryUploaderService implements UploaderService {
 
         } catch (IOException e) {
 
+            log.error("Failed to connect with cloudinary , check the coludinary credentials");
             throw new CloudinaryDeleteException(
                     "Failed to communicate with Cloudinary",
                     e
