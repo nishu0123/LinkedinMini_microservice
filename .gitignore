@@ -15,3 +15,7 @@ build/
 
 #desing and architecture related document
 Design_related_document/
+
+#script file
+build-service.sh
+start-service.sh
