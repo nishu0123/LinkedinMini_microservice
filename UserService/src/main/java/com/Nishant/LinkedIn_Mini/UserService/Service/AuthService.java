@@ -53,6 +53,9 @@ public class AuthService {
     @Autowired
     private final UserFeign userFeign;
 
+    @Autowired
+    private final ConnectionNodeService connectionNodeService;
+
 
 //    private BCryptPasswordEncoder passwordEncoder;
     @Autowired
@@ -64,35 +67,47 @@ public class AuthService {
     @Autowired
     private final JwtService jwtService;
 
+    @Autowired
+    private final ValidationService validationService;
+
     @Value("${jwt.refresh-token-expiry-days}")
     private Long refreshTokenExpiryDays;
 
+    private UserEntity createUserEntity(SignInRequestDto signInRequestDto)
+    {
+        UserEntity userEntity = new UserEntity();
+        userEntity.setUserName(signInRequestDto.getUserName());
+        userEntity.setEmail(signInRequestDto.getEmail());
+
+        //BCrypt the password before saving it into the database
+        String encryptedPassword =  bCrypt.hash( signInRequestDto.getPassword() );
+        userEntity.setPassword(encryptedPassword);
+
+        assignDefaultRole(userEntity);
+
+        return userEntity;
+    }
+
+    private void assignDefaultRole(UserEntity userEntity)
+    {
+        if(userEntity.getUserRole() == null)
+        {
+            log.warn("user Role is null , setting user Role as 'Default' for user = {} " , userEntity.getUserName());
+            userEntity.setUserRole("Default");
+        }
+    }
 
     //it will make sure that the signup and the node creation was successful or
     //noting happened
     @Transactional
     public UserDto signUp(SignInRequestDto signInRequestDto) {
         log.info("signup request reached to the service layer");
-        UserEntity userEntity = new UserEntity();
-        userEntity.setUserName(signInRequestDto.getUserName());
-        userEntity.setEmail(signInRequestDto.getEmail());
-        //BCrypt the password before saving it into the database
-        String encryptedPassword =  bCrypt.hash( signInRequestDto.getPassword() );
-        userEntity.setPassword(encryptedPassword);
-        if(userEntity.getUserRole() == null)
-        {
-            log.warn("user Role is null , setting user Role as 'Default' for user = {} " , signInRequestDto.getUserName());
-            userEntity.setUserRole("Default");
-        }
 
-        //check if user already exist in the database or not
-        UserEntity userInfo = userRepository.findByEmail(signInRequestDto.getEmail());
-        if(null != userInfo){
-            log.error("user trying to sign up already exist");
-            throw new DuplicateUserNameException("user already exist");
-        }else{
-            userRepository.save(userEntity);
-        }
+        UserEntity userEntity = createUserEntity(signInRequestDto);
+
+        validationService.validateDuplicateUserByEmail(signInRequestDto.getEmail());
+
+        UserEntity savedUser = userRepository.save(userEntity);
 
         //after user data has been saved on signup now we will create a node in the connection
         //service and for that we will call feign client api
@@ -102,29 +117,7 @@ public class AuthService {
         personDto.setUserId(userEntity.getId());
         personDto.setUserName(userEntity.getUserName());
 
-        try
-        {
-            ResponseEntity<ApiResponse<PersonDto>> response =  userFeign.addUserNode(userEntity.getId() , personDto);
-            //if execution reached to the below logs it means that node has been created
-            log.info("node created for username : " + personDto.getUserName());
-        }
-        catch (FeignException ex){
-
-            //check the status code
-            if (ex.status() == 409) {
-                throw new DuplicateUserNameException(
-                        "Username already exists"
-                );
-            }
-
-            log.error(
-                    "Failed to create node for username: {}",
-                    personDto.getUserName(),
-                    ex
-            );
-
-            throw ex;
-        }
+        connectionNodeService.createNode(savedUser.getId() , personDto);
 
         return modelMapper.map(userEntity , UserDto.class); //map the user entity value to the userDto and then return the userDto
     }
