@@ -1,5 +1,10 @@
 #!/bin/bash
 
+# Directory where this script is located
+ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+cd "$ROOT_DIR" || exit 1
+
 # Ensure the script is run from the project root
 if [ ! -f ".env" ]; then
     echo "❌ .env file not found!"
