@@ -41,33 +41,24 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class AuthService {
 
-    @Autowired
     private final RefreshTokenRepository refreshTokenRepository;
 
-    @Autowired
     private final UserRepository userRepository;
 
-    @Autowired
     private final ModelMapper modelMapper;
 
-    @Autowired
     private final UserFeign userFeign;
 
-    @Autowired
     private final ConnectionNodeService connectionNodeService;
 
 
 //    private BCryptPasswordEncoder passwordEncoder;
-    @Autowired
     private PasswordEncoder passwordEncoder;
 
-    @Autowired
     private BCrypt bCrypt;
 
-    @Autowired
     private final JwtService jwtService;
 
-    @Autowired
     private final ValidationService validationService;
 
     @Value("${jwt.refresh-token-expiry-days}")
