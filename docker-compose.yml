@@ -2,6 +2,27 @@ version: "3.8"
 
 services:
 
+  api-gateway:
+    build:
+      context: ./api-gateway
+      dockerfile: Dockerfile
+
+    container_name: api-gateway
+
+    env_file:
+      - .env
+
+    ports:
+      - "6085:6085"
+
+    environment:
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://discovery-service:8761/eureka
+
+    depends_on:
+      - discovery-service
+
+    restart: unless-stopped
+
   discovery-service:
     build:
       context: ./discovery-service
