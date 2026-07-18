@@ -53,9 +53,9 @@ public class AuthService {
 
 
 //    private BCryptPasswordEncoder passwordEncoder;
-    private PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
-    private BCrypt bCrypt;
+    private final BCrypt bCrypt;
 
     private final JwtService jwtService;
 
