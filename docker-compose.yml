@@ -2,6 +2,29 @@ version: "3.8"
 
 services:
 
+  user-service:
+    build:
+      context: .
+      dockerfile: UserService/Dockerfile
+
+    container_name: user-service
+
+    env_file:
+      - .env
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+
+    ports:
+      - "9030:9030"
+
+    depends_on:
+      mysql:
+          condition: service_healthy # Changes from a simple list to a strict health check
+      discovery-service:
+          condition: service_started
+
+#    restart: unless-stopped
+
   api-gateway:
     build:
       context: ./api-gateway
@@ -107,6 +130,12 @@ services:
     volumes:
       - mysql_data:/var/lib/mysql
       - ./mysql-init:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-proot" ]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
 
   redis:
     image: redis:latest

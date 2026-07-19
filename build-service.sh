@@ -1,6 +1,5 @@
 #!/bin/bash
 
-# Directory where this script is located
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 cd "$ROOT_DIR" || exit 1
@@ -17,6 +16,7 @@ fi
 
 set -a
 source .env
+export SPRING_PROFILES_ACTIVE=local
 set +a
 
 cd "$1" || exit 1
