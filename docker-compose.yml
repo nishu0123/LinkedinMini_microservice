@@ -2,6 +2,27 @@ version: "3.8"
 
 services:
 
+  uploader-service:
+    build:
+      context: .
+      dockerfile: UploaderService/Dockerfile
+
+    container_name: uploader-service
+
+    env_file:
+      - .env
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+
+    ports:
+      - "9057:9057"
+
+    depends_on:
+      discovery-service:
+        condition: service_started
+
+    restart: unless-stopped
+
   user-service:
     build:
       context: .
@@ -23,7 +44,7 @@ services:
       discovery-service:
           condition: service_started
 
-#    restart: unless-stopped
+    restart: unless-stopped
 
   api-gateway:
     build:
