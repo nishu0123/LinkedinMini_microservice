@@ -45,4 +45,4 @@ echo "======================================"
 echo "Starting $1..."
 echo "======================================"
 
-mvn spring-boot:run
+mvn spring-boot:run -Dspring-boot.run.profiles=local

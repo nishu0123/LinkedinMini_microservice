@@ -2,6 +2,146 @@ version: "3.8"
 
 services:
 
+  post-service:
+    build:
+      context: .
+      dockerfile: PostService/Dockerfile
+
+    container_name: post-service
+
+    env_file:
+      - .env
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+
+    ports:
+      - "9032:9032"
+
+    depends_on:
+      mysql:
+        condition: service_healthy # Changes from a simple list to a strict health check
+      discovery-service:
+        condition: service_started
+
+    restart: unless-stopped
+
+
+  notification-service:
+    build:
+      context: .
+      dockerfile: NotificationService/Dockerfile
+
+    container_name: notification-service
+
+    env_file:
+      - .env
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+
+    ports:
+      - "9039:9039"
+
+    depends_on:
+      mysql:
+        condition: service_healthy # Changes from a simple list to a strict health check
+      discovery-service:
+        condition: service_started
+
+    restart: unless-stopped
+
+
+  connection-service:
+    build:
+      context: .
+      dockerfile: ConnectionService/Dockerfile
+
+    container_name: connection-service
+
+    env_file:
+      - .env
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+
+    ports:
+      - "9040:9040"
+
+    depends_on:
+      neo4j:
+        condition: service_healthy # Changes from a simple list to a strict health check
+      discovery-service:
+        condition: service_started
+
+
+    restart: unless-stopped
+
+  uploader-service:
+    build:
+      context: .
+      dockerfile: UploaderService/Dockerfile
+
+    container_name: uploader-service
+
+    env_file:
+      - .env
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+
+    ports:
+      - "9057:9057"
+
+    depends_on:
+      discovery-service:
+        condition: service_started
+
+    restart: unless-stopped
+
+  user-service:
+    build:
+      context: .
+      dockerfile: UserService/Dockerfile
+
+    container_name: user-service
+
+    env_file:
+      - .env
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+
+    ports:
+      - "9030:9030"
+
+    depends_on:
+      mysql:
+          condition: service_healthy # Changes from a simple list to a strict health check
+      discovery-service:
+          condition: service_started
+
+      connection-service:
+        condition: service_started
+
+    restart: unless-stopped
+
+  api-gateway:
+    build:
+      context: ./api-gateway
+      dockerfile: Dockerfile
+
+    container_name: api-gateway
+
+    env_file:
+      - .env
+
+    ports:
+      - "6085:6085"
+
+    environment:
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://discovery-service:8761/eureka
+
+    depends_on:
+      - discovery-service
+
+    restart: unless-stopped
+
   discovery-service:
     build:
       context: ./discovery-service
@@ -75,6 +215,13 @@ services:
     volumes:
       - neo4j_data:/data
 
+    healthcheck:
+      test: [ "CMD-SHELL", "wget --no-verbose --tries=1 --spider http://neo4j:7474/ || exit 1" ]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+
   mysql:
     image: mysql:8
     container_name: mysql
@@ -86,6 +233,12 @@ services:
     volumes:
       - mysql_data:/var/lib/mysql
       - ./mysql-init:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-proot" ]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
 
   redis:
     image: redis:latest
