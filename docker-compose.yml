@@ -2,6 +2,30 @@ version: "3.8"
 
 services:
 
+  connection-service:
+    build:
+      context: .
+      dockerfile: ConnectionService/Dockerfile
+
+    container_name: connection-service
+
+    env_file:
+      - .env
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+
+    ports:
+      - "9040:9040"
+
+    depends_on:
+      neo4j:
+        condition: service_healthy # Changes from a simple list to a strict health check
+      discovery-service:
+        condition: service_started
+
+
+    restart: unless-stopped
+
   uploader-service:
     build:
       context: .
@@ -43,6 +67,9 @@ services:
           condition: service_healthy # Changes from a simple list to a strict health check
       discovery-service:
           condition: service_started
+
+      connection-service:
+        condition: service_started
 
     restart: unless-stopped
 
@@ -139,6 +166,13 @@ services:
       - "7687:7687"
     volumes:
       - neo4j_data:/data
+
+    healthcheck:
+      test: [ "CMD-SHELL", "wget --no-verbose --tries=1 --spider http://neo4j:7474/ || exit 1" ]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
 
   mysql:
     image: mysql:8
