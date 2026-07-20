@@ -44,6 +44,7 @@
         <module>api-gateway</module>
         <module>discovery-service</module>
         <module>UploaderService</module>
+        <module>NotificationService</module>
         <module>LinkedMini-common-contracts</module>
     </modules>
 

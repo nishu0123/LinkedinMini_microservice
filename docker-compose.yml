@@ -2,6 +2,30 @@ version: "3.8"
 
 services:
 
+  notification-service:
+    build:
+      context: .
+      dockerfile: NotificationService/Dockerfile
+
+    container_name: notification-service
+
+    env_file:
+      - .env
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+
+    ports:
+      - "9039:9039"
+
+    depends_on:
+      mysql:
+        condition: service_healthy # Changes from a simple list to a strict health check
+      discovery-service:
+        condition: service_started
+
+    restart: unless-stopped
+
+
   connection-service:
     build:
       context: .
