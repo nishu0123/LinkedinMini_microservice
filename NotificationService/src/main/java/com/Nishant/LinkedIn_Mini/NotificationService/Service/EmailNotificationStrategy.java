@@ -4,6 +4,7 @@ package com.Nishant.LinkedIn_Mini.NotificationService.Service;
 import com.Nishant.LinkedIn_Mini.NotificationService.Constant.NotificationChannel;
 import com.Nishant.LinkedIn_Mini.NotificationService.Dto.NotificationRequest;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.scheduling.annotation.Async;
@@ -36,7 +37,13 @@ public class EmailNotificationStrategy implements NotificationStrategy{
         message.setText("Hey! " + request.getSenderUserName() + " just posted: \n\n" + request.getMessage());
         message.setFrom("your-app@linkedin-mini.com");
 
-        mailSender.send(message);
-        log.info("Email sent successfully to {}", request.getReceiverEmailId());
+
+        try {
+            mailSender.send(message);
+            log.info("Email sent successfully to {}", request.getReceiverEmailId());
+        } catch (MailException ex) {
+            log.error("Failed to send email to {} : {}", request.getReceiverEmailId(), ex.getMessage());
+        }
+
     }
 }
