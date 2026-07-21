@@ -19,4 +19,10 @@ jobs:
           cache: maven
 
       - name: Build Project
-        run: mvn clean install -DskipTests
+        run: ./build-service.sh discovery-service docker
+
+      - name: Build Discovery Service Docker Image
+        run: |
+          docker build \
+            -t linkedinmini/discovery-service:latest \
+            -f discovery-service/Dockerfile .

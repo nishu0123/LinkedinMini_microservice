@@ -12,9 +12,9 @@ if [ ! -f ".env" ]; then
     exit 1
 fi
 
-# Check service name
-if [ $# -ne 1 ]; then
-    echo "Usage: ./start-service.sh <service-directory>"
+# Check arguments
+if [ $# -lt 1 ] || [ $# -gt 2 ]; then
+    echo "Usage: ./start-service.sh <service-directory> [profile]"
     echo ""
     echo "Available services:"
     echo "  UserService"
@@ -24,25 +24,35 @@ if [ $# -ne 1 ]; then
     echo "  ConnectionService"
     echo "  UploaderService"
     echo "  discovery-service"
+    echo ""
+    echo "Examples:"
+    echo "  ./start-service.sh discovery-service"
+    echo "  ./start-service.sh discovery-service local"
+    echo "  ./start-service.sh discovery-service docker"
     exit 1
 fi
 
+SERVICE=$1
+PROFILE=${2:-local}
+
 # Validate directory
-if [ ! -d "$1" ]; then
-    echo "❌ Service directory '$1' not found."
+if [ ! -d "$SERVICE" ]; then
+    echo "❌ Service directory '$SERVICE' not found."
     exit 1
 fi
 
 # Load environment variables
 set -a
 source .env
+export SPRING_PROFILES_ACTIVE="$PROFILE"
 set +a
 
 # Navigate to service
-cd "$1" || exit 1
+cd "$SERVICE" || exit 1
 
 echo "======================================"
-echo "Starting $1..."
+echo "Starting Service : $SERVICE"
+echo "Profile          : $PROFILE"
 echo "======================================"
 
-mvn spring-boot:run -Dspring-boot.run.profiles=local
+mvn spring-boot:run -Dspring-boot.run.profiles="$PROFILE"
