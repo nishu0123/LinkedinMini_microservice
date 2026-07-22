@@ -29,3 +29,9 @@ jobs:
 
           ./build-service.sh discovery-service docker
 
+      - name: Build Discovery Service Docker Image
+        run: |
+          docker build \
+            -t linkedinmini/discovery-service:latest \
+            -f discovery-service/Dockerfile \
+            discovery-service
