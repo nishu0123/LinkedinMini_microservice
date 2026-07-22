@@ -39,10 +39,22 @@ echo "Profile          : $PROFILE"
 echo "======================================"
 
 # Load environment variables
-set -a
-source .env
+#set -a
+#source .env
+#export SPRING_PROFILES_ACTIVE="$PROFILE"
+#set +a
+
+#Below will bypass if .env is not present , when we will introduce girhub secret then
+#we will get back to the upper commented script
 export SPRING_PROFILES_ACTIVE="$PROFILE"
-set +a
+
+if [ -f ".env" ]; then
+    set -a
+    source .env
+    set +a
+else
+    echo "⚠️ .env not found. Continuing without it..."
+fi
 
 # Navigate to service directory
 cd "$SERVICE" || exit 1
