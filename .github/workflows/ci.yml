@@ -1,3 +1,4 @@
+#currently ci pipleline for the discovery-service
 name: LinkedIn Mini CI
 
 on:
@@ -46,3 +47,4 @@ jobs:
       - name: Push Docker Image
         run: |
           docker push ${{ secrets.DOCKER_USERNAME }}/discovery-service:latest
+          
