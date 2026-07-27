@@ -1,6 +1,25 @@
 version: "3.9"
 
 services:
+
+  connection-service:
+    image: nishant2342/connection-service:latest
+    container_name: connection-service
+
+    ports:
+      - "9040:9040"
+
+    env_file:
+      - .env
+
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+
+    depends_on:
+      - discovery-service
+
+    restart: unless-stopped
+
   discovery-service:
     image: nishant2342/discovery-service:latest
     container_name: discovery-service
