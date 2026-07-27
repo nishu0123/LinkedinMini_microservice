@@ -2,6 +2,26 @@ version: "3.9"
 
 services:
 
+  post-service:
+    image: nishant2342/post-service:latest
+    container_name: post-service
+
+    ports:
+      - "9032:9032"
+
+    env_file:
+      - .env
+
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+
+    depends_on:
+      - discovery-service
+
+    restart: unless-stopped
+
+
+
   uploader-service:
     image: nishant2342/uploader-service:latest
     container_name: uploader-service
