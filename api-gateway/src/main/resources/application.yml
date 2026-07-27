@@ -88,11 +88,11 @@ spring:
                     AuthenticationEnabled: true
                     AuthorizationEnabled: true
 
-eureka:
-  client:
-    service-url:
-      defaultZone: ${EUREKA_CLIENT_SERVICEURL_DEFAULTZONE:http://localhost:8761/eureka}
-#      defaultZone: http://localhost:8761/eureka
+#eureka:
+#  client:
+#    service-url:
+#      defaultZone: ${EUREKA_CLIENT_SERVICEURL_DEFAULTZONE:http://localhost:8761/eureka}
+##      defaultZone: http://localhost:8761/eureka
 
 server:
   port: 6085
