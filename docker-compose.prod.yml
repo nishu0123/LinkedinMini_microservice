@@ -11,6 +11,9 @@ services:
     env_file:
       - .env
 
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+
     restart: unless-stopped
 
   api-gateway:
@@ -22,6 +25,9 @@ services:
 
     env_file:
       - .env
+
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
 
     depends_on:
       - discovery-service
