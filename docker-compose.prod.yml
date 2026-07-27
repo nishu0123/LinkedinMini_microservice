@@ -2,6 +2,24 @@ version: "3.9"
 
 services:
 
+  notification-service:
+    image: nishant2342/notification-service:latest
+    container_name: notification-service
+
+    ports:
+      - "9039:9039"
+
+    env_file:
+      - .env
+
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+
+    depends_on:
+      - discovery-service
+
+    restart: unless-stopped
+
   post-service:
     image: nishant2342/post-service:latest
     container_name: post-service
