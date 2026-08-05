@@ -74,6 +74,8 @@ public class SendNotificationEventConsumer
         notificationEntity.setNotificationId(event.getNotificationId());
         notificationEntity.setEventType(event.getEventType());
         notificationEntity.setCreatedAt(event.getCreatedAt());
+        notificationEntity.setRecipientEmail(event.getRecipientEmail());
+        notificationEntity.setRecipientUserId(event.getRecipientUserId());
         //TO DO : check this payload part , how we can manage
         // Convert Map<String, Object> to valid JSON
         try {

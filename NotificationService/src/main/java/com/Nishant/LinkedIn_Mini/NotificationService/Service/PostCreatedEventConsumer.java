@@ -192,6 +192,9 @@ public class PostCreatedEventConsumer {
                 notificationEntity.setDeliveryChannel(notificationRequest.getChannel());
                 notificationEntity.setRetryCount(0);
                 notificationEntity.setStatus(NotificationStatus.PENDING);
+                notificationEntity.setRecipientEmail(notificationRequest.getRecipientEmail());
+                notificationEntity.setRecipientUserId(notificationRequest.getRecipientUserId());
+                notificationEntity.setRetryCount(0);
 
                 notificationRepository.save(notificationEntity);
 
