@@ -7,6 +7,8 @@ import com.Nishant.LinkedIn_Mini.NotificationService.Entity.NotificationEntity;
 import com.Nishant.LinkedIn_Mini.NotificationService.FeignClient.GetFollowerFeign;
 import com.Nishant.LinkedIn_Mini.NotificationService.FeignClient.GetUserInfoFeign;
 import com.Nishant.LinkedIn_Mini.NotificationService.Repository.NotificationRepository;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nishant.linkedinmini.common.contracts.Constants.DeliveryChannel;
 import com.nishant.linkedinmini.common.contracts.Dto.FeignDto.NotificationUserInfoDto;
 import com.nishant.linkedinmini.common.contracts.Dto.FeignDto.PersonDto;
@@ -43,7 +45,9 @@ public class PostCreatedEventConsumer {
 
     private final NotificationStrategyOrchestrator notificationStrategyOrchestrator;
 
-    public PostCreatedEventConsumer(GetFollowerFeign getFollowerFeign, SendNotificationEventProducer sendNotificationEventProducer, GetUserInfoFeign getUserInfoFeign, EmailService emailService, NotificationRepository notificationRepository, NotificationStrategyOrchestrator notificationStrategyOrchestrator) {
+    private final ObjectMapper objectMapper;
+
+    public PostCreatedEventConsumer(GetFollowerFeign getFollowerFeign, SendNotificationEventProducer sendNotificationEventProducer, GetUserInfoFeign getUserInfoFeign, EmailService emailService, NotificationRepository notificationRepository, NotificationStrategyOrchestrator notificationStrategyOrchestrator, ObjectMapper objectMapper) {
         this.getFollowerFeign = getFollowerFeign;
         this.sendNotificationEventProducer = sendNotificationEventProducer;
         this.getUserInfoFeign = getUserInfoFeign;
@@ -51,6 +55,7 @@ public class PostCreatedEventConsumer {
         this.emailService = emailService;
         this.notificationRepository = notificationRepository;
         this.notificationStrategyOrchestrator = notificationStrategyOrchestrator;
+        this.objectMapper = objectMapper;
     }
 
 
@@ -177,7 +182,13 @@ public class PostCreatedEventConsumer {
                 notificationEntity.setEventType(notificationRequest.getEventType());
                 notificationEntity.setCreatedAt(notificationRequest.getCreatedAt());
                 //TO DO : check this payload part , how we can manage
-                notificationEntity.setPayload(notificationRequest.getPayload().toString());
+                try {
+                    notificationEntity.setPayload(
+                            objectMapper.writeValueAsString(notificationRequest.getPayload())
+                    );
+                } catch (JsonProcessingException e) {
+                    throw new RuntimeException("Failed to serialize notification payload", e);
+                }
                 notificationEntity.setDeliveryChannel(notificationRequest.getChannel());
                 notificationEntity.setRetryCount(0);
                 notificationEntity.setStatus(NotificationStatus.PENDING);

@@ -6,12 +6,15 @@ import com.Nishant.LinkedIn_Mini.NotificationService.Dto.NotificationRequest;
 import com.Nishant.LinkedIn_Mini.NotificationService.Entity.NotificationEntity;
 import com.Nishant.LinkedIn_Mini.NotificationService.FeignClient.GetUserInfoFeign;
 import com.Nishant.LinkedIn_Mini.NotificationService.Repository.NotificationRepository;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nishant.linkedinmini.common.contracts.Constants.DeliveryChannel;
 import com.nishant.linkedinmini.common.contracts.Dto.FeignDto.UserInfoDto;
 import com.nishant.linkedinmini.common.contracts.NotificationRequestDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
+
 
 
 @Slf4j
@@ -24,15 +27,18 @@ public class SendNotificationEventConsumer
 
     private final NotificationRepository notificationRepository;
 
+    private final ObjectMapper objectMapper;
+
     private final NotificationStrategyOrchestrator notificationStrategyOrchestrator;
 
     public SendNotificationEventConsumer(
             GetUserInfoFeign getUserInfoFeign,
-            EmailService emailService, NotificationRepository notificationRepository, NotificationStrategyOrchestrator notificationStrategyOrchestrator)
+            EmailService emailService, NotificationRepository notificationRepository, ObjectMapper objectMapper, NotificationStrategyOrchestrator notificationStrategyOrchestrator)
     {
         this.getUserInfoFeign = getUserInfoFeign;
         this.emailService = emailService;
         this.notificationRepository = notificationRepository;
+        this.objectMapper = objectMapper;
         this.notificationStrategyOrchestrator = notificationStrategyOrchestrator;
     }
 
@@ -69,7 +75,15 @@ public class SendNotificationEventConsumer
         notificationEntity.setEventType(event.getEventType());
         notificationEntity.setCreatedAt(event.getCreatedAt());
         //TO DO : check this payload part , how we can manage
-        notificationEntity.setPayload(event.getPayload().toString());
+        // Convert Map<String, Object> to valid JSON
+        try {
+            notificationEntity.setPayload(
+                    objectMapper.writeValueAsString(event.getPayload())
+            );
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException("Failed to serialize notification payload", e);
+        }
+
         notificationEntity.setDeliveryChannel(event.getChannel());
         notificationEntity.setRetryCount(0);
         notificationEntity.setStatus(NotificationStatus.PENDING);
