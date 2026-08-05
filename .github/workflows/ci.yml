@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - feature/CI
+      - feature/notification-reliability
 
 jobs:
 

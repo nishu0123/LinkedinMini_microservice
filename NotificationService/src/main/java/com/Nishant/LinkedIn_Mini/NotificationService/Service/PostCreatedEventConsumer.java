@@ -1,9 +1,12 @@
 package com.Nishant.LinkedIn_Mini.NotificationService.Service;
 
+import com.Nishant.LinkedIn_Mini.NotificationService.Constant.NotificationStatus;
 import com.Nishant.LinkedIn_Mini.NotificationService.Dto.EventDto.SendNotificationEventDto;
 import com.Nishant.LinkedIn_Mini.NotificationService.Dto.NotificationRequest;
+import com.Nishant.LinkedIn_Mini.NotificationService.Entity.NotificationEntity;
 import com.Nishant.LinkedIn_Mini.NotificationService.FeignClient.GetFollowerFeign;
 import com.Nishant.LinkedIn_Mini.NotificationService.FeignClient.GetUserInfoFeign;
+import com.Nishant.LinkedIn_Mini.NotificationService.Repository.NotificationRepository;
 import com.nishant.linkedinmini.common.contracts.Constants.DeliveryChannel;
 import com.nishant.linkedinmini.common.contracts.Dto.FeignDto.NotificationUserInfoDto;
 import com.nishant.linkedinmini.common.contracts.Dto.FeignDto.PersonDto;
@@ -36,14 +39,17 @@ public class PostCreatedEventConsumer {
 
     private final EmailService emailService;
 
+    private final NotificationRepository notificationRepository;
+
     private final NotificationStrategyOrchestrator notificationStrategyOrchestrator;
 
-    public PostCreatedEventConsumer(GetFollowerFeign getFollowerFeign, SendNotificationEventProducer sendNotificationEventProducer, GetUserInfoFeign getUserInfoFeign, EmailService emailService, NotificationStrategyOrchestrator notificationStrategyOrchestrator) {
+    public PostCreatedEventConsumer(GetFollowerFeign getFollowerFeign, SendNotificationEventProducer sendNotificationEventProducer, GetUserInfoFeign getUserInfoFeign, EmailService emailService, NotificationRepository notificationRepository, NotificationStrategyOrchestrator notificationStrategyOrchestrator) {
         this.getFollowerFeign = getFollowerFeign;
         this.sendNotificationEventProducer = sendNotificationEventProducer;
         this.getUserInfoFeign = getUserInfoFeign;
 
         this.emailService = emailService;
+        this.notificationRepository = notificationRepository;
         this.notificationStrategyOrchestrator = notificationStrategyOrchestrator;
     }
 
@@ -161,6 +167,22 @@ public class PostCreatedEventConsumer {
 //                }
 
                 //pass the dto that we got from the post-service itself
+
+
+                //here before calling the notify , we will insert a row in the databse against this
+                //notification
+
+                NotificationEntity notificationEntity = new NotificationEntity();
+                notificationEntity.setNotificationId(notificationRequest.getNotificationId());
+                notificationEntity.setEventType(notificationRequest.getEventType());
+                notificationEntity.setCreatedAt(notificationRequest.getCreatedAt());
+                //TO DO : check this payload part , how we can manage
+                notificationEntity.setPayload(notificationRequest.getPayload().toString());
+                notificationEntity.setDeliveryChannel(notificationRequest.getChannel());
+                notificationEntity.setRetryCount(0);
+                notificationEntity.setStatus(NotificationStatus.PENDING);
+
+                notificationRepository.save(notificationEntity);
 
                 notificationStrategyOrchestrator.notify(notificationRequest);
 
