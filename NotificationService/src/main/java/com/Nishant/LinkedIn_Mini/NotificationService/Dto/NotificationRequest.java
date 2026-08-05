@@ -1,6 +1,6 @@
 package com.Nishant.LinkedIn_Mini.NotificationService.Dto;
 
-import com.Nishant.LinkedIn_Mini.NotificationService.Constant.NotificationChannel;
+import com.nishant.linkedinmini.common.contracts.Constants.DeliveryChannel;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
@@ -17,6 +17,6 @@ public class NotificationRequest {
     private String receiverUserName;
     private String receiverEmailId;
     private String receiverMobileNumber;
-    private NotificationChannel channel;
+    private DeliveryChannel channel;
     private String message;
 }
