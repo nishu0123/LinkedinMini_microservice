@@ -39,7 +39,7 @@ public class PostCreatedEventConsumer {
 
 //    private final GetUserInfoInBulkFeign getUserInfoInBulkFeign;
 
-    private final EmailService emailService;
+//    private final EmailService emailService;
 
     private final NotificationRepository notificationRepository;
 
@@ -47,12 +47,12 @@ public class PostCreatedEventConsumer {
 
     private final ObjectMapper objectMapper;
 
-    public PostCreatedEventConsumer(GetFollowerFeign getFollowerFeign, SendNotificationEventProducer sendNotificationEventProducer, GetUserInfoFeign getUserInfoFeign, EmailService emailService, NotificationRepository notificationRepository, NotificationStrategyOrchestrator notificationStrategyOrchestrator, ObjectMapper objectMapper) {
+    public PostCreatedEventConsumer(GetFollowerFeign getFollowerFeign, SendNotificationEventProducer sendNotificationEventProducer, GetUserInfoFeign getUserInfoFeign, NotificationRepository notificationRepository, NotificationStrategyOrchestrator notificationStrategyOrchestrator, ObjectMapper objectMapper) {
         this.getFollowerFeign = getFollowerFeign;
         this.sendNotificationEventProducer = sendNotificationEventProducer;
         this.getUserInfoFeign = getUserInfoFeign;
 
-        this.emailService = emailService;
+//        this.emailService = emailService;
         this.notificationRepository = notificationRepository;
         this.notificationStrategyOrchestrator = notificationStrategyOrchestrator;
         this.objectMapper = objectMapper;

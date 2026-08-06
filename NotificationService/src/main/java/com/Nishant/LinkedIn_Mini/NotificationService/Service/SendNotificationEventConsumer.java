@@ -23,7 +23,7 @@ public class SendNotificationEventConsumer
 {
     private final GetUserInfoFeign getUserInfoFeign;
 
-    private final EmailService emailService;
+//    private final EmailService emailService;
 
     private final NotificationRepository notificationRepository;
 
@@ -33,10 +33,10 @@ public class SendNotificationEventConsumer
 
     public SendNotificationEventConsumer(
             GetUserInfoFeign getUserInfoFeign,
-            EmailService emailService, NotificationRepository notificationRepository, ObjectMapper objectMapper, NotificationStrategyOrchestrator notificationStrategyOrchestrator)
+             NotificationRepository notificationRepository, ObjectMapper objectMapper, NotificationStrategyOrchestrator notificationStrategyOrchestrator)
     {
         this.getUserInfoFeign = getUserInfoFeign;
-        this.emailService = emailService;
+//        this.emailService = emailService;
         this.notificationRepository = notificationRepository;
         this.objectMapper = objectMapper;
         this.notificationStrategyOrchestrator = notificationStrategyOrchestrator;
