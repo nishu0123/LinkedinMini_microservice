@@ -39,8 +39,14 @@ public class EmailNotificationStrategy implements NotificationStrategy{
     @Override
     public void send(NotificationRequestDto request) {
 
+//        these are the field which were added in the payload
+
+//        payload.put("userId", userIdString);
+//        payload.put("userName", userName);
+//        payload.put("imageUrl", imageUrl);
+
         String userName = request.getPayload().get("userName").toString();
-        String postContent = request.getPayload().get("postContent").toString();
+        String postContent = request.getPayload().get("imageUrl").toString();
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(request.getRecipientEmail());
         //senderName is null check this

@@ -61,21 +61,31 @@ public class PostCreatedEventConsumer {
 
     @KafkaListener(topics = "post-created-topic", groupId = "notification-group-v2")
     public void consumePostEvent(NotificationRequestDto postCreatedEventDto) {
+        //these are the content added in payload of post-create event
+
+//        payload.put("userId", userIdString);
+//        payload.put("userName", userName);
+//        payload.put("imageUrl", imageUrl);
+
+        String userId = postCreatedEventDto.getPayload().get("userId").toString();
+        String userName = postCreatedEventDto.getPayload().get("userName").toString();
+        String imageUrl = postCreatedEventDto.getPayload().get("imageUrl").toString();
+
 //        System.out.println("New post by: " + postCreatedEventDto.);
-        System.out.println("Image URL: " + postCreatedEventDto.getPayload().get("postContent"));
+        System.out.println("Image URL: " + imageUrl);
 
         // Logic to find followers and send emails/push notifications
 
 
         //now call the connection service to get the first-degree connection and send the email to all the user
-        List<PersonDto> followersList =  getFollowerFeign.getFirstDegreeConnection(Long.valueOf(postCreatedEventDto.getPayload().get("userId").toString()) , postCreatedEventDto.getPayload().get("userId").toString()).getBody().getData();
+        List<PersonDto> followersList =  getFollowerFeign.getFirstDegreeConnection(Long.valueOf(userId) , userId).getBody().getData();
 
 
         //chek if there is no followers then avoid feign call
         if(followersList == null || followersList.isEmpty())
         {
             log.info("NO followers found for user {}",
-                    Long.valueOf(postCreatedEventDto.getPayload().get("userId").toString()));
+                    Long.valueOf(userId));
             return;
         }
 
