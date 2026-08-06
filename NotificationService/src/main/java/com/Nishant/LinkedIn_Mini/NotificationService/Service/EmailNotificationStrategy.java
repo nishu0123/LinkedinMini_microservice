@@ -55,21 +55,37 @@ public class EmailNotificationStrategy implements NotificationStrategy{
         message.setFrom("nishant@linkedin-mini.com");
 
 
-        NotificationEntity notificationEntity = notificationRepository.getByNotificationId(request.getNotificationId());
+        NotificationEntity notificationEntity =
+                notificationRepository.getByNotificationId(request.getNotificationId());
+
+        log.info("Current status before sending = {}", notificationEntity.getStatus());
 
         try {
             mailSender.send(message);
+
             log.info("Email sent successfully to {}", request.getRecipientEmail());
 
             notificationEntity.setStatus(NotificationStatus.SENT);
             notificationEntity.setSentAt(LocalDateTime.now());
+
             notificationRepository.save(notificationEntity);
 
+            log.info("Notification {} updated to SENT",
+                    notificationEntity.getNotificationId());
+
         } catch (MailException ex) {
-            log.error("Failed to send email to {} : {}", request.getRecipientEmail(), ex.getMessage());
+
+            log.error("Failed to send email to {} : {}",
+                    request.getRecipientEmail(),
+                    ex.getMessage());
+
             notificationEntity.setStatus(NotificationStatus.FAILED);
             notificationEntity.setErrorMessage(ex.getMessage());
+
             notificationRepository.save(notificationEntity);
+
+            log.info("Notification {} updated to FAILED",
+                    notificationEntity.getNotificationId());
         }
     }
 }
