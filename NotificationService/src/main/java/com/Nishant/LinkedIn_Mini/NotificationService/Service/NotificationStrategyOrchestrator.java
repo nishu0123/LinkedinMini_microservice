@@ -1,7 +1,8 @@
 package com.Nishant.LinkedIn_Mini.NotificationService.Service;
 
-import com.Nishant.LinkedIn_Mini.NotificationService.Constant.NotificationChannel;
 import com.Nishant.LinkedIn_Mini.NotificationService.Dto.NotificationRequest;
+import com.nishant.linkedinmini.common.contracts.Constants.DeliveryChannel;
+import com.nishant.linkedinmini.common.contracts.NotificationRequestDto;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -19,9 +20,9 @@ public class NotificationStrategyOrchestrator {
     }
 
 
-    public void notify(NotificationRequest request) {
+    public void notify(NotificationRequestDto request) {
 
-        Map<NotificationChannel, NotificationStrategy> strategyMap = new HashMap<>();;
+        Map<DeliveryChannel, NotificationStrategy> strategyMap = new HashMap<>();;
 
         strategyMap = strategies.stream()
                 .collect(Collectors.toMap(

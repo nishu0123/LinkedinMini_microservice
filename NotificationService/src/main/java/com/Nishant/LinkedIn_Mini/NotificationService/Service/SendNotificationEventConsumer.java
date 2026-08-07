@@ -1,13 +1,20 @@
 package com.Nishant.LinkedIn_Mini.NotificationService.Service;
 
-import com.Nishant.LinkedIn_Mini.NotificationService.Constant.NotificationChannel;
+import com.Nishant.LinkedIn_Mini.NotificationService.Constant.NotificationStatus;
 import com.Nishant.LinkedIn_Mini.NotificationService.Dto.EventDto.SendNotificationEventDto;
 import com.Nishant.LinkedIn_Mini.NotificationService.Dto.NotificationRequest;
+import com.Nishant.LinkedIn_Mini.NotificationService.Entity.NotificationEntity;
 import com.Nishant.LinkedIn_Mini.NotificationService.FeignClient.GetUserInfoFeign;
+import com.Nishant.LinkedIn_Mini.NotificationService.Repository.NotificationRepository;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.nishant.linkedinmini.common.contracts.Constants.DeliveryChannel;
 import com.nishant.linkedinmini.common.contracts.Dto.FeignDto.UserInfoDto;
+import com.nishant.linkedinmini.common.contracts.NotificationRequestDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
+
 
 
 @Slf4j
@@ -16,16 +23,22 @@ public class SendNotificationEventConsumer
 {
     private final GetUserInfoFeign getUserInfoFeign;
 
-    private final EmailService emailService;
+//    private final EmailService emailService;
+
+    private final NotificationRepository notificationRepository;
+
+    private final ObjectMapper objectMapper;
 
     private final NotificationStrategyOrchestrator notificationStrategyOrchestrator;
 
     public SendNotificationEventConsumer(
             GetUserInfoFeign getUserInfoFeign,
-            EmailService emailService, NotificationStrategyOrchestrator notificationStrategyOrchestrator)
+             NotificationRepository notificationRepository, ObjectMapper objectMapper, NotificationStrategyOrchestrator notificationStrategyOrchestrator)
     {
         this.getUserInfoFeign = getUserInfoFeign;
-        this.emailService = emailService;
+//        this.emailService = emailService;
+        this.notificationRepository = notificationRepository;
+        this.objectMapper = objectMapper;
         this.notificationStrategyOrchestrator = notificationStrategyOrchestrator;
     }
 
@@ -34,27 +47,56 @@ public class SendNotificationEventConsumer
             groupId = "notification-group"
     )
     public void consume(
-            SendNotificationEventDto event)
+            NotificationRequestDto event)
     {
         log.info(
                 "Received notification event for follower {}",
-                event.getUsersFollowerId()
+                event.getRecipientUserId()
         );
 
         UserInfoDto follower =
                 getUserInfoFeign.GetUserInfo(
-                        event.getUsersFollowerId()
+                        event.getRecipientUserId()
                 ).getBody().getData();
 
 
-        NotificationRequest notificationRequest = new NotificationRequest();
-        notificationRequest.setMessage(event.getContent());
-        notificationRequest.setSenderUserName(follower.getUserName());
-        notificationRequest.setReceiverEmailId(event.getReceipientEmail());
-        //decision making logic
-        notificationRequest.setChannel(NotificationChannel.EMAIL);//this will decide which method of notify will be used
+//
+//        NotificationRequestDto notificationRequest = new NotificationRequestDto();
+//        notificationRequest.setMessage(event.getContent());
+//        notificationRequest.setSenderUserName(follower.getUserName());
+//        notificationRequest.setReceiverEmailId(event.getReceipientEmail());
+//        //decision making logic
+//        notificationRequest.setChannel(DeliveryChannel.EMAIL);//this will decide which method of notify will be used
 
-        notificationStrategyOrchestrator.notify(notificationRequest);
+
+        //insert a row against this notification and set the status pending
+        NotificationEntity notificationEntity = new NotificationEntity();
+        notificationEntity.setNotificationId(event.getNotificationId());
+        notificationEntity.setEventType(event.getEventType());
+        notificationEntity.setCreatedAt(event.getCreatedAt());
+        notificationEntity.setRecipientEmail(event.getRecipientEmail());
+        notificationEntity.setRecipientUserId(event.getRecipientUserId());
+        //TO DO : check this payload part , how we can manage
+        // Convert Map<String, Object> to valid JSON
+        try {
+            notificationEntity.setPayload(
+                    objectMapper.writeValueAsString(event.getPayload())
+            );
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException("Failed to serialize notification payload", e);
+        }
+
+        notificationEntity.setDeliveryChannel(event.getChannel());
+        notificationEntity.setRetryCount(0);
+        notificationEntity.setStatus(NotificationStatus.PENDING);
+
+        notificationRepository.save(notificationEntity);
+
+
+        //when producer produce event it pass NotificationRequestDto and all the data are already set
+        //and we will not change it , that will be the single source of truth
+
+        notificationStrategyOrchestrator.notify(event);
 
         //now new implementation using strategy pattern should work
         /*

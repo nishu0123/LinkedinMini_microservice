@@ -1,20 +1,28 @@
 package com.Nishant.LinkedIn_Mini.NotificationService.Service;
 
-import com.Nishant.LinkedIn_Mini.NotificationService.Constant.NotificationChannel;
+import com.Nishant.LinkedIn_Mini.NotificationService.Constant.NotificationStatus;
 import com.Nishant.LinkedIn_Mini.NotificationService.Dto.EventDto.SendNotificationEventDto;
 import com.Nishant.LinkedIn_Mini.NotificationService.Dto.NotificationRequest;
+import com.Nishant.LinkedIn_Mini.NotificationService.Entity.NotificationEntity;
 import com.Nishant.LinkedIn_Mini.NotificationService.FeignClient.GetFollowerFeign;
 import com.Nishant.LinkedIn_Mini.NotificationService.FeignClient.GetUserInfoFeign;
+import com.Nishant.LinkedIn_Mini.NotificationService.Repository.NotificationRepository;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.nishant.linkedinmini.common.contracts.Constants.DeliveryChannel;
 import com.nishant.linkedinmini.common.contracts.Dto.FeignDto.NotificationUserInfoDto;
 import com.nishant.linkedinmini.common.contracts.Dto.FeignDto.PersonDto;
 import com.nishant.linkedinmini.common.contracts.Dto.FeignDto.UserInfoDto;
-import com.nishant.linkedinmini.common.contracts.Dto.KafkaEventDto.PostCreatedEventDto;
+import com.nishant.linkedinmini.common.contracts.NotificationRequestDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 import static com.Nishant.LinkedIn_Mini.NotificationService.Constant.AppConstants.SUPER_USER_FOLLOWER_MIN_LIMIT;
 
@@ -31,37 +39,53 @@ public class PostCreatedEventConsumer {
 
 //    private final GetUserInfoInBulkFeign getUserInfoInBulkFeign;
 
-    private final EmailService emailService;
+//    private final EmailService emailService;
+
+    private final NotificationRepository notificationRepository;
 
     private final NotificationStrategyOrchestrator notificationStrategyOrchestrator;
 
-    public PostCreatedEventConsumer(GetFollowerFeign getFollowerFeign, SendNotificationEventProducer sendNotificationEventProducer, GetUserInfoFeign getUserInfoFeign, EmailService emailService, NotificationStrategyOrchestrator notificationStrategyOrchestrator) {
+    private final ObjectMapper objectMapper;
+
+    public PostCreatedEventConsumer(GetFollowerFeign getFollowerFeign, SendNotificationEventProducer sendNotificationEventProducer, GetUserInfoFeign getUserInfoFeign, NotificationRepository notificationRepository, NotificationStrategyOrchestrator notificationStrategyOrchestrator, ObjectMapper objectMapper) {
         this.getFollowerFeign = getFollowerFeign;
         this.sendNotificationEventProducer = sendNotificationEventProducer;
         this.getUserInfoFeign = getUserInfoFeign;
 
-        this.emailService = emailService;
+//        this.emailService = emailService;
+        this.notificationRepository = notificationRepository;
         this.notificationStrategyOrchestrator = notificationStrategyOrchestrator;
+        this.objectMapper = objectMapper;
     }
 
 
     @KafkaListener(topics = "post-created-topic", groupId = "notification-group-v2")
-    public void consumePostEvent(PostCreatedEventDto postCreatedEventDto) {
-        System.out.println("New post by: " + postCreatedEventDto.getUserId());
-        System.out.println("Image URL: " + postCreatedEventDto.getImageUrl());
+    public void consumePostEvent(NotificationRequestDto postCreatedEventDto) {
+        //these are the content added in payload of post-create event
+
+//        payload.put("userId", userIdString);
+//        payload.put("userName", userName);
+//        payload.put("imageUrl", imageUrl);
+
+        String userId = postCreatedEventDto.getPayload().get("userId").toString();
+        String userName = postCreatedEventDto.getPayload().get("userName").toString();
+        String imageUrl = postCreatedEventDto.getPayload().get("imageUrl").toString();
+
+//        System.out.println("New post by: " + postCreatedEventDto.);
+        System.out.println("Image URL: " + imageUrl);
 
         // Logic to find followers and send emails/push notifications
 
 
         //now call the connection service to get the first-degree connection and send the email to all the user
-        List<PersonDto> followersList =  getFollowerFeign.getFirstDegreeConnection(postCreatedEventDto.getUserId() , postCreatedEventDto.getUserId().toString()).getBody().getData();
+        List<PersonDto> followersList =  getFollowerFeign.getFirstDegreeConnection(Long.valueOf(userId) , userId).getBody().getData();
 
 
         //chek if there is no followers then avoid feign call
         if(followersList == null || followersList.isEmpty())
         {
             log.info("NO followers found for user {}",
-                    postCreatedEventDto.getUserId());
+                    Long.valueOf(userId));
             return;
         }
 
@@ -98,12 +122,21 @@ public class PostCreatedEventConsumer {
             for(int i = 0; i<noOfFollowers; i++)
             {
                 //here now produce send notification event for each user
-                SendNotificationEventDto sendNotificationEventDto  = new SendNotificationEventDto();
-                sendNotificationEventDto.setUserId(postCreatedEventDto.getUserId());
-                sendNotificationEventDto.setContent(postCreatedEventDto.getImageUrl());
-                sendNotificationEventDto.setUsersFollowerId(followersInfoList.get(i).getUserId());
-                sendNotificationEventDto.setReceipientEmail(followersInfoList.get(i).getEmail());
-                sendNotificationEventDto.setUserName(postCreatedEventDto.getUserName());
+                NotificationRequestDto sendNotificationEventDto  = new NotificationRequestDto();
+                sendNotificationEventDto.setCreatedAt(LocalDateTime.now());
+                sendNotificationEventDto.setNotificationId(UUID.randomUUID());
+                sendNotificationEventDto.setTemplateName("default");
+                sendNotificationEventDto.setRecipientUserId(followersInfoList.get(i).getUserId());
+                sendNotificationEventDto.setRecipientEmail(followersInfoList.get(i).getEmail());
+                sendNotificationEventDto.setEventType(postCreatedEventDto.getEventType());
+                sendNotificationEventDto.setChannel(postCreatedEventDto.getChannel());
+                sendNotificationEventDto.setPayload(postCreatedEventDto.getPayload());
+
+//                sendNotificationEventDto.setUserId(Long.valueOf(postCreatedEventDto.getPayload().get("userId").toString()));
+//                sendNotificationEventDto.setContent(postCreatedEventDto.getPayload().get("imageUrl").toString());
+//                sendNotificationEventDto.setUsersFollowerId(followersInfoList.get(i).getUserId());
+//                sendNotificationEventDto.setReceipientEmail(followersInfoList.get(i).getEmail());
+//                sendNotificationEventDto.setUserName(postCreatedEventDto.getPayload().get("userName").toString());
 
                 sendNotificationEventProducer.sendNotificationEvent(sendNotificationEventDto);
                 log.info(" sendNotificationEvent produced");
@@ -116,35 +149,67 @@ public class PostCreatedEventConsumer {
             for(int i = 0; i<noOfFollowers; i++)
             {
 
-                String sendername = postCreatedEventDto.getUserName();
-                String receipientMail = followersInfoList.get(i).getEmail();
-                String postUrl = postCreatedEventDto.getImageUrl();
+                NotificationRequestDto notificationRequest  = new NotificationRequestDto();
+                notificationRequest.setCreatedAt(LocalDateTime.now());
+                notificationRequest.setNotificationId(UUID.randomUUID());
+                notificationRequest.setTemplateName("default");
+                notificationRequest.setRecipientUserId(followersInfoList.get(i).getUserId());
+                notificationRequest.setRecipientEmail(followersInfoList.get(i).getEmail());
+                notificationRequest.setEventType(postCreatedEventDto.getEventType());
+                notificationRequest.setChannel(postCreatedEventDto.getChannel());
+                notificationRequest.setPayload(postCreatedEventDto.getPayload());
 
-                NotificationRequest notificationRequest = new NotificationRequest();
-                notificationRequest.setMessage(postUrl);
-                notificationRequest.setSenderUserName(sendername);
-                notificationRequest.setReceiverEmailId(receipientMail);
-                notificationRequest.setChannel(NotificationChannel.EMAIL);//this will decide , user will be notified with which means of communication
-                //set the sender user name if null
-                if(notificationRequest.getSenderUserName() == null)
-                {
-                    UserInfoDto senderUserInfoDto =
-                            getUserInfoFeign.GetUserInfo(
-                                    postCreatedEventDto.getUserId()
-                            ).getBody().getData();
-                    notificationRequest.setSenderUserName(senderUserInfoDto.getUserName());
+
+
+//                String sendername = postCreatedEventDto.getPayload().get("userName").toString();
+//                String receipientMail = followersInfoList.get(i).getEmail();
+//                String postUrl = postCreatedEventDto.getPayload().get("imageUrl").toString();
+//
+//                NotificationRequestDto notificationRequest = new NotificationRequestDto();
+//                notificationRequest.setMessage(postUrl);
+//                notificationRequest.setSenderUserName(sendername);
+//                notificationRequest.setReceiverEmailId(receipientMail);
+//                //correct the below notification-channel and delivery-channel two enums class have been created for the same purpoes remove this imbiguity
+//                notificationRequest.setChannel(DeliveryChannel.EMAIL);//this will decide , user will be notified with which means of communication
+//                //set the sender user name if null
+//                if(notificationRequest.getSenderUserName() == null)
+//                {
+//                    UserInfoDto senderUserInfoDto =
+//                            getUserInfoFeign.GetUserInfo(
+//                                    Long.valueOf(postCreatedEventDto.getPayload().get("userId").toString())
+//                            ).getBody().getData();
+//                    notificationRequest.setSenderUserName(senderUserInfoDto.getUserName());
+//                }
+
+                //pass the dto that we got from the post-service itself
+
+
+                //here before calling the notify , we will insert a row in the databse against this
+                //notification
+
+                NotificationEntity notificationEntity = new NotificationEntity();
+                notificationEntity.setNotificationId(notificationRequest.getNotificationId());
+                notificationEntity.setEventType(notificationRequest.getEventType());
+                notificationEntity.setCreatedAt(notificationRequest.getCreatedAt());
+                //TO DO : check this payload part , how we can manage
+                try {
+                    notificationEntity.setPayload(
+                            objectMapper.writeValueAsString(notificationRequest.getPayload())
+                    );
+                } catch (JsonProcessingException e) {
+                    throw new RuntimeException("Failed to serialize notification payload", e);
                 }
+                notificationEntity.setDeliveryChannel(notificationRequest.getChannel());
+                notificationEntity.setRetryCount(0);
+                notificationEntity.setStatus(NotificationStatus.PENDING);
+                notificationEntity.setRecipientEmail(notificationRequest.getRecipientEmail());
+                notificationEntity.setRecipientUserId(notificationRequest.getRecipientUserId());
+                notificationEntity.setRetryCount(0);
+
+                notificationRepository.save(notificationEntity);
 
                 notificationStrategyOrchestrator.notify(notificationRequest);
 
-                /*
-                //To Do rather than sender mail , i have to set the sender name implement
-                String sendername = postCreatedEventDto.getUserName();
-                String receipientMail = followersInfoList.get(i).getEmail();
-                String postUrl = postCreatedEventDto.getImageUrl();
-                emailService.sendPostNotificationEmail(receipientMail , sendername , postUrl);
-                log.info("email sent to " + receipientMail + " successfully");
-                 */
             }
 
         }

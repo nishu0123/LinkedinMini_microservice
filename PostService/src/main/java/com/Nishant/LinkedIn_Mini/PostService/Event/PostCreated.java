@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 @Builder
-public class PostCrated {
+public class PostCreated {
     private Long id;
     private Long userId;
     private Long postId;
