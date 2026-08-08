@@ -2,7 +2,10 @@ package com.Nishant.LinkedIn_Mini.UploaderService.Service;
 
 import com.Nishant.LinkedIn_Mini.UploaderService.Constants.UploadProvider;
 import com.Nishant.LinkedIn_Mini.UploaderService.Dto.CreatePostResponseDto;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.HashMap;
@@ -11,6 +14,9 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+@Service
+@Slf4j
+@RequiredArgsConstructor
 public class UploadStrategyOrchestrator {
 
     List<UploadStrategy> strategies;
@@ -20,7 +26,7 @@ public class UploadStrategyOrchestrator {
     }
 
     //now get the provider
-    @Value("${upload.provider}")
+    @Value("${upload.provider:CLOUDINARY}")
     private UploadProvider uploadProvider;
 
     public CreatePostResponseDto upload(MultipartFile file)
