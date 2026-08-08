@@ -24,6 +24,9 @@ public class CloudinaryUploaderService implements UploaderService {
 
     @Override
     public CreatePostResponseDto upload(MultipartFile file) {
+        //commented this part if current strategy work then it will be removed
+        return null;
+        /*
 
         CreatePostResponseDto createPostResponseDto = new CreatePostResponseDto();
         log.info("request passed to the service layer");
@@ -61,6 +64,8 @@ public class CloudinaryUploaderService implements UploaderService {
                     e
             );
         }
+
+         */
 
     }
 

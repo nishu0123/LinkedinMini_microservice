@@ -5,6 +5,7 @@ on:
     branches:
       - feature/CI
       - feature/notification-reliability
+      - refactor/uploader-strategy
 
 jobs:
 
