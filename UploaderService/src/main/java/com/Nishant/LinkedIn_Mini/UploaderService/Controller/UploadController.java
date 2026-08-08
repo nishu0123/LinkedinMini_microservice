@@ -2,6 +2,7 @@ package com.Nishant.LinkedIn_Mini.UploaderService.Controller;
 
 import com.Nishant.LinkedIn_Mini.UploaderService.Dto.CreatePostResponseDto;
 import com.Nishant.LinkedIn_Mini.UploaderService.Dto.DeleteImageResponseDto;
+import com.Nishant.LinkedIn_Mini.UploaderService.Service.UploadStrategyOrchestrator;
 import com.Nishant.LinkedIn_Mini.UploaderService.Service.UploaderService;
 import com.Nishant.LinkedIn_Mini.UploaderService.Util.ResponseBuilder;
 import com.cloudinary.Api;
@@ -24,8 +25,11 @@ public class UploadController {
     @Autowired
     private final UploaderService uploaderService;
 
-    public UploadController(UploaderService uploaderService) {
+    private final UploadStrategyOrchestrator uploadStrategyOrchestrator;
+
+    public UploadController(UploaderService uploaderService, UploadStrategyOrchestrator uploadStrategyOrchestrator) {
         this.uploaderService = uploaderService;
+        this.uploadStrategyOrchestrator = uploadStrategyOrchestrator;
     }
 
 
@@ -39,7 +43,10 @@ public class UploadController {
     public ResponseEntity<ApiResponse<CreatePostResponseDto>> upload(@RequestPart("file") MultipartFile file) {
         log.info("Upload API hit, file name: {}", file.getOriginalFilename());
 //        String url = uploaderService.upload(file);
-        CreatePostResponseDto createPostResponseDto = uploaderService.upload(file);
+//        CreatePostResponseDto createPostResponseDto = uploaderService.upload(file);
+
+        CreatePostResponseDto createPostResponseDto = uploadStrategyOrchestrator.upload(file);
+
 
 //        return ResponseEntity.ok(createPostResponseDto);
         return ResponseEntity.status(HttpStatus.OK)
