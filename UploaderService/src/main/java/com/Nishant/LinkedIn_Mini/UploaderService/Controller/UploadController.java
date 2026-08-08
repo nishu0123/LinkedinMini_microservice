@@ -22,7 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 @RequestMapping("/file")
 public class UploadController {
 
-    @Autowired
+
     private final UploaderService uploaderService;
 
     private final UploadStrategyOrchestrator uploadStrategyOrchestrator;

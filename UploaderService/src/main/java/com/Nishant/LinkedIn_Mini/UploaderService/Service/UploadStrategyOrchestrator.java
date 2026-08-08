@@ -16,37 +16,32 @@ import java.util.stream.Collectors;
 
 @Service
 @Slf4j
-@RequiredArgsConstructor
 public class UploadStrategyOrchestrator {
 
-    List<UploadStrategy> strategies;
+    private final List<UploadStrategy> strategies;
 
-    public UploadStrategyOrchestrator(List<UploadStrategy> strategies) {
-        this.strategies = strategies;
-    }
-
-    //now get the provider
     @Value("${upload.provider:CLOUDINARY}")
     private UploadProvider uploadProvider;
 
-    public CreatePostResponseDto upload(MultipartFile file)
-    {
-        Map<UploadProvider , UploadStrategy> strategyMap = new HashMap<>();
+    public UploadStrategyOrchestrator(List<UploadStrategy> strategies) {
+        this.strategies = strategies;
+        log.info("Injected strategies: {}", strategies);
+    }
 
-        strategyMap = strategies.stream()
-                .collect(Collectors.toMap(
-                        UploadStrategy::getProvider,
-                        Function.identity()
-                ));
+    public CreatePostResponseDto upload(MultipartFile file) {
+
+        log.info("Strategies inside upload(): {}", strategies);
+        log.info("Selected provider: {}", uploadProvider);
+
+        Map<UploadProvider, UploadStrategy> strategyMap =
+                strategies.stream()
+                        .collect(Collectors.toMap(
+                                UploadStrategy::getProvider,
+                                Function.identity()
+                        ));
 
         UploadStrategy strategy = strategyMap.get(uploadProvider);
 
-
-        //calling the strategy
-
         return strategy.upload(file);
-
     }
-
-
 }
